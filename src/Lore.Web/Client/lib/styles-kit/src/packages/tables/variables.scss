@@ -1,0 +1,25 @@
+@import '../../variables';
+@import '../icons/variables';
+
+$table-th-color: $gray-700;
+$table-th-height: $screen-atom * 4;
+$table-th-background: $gray-100;
+$table-background: $white;
+$table-border-width: 1px;
+$table-border-style: solid;
+$table-border-color: $gray-400;
+$table-border: $table-border-width $table-border-style $table-border-color;
+$table-strip-odd-background: $white;
+$table-strip-even-background: $gray-100;
+$table-row-hover-bg: $gray-200;
+$table-cell-min-size: $screen-atom * 10;
+$table-cell-icon-size: $icon-size-sm;
+$table-cell-action-width: $screen-atom * 4;
+$table-cell-vertical-padding: $offset-xs / 2;
+$table-cell-horizontal-padding: $offset-xs;
+$table-cell-selected: $block-active-color;
+$table-tree-cell-element-size: $screen-atom * 3;
+$table-tree-cell-action-width: $screen-atom * 20;
+
+$grid-row-height: $screen-atom * 5;
+$grid-pager-textfield-width: $screen-atom * 5;

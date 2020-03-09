@@ -1,0 +1,55 @@
+<div class="form" appTranslateScroll>
+  <div class="form-header row row--offset">
+    <div class="row__section row__section--align-start mat-headline">
+      <a class="mdi mdi--sm mdi-arrow-left" [routerLink]="['..']"></a>
+      &nbsp;&nbsp;&nbsp;&nbsp; Промоакция
+    </div>
+    <span class="row__spacer"></span>
+    <div class="row__section row__section--align-end buttons-group">
+      <button mat-stroked-button>Сбросить</button>
+      <button
+        mat-flat-button
+        color="primary"
+        (click)="save()"
+        [disabled]="savingProgress.state.progress || form.invalid"
+      >
+        {{ savingProgress.state.progress ? 'Сохранение...' : 'Сохранить' }}
+      </button>
+    </div>
+  </div>
+  <div class="form-body">
+    <mat-accordion [multi]="true" displayMode="flat" class="body-1">
+      <mat-expansion-panel [expanded]="true" class="mat-elevation-z0" #panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <span class="mat-title text--underline">Общая информация</span>
+          </mat-panel-title>
+          <mat-panel-description></mat-panel-description>
+        </mat-expansion-panel-header>
+        <app-promotion-details
+          (formState)="onDetailsChanged($event)"
+        ></app-promotion-details>
+      </mat-expansion-panel>
+      <mat-expansion-panel class="mat-elevation-z0" [expanded]="true">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <span class="mat-title text--underline"
+              >Адресная программа и товары</span
+            >
+          </mat-panel-title>
+          <mat-panel-description></mat-panel-description>
+        </mat-expansion-panel-header>
+        <app-promotion-address-program
+          [clientId]="form.get('details').value?.client?.id"
+          (selected)="onSelect($event)"
+        ></app-promotion-address-program>
+      </mat-expansion-panel>
+    </mat-accordion>
+    <mat-divider></mat-divider>
+  </div>
+</div>
+
+<app-promotion-planning-table
+  [selectionData]="form.get('addressProgram').value"
+  (formState)="rowsChanged($event)"
+></app-promotion-planning-table>

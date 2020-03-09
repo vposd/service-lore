@@ -1,0 +1,23 @@
+<request-progress-spinner
+  [requestProgress]="requestProgress"
+></request-progress-spinner>
+
+<div *ngIf="promotionDetail$ | async as promotionDetail">
+  <div class="row">
+    <div class="row__section row__section--align-start">
+      Адресная программа: {{ promotionDetail.addressProgram.length }} ТТ
+    </div>
+    <div class="row__spacer"></div>
+
+    <div class="row__section row__section--align-end buttons-group">
+      <button mat-stroked-button color="primary">Изменить</button>
+      <button mat-stroked-button color="primary">Скопировать</button>
+    </div>
+  </div>
+
+  <app-promotion-planning-table
+    class="grid-container"
+    [stickyHeader]="false"
+    [promotionDetail]="promotionDetail"
+  ></app-promotion-planning-table>
+</div>

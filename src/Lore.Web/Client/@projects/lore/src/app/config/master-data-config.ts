@@ -1,0 +1,29 @@
+import { Client } from '@contracts/master-data/entities/customer.class';
+import { Employee } from '@contracts/master-data/entities/employee.class';
+
+import {
+  MasterDataConfig,
+  MasterDataSource
+} from '../modules/master-data/config/master-data-config.service';
+import { environment } from '../../environments/environment';
+
+const config = new MasterDataConfig();
+
+config.sources = [
+  new MasterDataSource<Client>({
+    href: 'clients',
+    endpoint: environment.endpoints.data.clients,
+    label: { plural: 'Клиенты', single: 'Клиент' },
+    entity: new Client(),
+    entityName: 'Client'
+  }),
+  new MasterDataSource<Employee>({
+    href: 'employees',
+    endpoint: environment.endpoints.data.employees,
+    label: { plural: 'Сотрудники', single: 'Сотрудник' },
+    entity: new Employee(),
+    entityName: 'Employee'
+  })
+];
+
+export const masterDataConfig = config;

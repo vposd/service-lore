@@ -1,0 +1,65 @@
+@import 'variables';
+
+@mixin elevation(
+  $z-value,
+  $color: $elevation-baseline-color,
+  $opacity-boost: 0
+) {
+  @if type-of($z-value) != number or not unitless($z-value) {
+    @error "$z-value must be a unitless number, but received "#{$z-value}"";
+  }
+
+  @if $z-value < 0 or $z-value > 10 {
+    @error "$z-value must be between 0 and 10, but received "#{$z-value}"";
+  }
+
+  @if type-of($color) != color {
+    @error "$color must be a valid color, but "#{$color}" is of type #{type-of($color)}";
+  }
+
+  $umbra-z-value: map-get($elevation-umbra-map, $z-value);
+  $penumbra-z-value: map-get($elevation-penumbra-map, $z-value);
+  $ambient-z-value: map-get($elevation-ambient-map, $z-value);
+
+  $umbra-color: rgba($color, $elevation-umbra-opacity + $opacity-boost);
+  $penumbra-color: rgba($color, $elevation-penumbra-opacity + $opacity-boost);
+  $ambient-color: rgba($color, $elevation-ambient-opacity + $opacity-boost);
+
+  box-shadow: #{'#{$umbra-z-value} #{$umbra-color}'},
+    #{'#{$penumbra-z-value} #{$penumbra-color}'},
+    #{$ambient-z-value} $ambient-color !important;
+}
+
+/**
+ * Returns a string that can be used as the value for a `transition` property for elevation.
+ * Calling this function directly is useful in situations where a component needs to transition
+ * more than one property.
+ *
+ * ```scss
+ * .foo {
+ *   transition: elevation-transition-rule(), opacity 100ms ease;
+ *   will-change: $elevation-property, opacity;
+ * }
+ * ```
+ */
+@function elevation-transition-rule(
+  $duration: $elevation-transition-duration,
+  $easing: $elevation-transition-timing-function
+) {
+  @return #{$elevation-property} #{$duration} #{$easing};
+}
+
+/**
+ * Applies the correct css rules needed to have an element transition between elevations.
+ * This mixin should be applied to elements whose elevation values will change depending on their
+ * context (e.g. when active or disabled).
+ */
+// NOTE(traviskaufman): Both this mixin and the above function use default parameters so they can
+// be used in the same way by clients.
+@mixin elevation-transition(
+  $duration: $elevation-transition-duration,
+  $easing: $elevation-transition-timing-function
+) {
+  transition: elevation-transition-rule($duration, $easing);
+  will-change: $elevation-property;
+}

@@ -1,0 +1,127 @@
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "newProjectRoot": "@projects",
+  "projects": {
+    "lore": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "prefix": "app",
+          "styleext": "scss"
+        }
+      },
+      "root": "@projects/lore",
+      "sourceRoot": "@projects/lore/src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/lore",
+            "index": "@projects/lore/src/index.html",
+            "main": "@projects/lore/src/main.ts",
+            "polyfills": "@projects/lore/src/polyfills.ts",
+            "tsConfig": "@projects/lore/tsconfig.app.json",
+            "aot": true,
+            "assets": [
+              "@projects/lore/src/favicon.ico",
+              "@projects/lore/src/assets"
+            ],
+            "styles": [
+              "@projects/lore/src/styles.scss",
+              "node_modules/@mdi/font/scss/materialdesignicons.scss"
+            ],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "@projects/lore/src/environments/environment.ts",
+                  "with": "@projects/lore/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "lore:build",
+            "proxyConfig": "@projects/lore/proxy.conf.json"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "lore:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "lore:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "@projects/lore/src/test.ts",
+            "polyfills": "@projects/lore/src/polyfills.ts",
+            "tsConfig": "@projects/lore/tsconfig.spec.json",
+            "karmaConfig": "@projects/lore/karma.conf.js",
+            "assets": [
+              "@projects/lore/src/favicon.ico",
+              "@projects/lore/src/assets"
+            ],
+            "styles": ["@projects/lore/src/styles.scss"],
+            "scripts": []
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "@projects/lore/tsconfig.app.json",
+              "@projects/lore/tsconfig.spec.json",
+              "@projects/lore/e2e/tsconfig.json"
+            ],
+            "exclude": ["**/node_modules/**"]
+          }
+        },
+        "e2e": {
+          "builder": "@angular-devkit/build-angular:protractor",
+          "options": {
+            "protractorConfig": "@projects/lore/e2e/protractor.conf.js",
+            "devServerTarget": "lore:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "lore:serve:production"
+            }
+          }
+        }
+      }
+    }
+  },
+  "defaultProject": "lore"
+}

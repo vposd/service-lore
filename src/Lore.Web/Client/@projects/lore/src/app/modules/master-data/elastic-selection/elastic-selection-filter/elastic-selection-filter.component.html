@@ -1,0 +1,39 @@
+<core-dialog>
+  <core-dialog-header
+    [title]="params.sourceParams.label.plural + ': подбор'"
+  ></core-dialog-header>
+  <core-dialog-body
+    class="dialog__body--relative offset--sm"
+    [formGroup]="form"
+  >
+    <request-progress [requestProgress]="requestProgress"></request-progress>
+    <div class="d-flex flex-column" [hidden]="!requestProgress.success">
+      <ng-container *ngFor="let classifier of classifiers$ | async">
+        <mat-form-field appearance="fill" *ngIf="classifier.values.length">
+          <mat-label>{{ classifier.name }}</mat-label>
+          <app-select
+            [required]="false"
+            [values]="classifier.values"
+            [formControlName]="classifier.id"
+            [compareWith]="compareWith"
+          ></app-select>
+        </mat-form-field>
+      </ng-container>
+    </div>
+  </core-dialog-body>
+  <core-dialog-footer>
+    <ng-container coreDialogActions>
+      <button mat-stroked-button coreDialogClose>
+        Закрыть
+      </button>
+      <button
+        mat-flat-button
+        color="primary"
+        (click)="select()"
+        [disabled]="selectProgress.state.progress"
+      >
+        {{ selectProgress.state.progress ? 'Выборка...' : 'Выбрать' }}
+      </button>
+    </ng-container>
+  </core-dialog-footer>
+</core-dialog>

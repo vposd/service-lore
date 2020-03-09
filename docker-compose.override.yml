@@ -1,0 +1,14 @@
+version: "3.7"
+
+services:
+  lore-api:
+    environment:
+      - DB_CONNECTION_STRING=host=lore-db;port=5432;database=db-test;username=db-user;password=db-pass
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+    ports:
+      - "80"
+      - "443"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro

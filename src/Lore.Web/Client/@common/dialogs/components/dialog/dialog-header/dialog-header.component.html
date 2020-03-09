@@ -1,0 +1,13 @@
+<span class="dialog__header__title mat-headline">{{ title }}</span>
+<span
+  class="dialog__header__right-icon mdi mdi--sm"
+  [ngClass]="maximized ? 'mdi-window-restore' : 'mdi-window-maximize'"
+  (click)="toggleMaximize()"
+  *ngIf="canMaximize"
+  [title]="maximized ? 'Свернуть' : 'Развернуть'"
+></span>
+<span
+  class="dialog__header__right-icon mdi mdi--sm mdi-close"
+  coreDialogClose
+  title="Закрыть"
+></span>

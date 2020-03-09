@@ -1,0 +1,19 @@
+@import '../../variables';
+
+@mixin image-box-size($size) {
+  flex-basis: $size;
+  width: $size;
+  height: $size;
+}
+
+@mixin image-box {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 2px;
+  transition: animation-enter(all, 180ms);
+  background: $gray-200;
+  overflow: hidden;
+}

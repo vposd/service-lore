@@ -1,0 +1,44 @@
+@import '~@ui/kit/src/variables';
+@import '../styles/variables';
+@import '../styles/mixins';
+
+.auth-card {
+  width: $login-form-width;
+  padding: $offset-md;
+  margin: auto;
+
+  .auth-card__form-header {
+    display: flex;
+    text-align: center;
+    flex-direction: column;
+    justify-content: center;
+    margin-bottom: $offset-xs;
+    height: $screen-atom * 4;
+  }
+}
+
+.mat-form-field {
+  width: 100%;
+}
+
+.card__brand {
+  padding-top: $offset-md;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  .card__brand__logo {
+    width: $login-form-brand-logo-width;
+    height: $login-form-brand-logo-height;
+    margin-bottom: $offset-md;
+  }
+}
+
+.card__delimiter {
+  margin: $offset-md 0;
+}
+
+.card__footer {
+  padding-top: $offset-md;
+}

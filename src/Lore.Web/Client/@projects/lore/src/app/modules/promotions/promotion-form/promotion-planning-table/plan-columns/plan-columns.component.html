@@ -1,0 +1,112 @@
+<ng-container matColumnDef="plan">
+  <th
+    mat-header-cell
+    *matHeaderCellDef
+    colspan="7"
+    class="text--center border-right--bold"
+  >
+    План
+  </th>
+</ng-container>
+
+<ng-container matColumnDef="plan-volume" [formGroup]="form">
+  <th mat-header-cell *matHeaderCellDef class="value-cell">Объем</th>
+  <ng-container formArrayName="table">
+    <td
+      mat-cell
+      appTableCell
+      [appTableCellRowIndex]="i"
+      [appTableCellColIndex]="2"
+      [formGroupName]="i"
+      *matCellDef="let data; let i = dataIndex"
+      class="value-cell form-cell"
+    >
+      <input
+        matInput
+        appTableCellInput
+        type="text"
+        autocomplete="off"
+        formControlName="planVolume"
+      />
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="plan-net-cost">
+    <th mat-header-cell *matHeaderCellDef class="value-cell">Себестоимость</th>
+    <td mat-cell *matCellDef="let data; let i = dataIndex" class="value-cell">
+      {{ data.value.row.plan.netCostAmount | number: '1.0-2' }}
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="plan-revenue" [formGroup]="form">
+    <th mat-header-cell *matHeaderCellDef class="value-cell">Выручка</th>
+    <ng-container formArrayName="table">
+      <td
+        mat-cell
+        appTableCell
+        [appTableCellRowIndex]="i"
+        [appTableCellColIndex]="3"
+        *matCellDef="let data; let i = dataIndex; let u = renderIndex"
+        [formGroupName]="i"
+        class="value-cell form-cell"
+      >
+        <input
+          matInput
+          appTableCellInput
+          autocomplete="off"
+          type="text"
+          formControlName="planRevenue"
+        /></td
+    ></ng-container>
+  </ng-container>
+
+  <ng-container matColumnDef="plan-margin">
+    <th mat-header-cell *matHeaderCellDef class="value-cell">Маржа</th>
+    <td mat-cell *matCellDef="let data; let i = dataIndex" class="value-cell">
+      {{ data.value.row.plan.margin | number: '1.0-2' }}
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="plan-uplift-volume">
+    <th mat-header-cell *matHeaderCellDef class="value-cell">Uplift, объём</th>
+    <td
+      mat-cell
+      *matCellDef="let data; let i = dataIndex"
+      class="value-cell"
+      [class.text--danger]="data.value.row.plan.upliftVolume < 0"
+    >
+      {{ data.value.row.plan.upliftVolume | number: '1.0-2' }}
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="plan-uplift-amount">
+    <th mat-header-cell *matHeaderCellDef class="value-cell">Uplift, сумма</th>
+    <td
+      mat-cell
+      *matCellDef="let data; let i = dataIndex"
+      class="value-cell"
+      [class.text--danger]="data.value.row.plan.upliftAmount < 0"
+    >
+      {{ data.value.row.plan.upliftAmount | number: '1.0-2' }}
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="plan-roi">
+    <th
+      mat-header-cell
+      *matHeaderCellDef
+      class="value-cell border-right--bold border-bottom--bold"
+      rowspan="2"
+    >
+      ROI, план
+    </th>
+    <td
+      mat-cell
+      *matCellDef="let data; let i = dataIndex"
+      class="value-cell border-right--bold"
+      [class.text--danger]="data.value.row.plan.roi < 0"
+    >
+      {{ data.value.row.plan.roi * 100 || 0 | number: '1.0-2' }}%
+    </td>
+  </ng-container>
+</ng-container>

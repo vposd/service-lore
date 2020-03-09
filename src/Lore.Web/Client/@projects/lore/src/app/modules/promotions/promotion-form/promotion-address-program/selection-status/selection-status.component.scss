@@ -1,0 +1,8 @@
+@import '~@ui/kit/src/variables';
+
+:host {
+  cursor: default;
+  padding: 0 $offset-xs;
+  display: flex;
+  align-items: center;
+}

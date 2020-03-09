@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Service Lore</title>
+    <base href="/" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=11" />
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+  </head>
+  <body>
+    <app-root>
+      <style>
+        /* stylelint-disable */
+        body {
+          background: #fafafa;
+        }
+        .splash {
+          display: flex;
+          position: absolute;
+          width: 100%;
+          height: 100%;
+        }
+        .splash__body {
+          display: flex;
+          flex-direction: column;
+          margin: auto;
+          text-align: center;
+          height: 144px;
+        }
+        .splash__body__logo {
+          width: 112px;
+          height: 112px;
+          margin: auto;
+          background: url(assets/product_logo_112px.png) no-repeat;
+        }
+        .splash__body__header {
+          color: #555;
+          font-size: 18px;
+          padding: 16px 0;
+        }
+      </style>
+      <div class="splash">
+        <div class="splash__body">
+          <span class="splash__body__logo"></span>
+          <span class="splash__body__header"></span>
+        </div>
+      </div>
+    </app-root>
+  </body>
+</html>

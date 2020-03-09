@@ -1,0 +1,31 @@
+<ng-container *ngIf="requestProgress.state$ | async as state">
+  <div class="progress-container" *ngIf="state.progress">
+    <p class="progress-container__header">{{ fetchingTitle }}</p>
+    <div class="progress-container__progress progress progress--info">
+      <div class="progress-indeterminate"></div>
+    </div>
+    <span *ngIf="fetchingMessage">{{ fetchingMessage }}</span>
+  </div>
+
+  <div class="progress-container" *ngIf="state.empty">
+    <p class="progress-container__header">{{ emptyTitle }}</p>
+    <div class="progress-container__progress progress progress--secondary">
+      <div
+        class="progress-determinate"
+        [style.width]="'100%'"
+        [style.opacity]="0.1"
+      ></div>
+    </div>
+    <span *ngIf="emptyMessage">{{ emptyMessage }}</span>
+  </div>
+
+  <div class="progress-container" *ngIf="state.error">
+    <p class="progress-container__header">{{ errorTitle }}</p>
+    <div class="progress-container__progress progress progress--danger">
+      <div class="progress-determinate" [style.width]="'100%'"></div>
+    </div>
+    <span class="text--danger">{{ errorMessage || state.error }}</span>
+  </div>
+
+  <ng-content></ng-content>
+</ng-container>

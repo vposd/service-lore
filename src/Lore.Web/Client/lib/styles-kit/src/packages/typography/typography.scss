@@ -1,0 +1,112 @@
+@import '../../variables';
+@import './variables';
+@import './mixins';
+
+.typography {
+  @include typography-base;
+}
+
+// Typography sets
+@each $style in map-keys($typography-styles) {
+  .typography--#{$style} {
+    @include typography($style);
+  }
+}
+
+// Alignment
+.text--justify {
+  text-align: justify !important;
+}
+
+.text--truncate {
+  @include typography-overflow-ellipsis;
+}
+
+.text--nowrap {
+  white-space: nowrap;
+}
+
+// Responsive alignment
+.text--left {
+  text-align: left !important;
+}
+
+.text--right {
+  text-align: right !important;
+}
+
+.text--center {
+  text-align: center !important;
+}
+
+// Transformation
+.text--lowercase {
+  text-transform: lowercase !important;
+}
+
+.text--uppercase {
+  text-transform: uppercase !important;
+}
+
+.text--capitalize {
+  text-transform: capitalize !important;
+}
+
+// Weight and italics
+.font--regular {
+  font-weight: $font-weight-regular !important;
+}
+
+.font--bold {
+  font-weight: $font-weight-medium !important;
+}
+
+// Decoration
+.text--underline {
+  border-bottom: 1px solid;
+}
+
+.text--underline-dotted {
+  border-bottom: 1px dotted;
+}
+
+.text--underline-dashed {
+  border-bottom: 1px dashed;
+}
+
+.text--line-through {
+  text-decoration: line-through !important;
+}
+
+// Colors
+@each $style, $color in $theme-colors {
+  .text--#{$style} {
+    color: $color !important;
+  }
+}
+
+// Backgrounds
+@each $style, $color in $theme-colors {
+  .bg--#{$style} {
+    @if (lightness($color) < 60) {
+      color: $gray-100;
+    }
+
+    background-color: $color !important;
+  }
+}
+
+.bg--white {
+  background-color: $white !important;
+}
+
+// Backgrounds accents
+@each $style, $color in $theme-colors {
+  .bg--tone-#{$style} {
+    background-color: rgba($color, 0.1) !important;
+  }
+}
+
+.text--muted {
+  color: $gray-600 !important;
+}

@@ -1,0 +1,11 @@
+@import 'variables';
+
+@mixin table-bordered {
+  border-right: $table-border;
+  word-wrap: break-word;
+  text-align: left;
+
+  &:last-child {
+    border-right: 0;
+  }
+}

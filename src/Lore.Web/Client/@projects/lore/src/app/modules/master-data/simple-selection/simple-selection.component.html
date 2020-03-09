@@ -1,0 +1,69 @@
+<mat-select
+  [multiple]="multiple"
+  (openedChange)="openChange($event)"
+  [required]="required"
+  [(ngModel)]="value"
+  [compareWith]="compareWith"
+>
+  <ngx-mat-select-search
+    [(ngModel)]="query"
+    placeholderLabel="Поиск..."
+    indexAndLengthScreenReaderText="из"
+    noEntriesFoundLabel="Ничего не найдено"
+    *ngIf="values.length > 10"
+  >
+    <i class="mdi mdi-close" ngxMatSelectSearchClear></i>
+  </ngx-mat-select-search>
+
+  <div
+    class="offset--md d-flex align-items-center justify-content-center"
+    *ngIf="requestProgress.state.progress"
+  >
+    <mat-spinner diameter="24" color="primary"></mat-spinner>
+  </div>
+
+  <!-- VIRTUAL SCROLL SELECT -->
+  <cdk-virtual-scroll-viewport
+    *ngIf="virtualScrollEnabled"
+    appHighlight
+    [highlightQuery]="query"
+    class="viewport-select"
+    itemSize="5"
+    maxBufferPx="400"
+    minBufferPx="200"
+  >
+    <mat-option
+      [hidden]="requestProgress.state.progress || multiple || required"
+      >[Пусто]</mat-option
+    >
+    <mat-option
+      [hidden]="requestProgress.state.progress"
+      [value]="value"
+      *ngIf="value"
+      >{{ value.name }}</mat-option
+    >
+    <mat-option
+      *cdkVirtualFor="
+        let value of values$ | async | searchFilter: 'name':query;
+        templateCacheSize: 0
+      "
+      [value]="value"
+    >
+      <div highlightTarget>{{ value['name'] }}</div>
+    </mat-option>
+  </cdk-virtual-scroll-viewport>
+
+  <!-- REGULAR SELECT -->
+  <ng-container *ngIf="!virtualScrollEnabled">
+    <mat-option
+      [hidden]="requestProgress.state.progress || multiple || required"
+      >[Пусто]</mat-option
+    >
+    <mat-option
+      *ngFor="let value of values$ | async | searchFilter: 'name':query"
+      [value]="value"
+    >
+      <span highlightTarget>{{ value['name'] }}</span>
+    </mat-option>
+  </ng-container>
+</mat-select>

@@ -1,0 +1,9 @@
+<app-shell>
+  <app-shell-sidebar></app-shell-sidebar>
+  <app-shell-main>
+    <app-shell-toolbar></app-shell-toolbar>
+    <app-shell-content [contextReady]="contextReady$ | async">
+      <auth-splash></auth-splash>
+    </app-shell-content>
+  </app-shell-main>
+</app-shell>

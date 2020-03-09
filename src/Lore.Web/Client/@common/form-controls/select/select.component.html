@@ -1,0 +1,47 @@
+<mat-select
+  [multiple]="multiple"
+  (openedChange)="openChange($event)"
+  [(ngModel)]="value"
+  [compareWith]="compareWith"
+>
+  <ngx-mat-select-search
+    [(ngModel)]="query"
+    placeholderLabel="Поиск..."
+    indexAndLengthScreenReaderText="из"
+    noEntriesFoundLabel="Ничего не найдено"
+    *ngIf="values.length > 10"
+  >
+    <i class="mdi mdi-close" ngxMatSelectSearchClear></i>
+  </ngx-mat-select-search>
+
+  <cdk-virtual-scroll-viewport
+    *ngIf="virtualScrollEnabled"
+    appHighlight
+    [highlightQuery]="query"
+    class="viewport-select"
+    itemSize="5"
+    maxBufferPx="400"
+    minBufferPx="200"
+  >
+    <mat-option>[Пусто]</mat-option>
+    <mat-option
+      *cdkVirtualFor="
+        let value of values | searchFilter: 'name':query;
+        templateCacheSize: 0
+      "
+      [value]="value"
+    >
+      <span highlightTarget>{{ value['name'] }}</span>
+    </mat-option>
+  </cdk-virtual-scroll-viewport>
+
+  <ng-container *ngIf="!virtualScrollEnabled">
+    <mat-option>[Пусто]</mat-option>
+    <mat-option
+      *ngFor="let value of values | searchFilter: 'name':query"
+      [value]="value"
+    >
+      <span highlightTarget>{{ value['name'] }}</span>
+    </mat-option>
+  </ng-container>
+</mat-select>

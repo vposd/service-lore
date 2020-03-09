@@ -1,0 +1,55 @@
+@import '~@ui/kit/src/variables';
+@import '~@ui/kit/src/packages/icons/mixins';
+
+$user-avatar-size-sm: $screen-atom * 4;
+$user-avatar-size: $screen-atom * 10;
+
+.avatar {
+  color: map-get($theme-colors, dark);
+  display: flex;
+  text-transform: uppercase;
+  justify-content: center;
+  align-items: center;
+}
+
+.avatar-link {
+  display: flex;
+  align-items: center;
+
+  .avatar-link__round {
+    @include round($gray-400, $user-avatar-size-sm);
+
+    background-color: $gray-500;
+    cursor: pointer;
+  }
+
+  .avatar-link__icon {
+    cursor: pointer;
+  }
+}
+
+.popover-details {
+  display: flex;
+  padding: $offset-sm;
+
+  .popover-details__round {
+    @include round($bg: $gray-400, $size: $user-avatar-size);
+
+    display: flex;
+    text-transform: uppercase;
+    justify-content: center;
+    align-items: center;
+    margin-right: $offset-md;
+  }
+
+  .popover-details__text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    &--primary {
+      margin-bottom: $offset-xs;
+      word-break: break-all;
+    }
+  }
+}

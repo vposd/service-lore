@@ -1,0 +1,31 @@
+# Outputs
+demo
+dist
+scripts
+styles
+
+# Logs
+logs
+*.log
+npm-debug.log*
+*.cache
+
+# Dependency directories
+node_modules
+
+# Optional npm cache directory
+.npm
+
+# IDE files
+.idea
+*.iml
+out
+gen
+.vscode
+.vs
+
+# logs folder
+dist-docs/
+
+# coverage
+coverage

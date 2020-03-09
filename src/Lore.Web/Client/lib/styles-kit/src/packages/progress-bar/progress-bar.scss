@@ -1,0 +1,74 @@
+@import '../../variables';
+@import '../typography/variables';
+@import '../typography/mixins';
+@import 'mixins';
+@import 'variables';
+
+.progress {
+  display: flex;
+  position: relative;
+  width: 100%;
+  height: $progress-height;
+  border-radius: $progress-height;
+  overflow: hidden;
+
+  @each $style, $color in $theme-colors {
+    &--#{$style} {
+      background-color: lighten($color, 30%);
+
+      .progress-determinate {
+        @include progress-determinate($color);
+      }
+
+      .progress-indeterminate::before,
+      .progress-indeterminate::after {
+        background-color: $color;
+      }
+    }
+  }
+}
+
+.progress-indeterminate {
+  &::before,
+  &::after {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    content: '';
+    will-change: left, right;
+  }
+
+  &::before {
+    animation: animation-enter(indeterminate, 1.8s) infinite;
+  }
+
+  &::after {
+    animation: animation-enter(indeterminate-short, 1.8s, 1.15s) infinite;
+  }
+}
+
+.progress-container {
+  @include typography(headline-small);
+
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin: auto;
+  text-align: center;
+
+  .progress-container__header {
+    @include typography(regular-large);
+
+    margin-bottom: 0;
+    color: map-get($theme-colors, secondary);
+  }
+
+  .progress-container__progress {
+    max-width: $progress-container-width;
+    margin: $offset-sm 0;
+  }
+}

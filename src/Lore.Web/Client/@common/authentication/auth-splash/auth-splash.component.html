@@ -1,0 +1,8 @@
+<div class="splash">
+  <div class="splash__body">
+    <span class="splash__body__header mat-headline">
+      <mat-spinner *ngIf="!authProgress?.error" diameter="32"></mat-spinner>
+      <span *ngIf="authProgress?.error">{{ authProgress.error }}</span>
+    </span>
+  </div>
+</div>

@@ -1,0 +1,15 @@
+@import '~@ui/kit/src/packages/utilites/mixins/page';
+
+.page {
+  @include page-full;
+
+  z-index: 1090;
+
+  &--fixed {
+    @include page-full--fixed;
+  }
+
+  &--centered {
+    @include page-full--centered;
+  }
+}

@@ -1,0 +1,242 @@
+@import '../typography/mixins';
+@import '../typography/variables';
+@import '../utilites/mixins/bottom-line';
+@import 'variables';
+@import 'mixins';
+
+.table-container {
+  @include typography(regular-small);
+
+  position: relative;
+  width: 100%;
+  border: $table-border;
+  overflow-x: auto;
+  overflow-y: auto;
+}
+
+.table {
+  @include typography(regular-small);
+
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-color: $table-background;
+  border-collapse: collapse;
+  word-wrap: break-word;
+
+  th {
+    padding: 0 $table-cell-horizontal-padding;
+    background: $table-th-background;
+    word-break: normal;
+  }
+
+  td {
+    padding: $table-cell-vertical-padding $table-cell-horizontal-padding;
+  }
+
+  th,
+  td {
+    border-right: $table-border;
+    text-align: left;
+
+    .checkbox {
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+
+    &:last-child {
+      border-right: 0;
+    }
+  }
+
+  thead {
+    background-color: $table-th-background;
+
+    tr {
+      border-bottom: $table-border;
+    }
+
+    th {
+      position: relative;
+      height: $table-th-height;
+      min-height: $table-th-height;
+      color: $table-th-color;
+      font-weight: $font-weight-medium;
+      cursor: pointer;
+    }
+  }
+
+  tbody {
+    background-color: $white;
+  }
+
+  .table__row {
+    &--selected {
+      background-color: $table-cell-selected !important;
+
+      &:hover {
+        background-color: $table-cell-selected !important;
+      }
+    }
+  }
+
+  .table__cell__border {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: $table-border-width;
+    background: $table-border-color;
+    z-index: 1050;
+  }
+
+  &--hover {
+    tbody {
+      tr:hover {
+        background-color: $table-row-hover-bg !important;
+        cursor: pointer;
+      }
+    }
+  }
+
+  &--stripped {
+    tbody {
+      tr:nth-child(odd) {
+        background-color: $table-strip-odd-background;
+      }
+
+      tr:nth-child(even) {
+        background-color: $table-strip-even-background;
+      }
+    }
+  }
+
+  &--fixed-header {
+    height: auto;
+
+    th {
+      @include bottom-line($table-border-color, 1px);
+
+      position: sticky !important;
+      top: 0 !important;
+      z-index: 1500;
+    }
+
+    th,
+    td {
+      border-right: 0;
+    }
+
+    thead {
+      tr {
+        border: 0;
+      }
+    }
+  }
+
+  .table__cell {
+    &--action {
+      width: $table-cell-action-width !important;
+      min-width: $table-cell-action-width !important;
+      max-width: $table-cell-action-width !important;
+      text-align: center;
+
+      .checkbox {
+        justify-content: center;
+      }
+    }
+
+    &--input {
+      padding: 0;
+
+      input {
+        height: $table-th-height;
+        border-right: 0;
+        border-left: 0;
+        border-radius: 0;
+      }
+    }
+  }
+
+  .table__cell__inner {
+    display: flex;
+    position: relative;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+  }
+
+  .table__cell__icon {
+    width: $table-cell-icon-size;
+    padding: 0;
+    color: $gray-700;
+    font-size: $table-cell-icon-size;
+    cursor: pointer;
+  }
+
+  .tree__row--selected {
+    td {
+      background: $table-cell-selected;
+    }
+
+    .table__cell--action {
+      background: transparent;
+
+      .table__cell__inner--action {
+        background: $table-cell-selected;
+      }
+    }
+  }
+
+  &--tree {
+    th,
+    td {
+      min-width: $table-cell-min-size;
+      border: 0;
+    }
+
+    td {
+      cursor: pointer;
+    }
+
+    thead,
+    tbody {
+      tr {
+        width: 100%;
+      }
+    }
+  }
+
+  &--bordered {
+    th,
+    td {
+      @include table-bordered;
+    }
+  }
+
+  .table__cell__inner--tree-cell {
+    display: flex;
+    height: 100%;
+    min-height: $table-tree-cell-element-size;
+    align-items: center;
+
+    .table__cell__inner--action {
+      display: flex;
+      align-items: center;
+      width: 100%;
+    }
+
+    .table__cell__inner--space {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: $table-tree-cell-element-size;
+      min-width: $table-tree-cell-element-size;
+      color: $gray-700;
+    }
+
+    .checkbox {
+      width: $table-tree-cell-element-size;
+      margin-right: $table-tree-cell-element-size / 4;
+    }
+  }
+}

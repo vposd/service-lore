@@ -1,0 +1,20 @@
+<mat-spinner
+  diameter="18"
+  @fadeIn
+  *ngIf="(progress.state$ | async).progress"
+></mat-spinner>
+
+<span
+  @fadeIn
+  *ngIf="count && (progress.state$ | async).done"
+  class="text--secondary body-1"
+  >({{ count }})</span
+>
+
+<span
+  @fadeIn
+  color="accent"
+  *ngIf="(progress.state$ | async).empty"
+  class="text--secondary body-1"
+  >(нет результатов)</span
+>

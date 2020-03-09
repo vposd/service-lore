@@ -1,0 +1,19 @@
+// Triangle with shadow for popover
+@mixin triangle-with-shadow($size) {
+  position: absolute;
+  width: $size;
+  height: $size;
+  box-shadow: 0 17px 10px -17px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+
+  &::after {
+    position: absolute;
+    top: $size * 0.75;
+    left: $size * 0.25;
+    width: $size / 2;
+    height: $size / 2;
+    transform: rotate(45deg);
+    box-shadow: -1px -1px 10px -1px rgba(0, 0, 0, 0.5);
+    content: '';
+  }
+}

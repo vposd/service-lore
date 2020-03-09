@@ -1,0 +1,94 @@
+// Colors
+
+$black: #000 !default;
+$white: #fff !default;
+$gray-100: lighten($black, 98%) !default;
+$gray-200: lighten($black, 95%) !default;
+$gray-300: lighten($black, 93%) !default;
+$gray-400: lighten($black, 89%) !default;
+$gray-500: lighten($black, 80%) !default;
+$gray-600: lighten($black, 70%) !default;
+$gray-700: lighten($black, 60%) !default;
+$gray-800: lighten($black, 40%) !default;
+$gray-900: lighten($black, 20%) !default;
+
+$blue: #317dc7 !default;
+$purple: #7e57c2 !default;
+$red: #f44336 !default;
+$orange: #f57c00 !default;
+$yellow: #ffb300 !default;
+$green: #4caf50 !default;
+$bluegrey: #242e36 !default;
+
+$colors: () !default;
+$colors: map-merge(
+  (
+    blue: $blue,
+    purple: $purple,
+    red: $red,
+    orange: $orange,
+    yellow: $yellow,
+    green: $green,
+    bluegray: $bluegrey,
+    white: $white,
+    gray: $gray-600,
+    gray-dark: $gray-800
+  ),
+  $colors
+);
+
+$theme-colors: () !default;
+$theme-colors: map-merge(
+  (
+    primary: $bluegrey,
+    accent: $purple,
+    secondary: $gray-700,
+    success: $green,
+    info: $blue,
+    warning: $orange,
+    highlight: $yellow,
+    danger: $red,
+    light: $gray-100,
+    dark: $gray-800
+  ),
+  $theme-colors
+);
+
+$block-active-color: transparentize(map-get($theme-colors, info), 0.85);
+
+// Body
+
+$body-bg: $gray-100 !default;
+$body-color: $gray-900 !default;
+$body-font-size: 16px;
+
+// Links
+
+$link-color: $blue;
+$link-decoration: none !default;
+$link-hover-color: darken($link-color, 15%) !default;
+$link-hover-decoration: underline !default;
+
+$screen-atom: 8px;
+
+$offset-xs: $screen-atom;
+$offset-sm: $screen-atom * 2;
+$offset-md: $screen-atom * 3;
+$offset-lg: $screen-atom * 4;
+$offset-xl: $screen-atom * 5;
+
+// Breakpoints
+
+// https://material.io/design/layout/responsive-layout-grid.html#breakpoints
+// Map contains breakpoints start values
+$breakpoints: () !default;
+$breakpoints: map-merge(
+  (
+    xs: 0,
+    sm: 600px,
+    md: 1024px,
+    lg: 1440px,
+    xl: 1920px
+  ),
+  $breakpoints
+);

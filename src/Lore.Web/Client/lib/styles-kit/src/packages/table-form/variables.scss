@@ -1,0 +1,8 @@
+@import '../../variables';
+@import '../icons/variables';
+
+$table-form-cell-height: $screen-atom * 5;
+$table-form-bg: $gray-100;
+$table-form-caption-cell-width: $screen-atom * 40;
+$table-form-border: 1px solid $gray-400;
+$table-form-icon-size: $icon-size-md;

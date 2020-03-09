@@ -1,0 +1,44 @@
+<div class="card auth-card" @fadeInOut>
+  <section class="card__brand">
+    <p class="mat-headline">{{ productName }}</p>
+  </section>
+
+  <div class="card__delimiter"></div>
+
+  <div class="card__form" [formGroup]="credentials">
+    <div>
+      <p class="text--center text--secondary p--lg">Вход</p>
+    </div>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Имя пользователя</mat-label>
+      <input matInput formControlName="userName" />
+      <mat-hint></mat-hint>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" appPassword>
+      <mat-label>Пароль</mat-label>
+      <input matInput isCapsLock formControlName="password" type="password" />
+      <i class="mdi mdi-eye cursor-pointer" appPasswordEye matSuffix></i>
+      <mat-hint></mat-hint>
+    </mat-form-field>
+
+    <div class="row card__footer">
+      <span class="row__spacer"></span>
+      <section
+        class="row__section row__section--align-end"
+        *ngIf="requestState$ | async as requestState"
+      >
+        <button
+          (click)="signIn()"
+          [disabled]="requestState.progress || credentials.invalid"
+          mat-flat-button
+          color="primary"
+        >
+          <span *ngIf="!requestState.progress">Войти</span>
+          <span *ngIf="requestState.progress">Вход...</span>
+        </button>
+      </section>
+    </div>
+  </div>
+</div>

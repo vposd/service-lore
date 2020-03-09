@@ -1,0 +1,19 @@
+<ng-container *ngIf="requestProgress.state$ | async as state">
+  <div class="spinner-container">
+    <mat-spinner [diameter]="diameter" *ngIf="state.progress"></mat-spinner>
+  </div>
+
+  <div class="spinner-container">
+    <mat-spinner
+      *ngIf="state.error"
+      [diameter]="diameter"
+      [value]="100"
+      color="warn"
+      mode="determinate"
+    ></mat-spinner>
+
+    <span class="text--secondary mat-subtitle offset--xs">{{
+      state.error
+    }}</span>
+  </div>
+</ng-container>

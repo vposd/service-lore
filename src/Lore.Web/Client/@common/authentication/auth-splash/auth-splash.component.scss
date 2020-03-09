@@ -1,0 +1,32 @@
+@import '~@ui/kit/src/variables';
+
+.splash {
+  display: flex;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  z-index: 1;
+
+  .splash__body {
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    align-items: center;
+    justify-content: center;
+    height: $screen-atom * 18;
+  }
+
+  .splash__body__logo {
+    width: $screen-atom * 14;
+    height: $screen-atom * 14;
+    margin: auto;
+    background: url(assets/product_logo_112px.png) no-repeat;
+  }
+
+  .splash__body__header {
+    color: $gray-800;
+    padding: $offset-sm 0 0 0;
+  }
+}

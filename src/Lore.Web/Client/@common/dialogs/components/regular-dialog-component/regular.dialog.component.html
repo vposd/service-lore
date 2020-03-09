@@ -1,0 +1,27 @@
+<core-dialog>
+  <core-dialog-header
+    [title]="data.title || data.type"
+    [canMaximize]="false"
+  ></core-dialog-header>
+  <core-dialog-body>
+    <div class="layout-grid">
+      <p [style.whiteSpace]="'pre-line'">{{ data.message }}</p>
+    </div>
+  </core-dialog-body>
+  <core-dialog-footer>
+    <ng-container coreDialogActions>
+      <button class="button button--light button--sm" coreDialogClose>
+        {{ data.closeLabel || 'Закрыть' }}
+      </button>
+      <button
+        class="button button--info button--sm"
+        [ngClass]="data.saveButtonClass || 'button--info'"
+        (click)="save()"
+        *ngIf="data.type === 'confirm'"
+        [disabled]="(data.saveProgressState$ | async)?.fetching"
+      >
+        {{ data.saveLabel || 'Принять' }}
+      </button>
+    </ng-container>
+  </core-dialog-footer>
+</core-dialog>

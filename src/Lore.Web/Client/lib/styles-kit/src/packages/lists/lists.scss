@@ -1,0 +1,111 @@
+@import '../animations/mixins';
+@import '../icons/variables';
+@import '../utilites/mixins/delimiter';
+@import 'variables';
+@import 'mixins';
+
+/* postcss-bem-linter: define list */
+
+.list {
+  @include list();
+
+  display: flex;
+  flex-direction: column;
+
+  &--secondary {
+    @include typography(regular-small);
+
+    /* stylelint-disable plugin/selector-bem-pattern */
+    .list-item {
+      height: $list-item-height-sm !important;
+      min-height: $list-item-height-sm !important;
+    }
+
+    .list-item__icon {
+      transform: scale(0.8);
+    }
+
+    .list-item__text {
+      padding: 0 $offset-sm 0 0 !important;
+      overflow: hidden;
+    }
+    /* stylelint-enable plugin/selector-bem-pattern */
+  }
+
+  /* stylelint-disable plugin/selector-bem-pattern */
+
+  .list-item {
+    @include list-item;
+
+    transition: animation-enter(all, 180ms);
+
+    &--active {
+      @include list-item-active();
+
+      transition: animation-enter(all, 180ms);
+    }
+
+    &--selected {
+      background: $tree-list-item-active-color;
+
+      &:hover {
+        background: $tree-list-item-active-color !important;
+      }
+    }
+
+    &:focus {
+      @include list-item-active($gray-200);
+    }
+
+    .list-item__textfield {
+      margin: 0;
+    }
+
+    .list-item__text {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      padding: 0 $offset-sm 0 0;
+
+      .list-item__text__secondary {
+        @include typography(regular-small);
+
+        color: $gray-700;
+      }
+    }
+
+    .list-item__icon {
+      width: $icon-size-base;
+      transition: all 0.25s;
+
+      + .list-item__text {
+        padding: 0 $offset-sm !important;
+      }
+    }
+    /* stylelint-enable plugin/selector-bem-pattern */
+  }
+
+  &--hover {
+    /* stylelint-disable plugin/selector-bem-pattern */
+    .list-item {
+      transition: animation-enter(all, 180ms);
+      cursor: pointer;
+
+      &:hover {
+        background-color: $gray-200;
+      }
+    }
+    /* stylelint-enable plugin/selector-bem-pattern */
+  }
+
+  &--dense {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+}
+
+.list__delimiter {
+  @include delimiter();
+}
+
+/* postcss-bem-linter: end */

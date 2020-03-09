@@ -1,0 +1,98 @@
+version: "3.7"
+
+networks:
+  back-tier:
+    driver: bridge
+
+services:
+  Lore:
+    image: dockerhub.northeurope.cloudapp.azure.com/Lore:latest
+    depends_on:
+      - Lore-db
+    ports:
+      - "8000:80"
+      - "9000:443"
+    restart: always
+    environment:
+      Jwt:Secret: YWcPDAj6xCwSLjMqxRHGDGkzdub6Lr5N
+      Jwt:Issuer: https://promotest.northeurope.cloudapp.azure.com
+      Jwt:Audience: https://promotest.northeurope.cloudapp.azure.com
+      DB_CONNECTION_STRING: host=Lore-db;port=5432;database=newton_test;username=sa;password=jLfYjTHbtFrn9ndB
+    networks:
+      - back-tier
+
+  Lore-db:
+    image: postgres:latest
+    hostname: Lore-db
+    ports:
+      - "5432:5432"
+    restart: always
+    volumes:
+      - db_volume:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: "sa"
+      POSTGRES_PASSWORD: "jLfYjTHbtFrn9ndB"
+      POSTGRES_DB: "newton_test"
+    networks:
+      - back-tier
+
+  pgadmin:
+    image: dpage/pgadmin4
+    depends_on:
+      - Lore-db
+    ports:
+      - "5000:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: v.pozdnyakov@systech.ru
+      PGADMIN_DEFAULT_PASSWORD: eqMXt8WmYGbf
+    networks:
+      - back-tier
+    restart: unless-stopped
+
+  prometheus:
+    image: prom/prometheus:v2.1.0
+    restart: always
+    ports:
+      - 9090:9090
+    volumes:
+      - ./prometheus/:/etc/prometheus/
+      - prometheus_data:/prometheus
+    networks:
+      - back-tier
+
+  node-exporter:
+    image: prom/node-exporter
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - "--path.procfs=/host/proc"
+      - "--path.sysfs=/host/sys"
+      - --collector.filesystem.ignored-mount-points
+      - "^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)"
+    ports:
+      - 9100:9100
+    networks:
+      - back-tier
+    restart: always
+
+  grafana:
+    image: grafana/grafana
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning/:/etc/grafana/provisioning/
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=WbjtFHEqe7gw
+      - GF_USERS_ALLOW_SIGN_UP=false
+    restart: always
+    ports:
+      - 3000:3000
+    networks:
+      - back-tier
+
+volumes:
+  db_volume: {}
+  pgadmin: {}
+  prometheus_data: {}
+  grafana_data: {}

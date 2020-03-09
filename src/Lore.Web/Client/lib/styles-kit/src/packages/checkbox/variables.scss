@@ -1,0 +1,23 @@
+$checkbox-container-height: $screen-atom * 3;
+$input-box-border-width: 2px;
+$input-box-height: $screen-atom * 2 - $input-box-border-width;
+$input-box-width: $input-box-height;
+$input-box-checked-bg: $blue;
+$input-box-stroke-color: $white;
+$input-box-border-color: $gray-800;
+$input-box-border: $input-box-border-width solid $input-box-border-color;
+/* stylelint-disable */
+$input-box-icon-checked: str-replace(
+  url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='white' stroke-width='3px' d='M1.73,12.91 8.1,19.28 22.79,4.59'/%3E%3C/svg%3E"),
+  '#',
+  '%23'
+) !default;
+
+$switch-width: 32px;
+$switch-height: 18px;
+$switch-border-width: $input-box-border-width;
+$switch-circle-size: $switch-width / 2 - $switch-border-width;
+$switch-transition: animation-enter(all, 0.5s);
+$switch-active-enabled-bg: map-get($theme-colors, info);
+$switch-active-disabled-bg: rgba($bluegrey, 0.2);
+$switch-bg: $white;

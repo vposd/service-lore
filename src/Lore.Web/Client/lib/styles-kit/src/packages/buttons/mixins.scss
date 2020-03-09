@@ -1,0 +1,148 @@
+@import '../animations/mixins';
+@import 'variables';
+
+// Returns light or dark bg color according to input bg
+@function button-font-color($bg) {
+  @if (lightness($bg) > 80) {
+    @return $button-default-color;
+  } @else {
+    @return $white;
+  }
+}
+
+// Define hover effects and fill bg
+@mixin button-fill-color($bg) {
+  @include button-hover($bg);
+
+  background-color: $bg;
+}
+
+// Set color acconding to bg color
+@mixin button-ink-color($bg) {
+  color: button-font-color($bg);
+}
+
+@mixin button-corner-radius($corner-radius) {
+  border-radius: $corner-radius;
+}
+
+// Base mixin for all buttons
+@mixin button() {
+  display: flex;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  transition: animation-enter(all, 0.2s);
+  border: none;
+  outline: none;
+  text-align: center;
+  user-select: none;
+  -webkit-appearance: none;
+  overflow: hidden;
+  vertical-align: middle;
+  z-index: 1005;
+
+  &::-moz-focus-inner {
+    padding: 0;
+    border: 0;
+  }
+
+  &:active {
+    outline: none;
+  }
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  &:disabled {
+    cursor: default;
+    pointer-events: none;
+  }
+}
+
+// Mixin for regular buttons
+@mixin button-base() {
+  @include typography(regular);
+  @include button();
+
+  min-width: $button-min-width;
+  height: $button-height;
+  padding: 0 $button-horizontal-padding;
+}
+
+// Mixin for icon buttons and action icons
+@mixin icon-button() {
+  @include button();
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 $icon-button-horizontal-padding;
+
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+@mixin button-hover-text-only($color: null) {
+  @if $color {
+    &:hover {
+      color: darken($color: $color, $amount: 10%);
+    }
+
+    &:active {
+      color: darken($color: $color, $amount: 15%);
+    }
+  } @else {
+    opacity: 0.6;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+}
+
+@mixin button-hover($bg) {
+  &:hover {
+    background-color: darken($bg, 10%);
+  }
+
+  &:active {
+    background-color: darken($bg, 15%);
+  }
+}
+
+@mixin button-disabled($bg) {
+  &:disabled {
+    background-color: transparentize(desaturate($bg, 30%), 0.2);
+    color: transparentize(button-font-color($bg), 0.4);
+  }
+}
+
+@mixin button-disabled-text-only($color) {
+  &:disabled {
+    color: transparentize($color, $amount: 0.4);
+  }
+}
+
+@mixin button-small($color) {
+  @include button-base;
+  @include elevation(0);
+  @include typography(regular-small);
+
+  min-width: 0;
+  height: $button-height-small;
+  padding: 0 $offset-xs;
+  border: 1px solid $color;
+  background-color: transparent;
+  color: $color;
+  font-weight: 500;
+
+  &:hover,
+  &:active {
+    background-color: $color;
+    color: white;
+  }
+}

@@ -1,0 +1,30 @@
+@import '../../variables';
+@import 'variables';
+@import 'mixins';
+
+/* stylelint-disable selector-no-qualifying-type */
+
+input[type='checkbox'] + label {
+  cursor: pointer;
+}
+
+.icon-checkbox {
+  margin: 0;
+
+  input[type='checkbox'] {
+    display: none;
+    position: absolute;
+    margin: $screen-atom / 2 0 0 $offset-sm;
+  }
+
+  input[type='checkbox'] + label {
+    transition: all 0.25s;
+    outline: none;
+    color: $gray-600;
+    cursor: pointer;
+  }
+
+  input[type='checkbox']:checked + label {
+    color: map-get($theme-colors, info);
+  }
+}

@@ -1,0 +1,50 @@
+@import '../typography/mixins';
+@import '../typography/variables';
+@import 'variables';
+
+/* postcss-bem-linter: define table-grid */
+
+.table-grid {
+  @include typography(regular-small);
+
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  .table-grid__header {
+    display: flex;
+    align-items: center;
+    height: $grid-row-height;
+    min-height: $grid-row-height;
+  }
+
+  .table-grid__body {
+    flex: 1;
+  }
+
+  .table-grid__footer {
+    display: flex;
+    align-items: center;
+    height: $grid-row-height;
+    min-height: $grid-row-height;
+    padding: 0 $offset-sm;
+    border: $table-border;
+    border-top: 0;
+
+    .table-grid__pager__textfield {
+      width: $grid-pager-textfield-width !important;
+      margin-bottom: 0;
+
+      .table-grid__pager__textfield__input {
+        font-weight: $font-weight-medium;
+        text-align: center;
+      }
+    }
+
+    .table-grid__pager__delimiter {
+      padding: 0 $offset-sm;
+    }
+  }
+}
+
+/* postcss-bem-linter: end */

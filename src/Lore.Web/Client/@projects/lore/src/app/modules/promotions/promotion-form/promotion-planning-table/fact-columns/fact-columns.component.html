@@ -1,0 +1,64 @@
+<ng-container matColumnDef="fact">
+  <th
+    mat-header-cell
+    *matHeaderCellDef
+    colspan="6"
+    class="text--center border-right--bold"
+  >
+    Факт
+  </th>
+</ng-container>
+
+<ng-container matColumnDef="fact-volume">
+  <th mat-header-cell *matHeaderCellDef class="value-cell">Объем</th>
+  <td mat-cell *matCellDef="let data; let i = dataIndex" class="value-cell">
+    {{ data.value.row.fact?.volume }}
+  </td>
+
+  <ng-container matColumnDef="fact-net-cost">
+    <th mat-header-cell *matHeaderCellDef class="value-cell">Себестоимость</th>
+    <td mat-cell *matCellDef="let data; let i = dataIndex" class="value-cell">
+      {{ data.value.row.fact?.netCostAmount | number: '1.0-2' }}
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="fact-revenue">
+    <th mat-header-cell *matHeaderCellDef class="value-cell">Выручка</th>
+    <td mat-cell *matCellDef="let data; let i = dataIndex" class="value-cell">
+      {{ data.value.row.fact?.revenue }}
+    </td></ng-container
+  >
+
+  <ng-container matColumnDef="fact-margin">
+    <th mat-header-cell *matHeaderCellDef class="value-cell">Маржа</th>
+    <td mat-cell *matCellDef="let data; let i = dataIndex" class="value-cell">
+      {{ data.value.row.fact?.margin | number: '1.0-2' }}
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="fact-uplift-volume">
+    <th mat-header-cell *matHeaderCellDef class="value-cell">Uplift, объём</th>
+    <td
+      mat-cell
+      *matCellDef="let data; let i = dataIndex"
+      class="value-cell"
+      [class.text--danger]="data.value.row.fact?.upliftVolume < 0"
+    >
+      {{ data.value.row.fact?.upliftVolume | number: '1.0-2' }}
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="fact-uplift-amount">
+    <th mat-header-cell *matHeaderCellDef class="value-cell border-right--bold">
+      Uplift, сумма
+    </th>
+    <td
+      mat-cell
+      *matCellDef="let data; let i = dataIndex"
+      class="value-cell border-right--bold"
+      [class.text--danger]="data.value.row.fact?.upliftAmount < 0"
+    >
+      {{ data.value.row.fact?.upliftAmount | number: '1.0-2' }}
+    </td>
+  </ng-container>
+</ng-container>

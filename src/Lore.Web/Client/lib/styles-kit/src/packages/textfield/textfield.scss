@@ -1,0 +1,146 @@
+@import '../utilites/mixins/bottom-line';
+@import '../typography/mixins';
+@import '../typography/variables';
+@import '../icons/variables';
+@import '../animations/variables';
+@import 'mixins';
+@import 'variables';
+
+/* postcss-bem-linter: define textfield */
+
+.textfield {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  width: 100%;
+  margin-bottom: $offset-xs;
+
+  &--dense {
+    margin: 0;
+  }
+
+  .textfield__label {
+    display: inline-block;
+    margin-bottom: $offset-xs;
+  }
+
+  .textfield__input {
+    @include textfield-base;
+
+    &:invalid {
+      @include bottom-line(map-get($theme-colors, danger), 1px);
+    }
+
+    &--right-icon-padding {
+      padding-right: $textfield-icon-padding;
+    }
+
+    &--two-right-icon-padding {
+      padding-right: $textfield-icon-padding * 2;
+    }
+  }
+
+  .textfield__caption {
+    @include typography(regular-small);
+
+    display: inline-block;
+
+    &--absolute {
+      position: absolute;
+      bottom: -1rem;
+    }
+  }
+
+  .textfield__icons-group {
+    display: flex;
+    position: absolute;
+    justify-content: center;
+
+    &--align-right {
+      .textfield__icon {
+        // only right icons must have hover style
+        @include button-hover-text-only(darken($textfield-icon-color, 10%));
+      }
+
+      top: 0;
+      right: 0;
+      bottom: 0;
+    }
+
+    &--align-left {
+      left: 0;
+    }
+
+    &--vertical {
+      flex-direction: column;
+
+      .textfield__icon {
+        height: $textfield-icon-size / 2;
+        line-height: $textfield-icon-size / 2;
+      }
+    }
+
+    .textfield__icon {
+      position: relative;
+    }
+  }
+
+  .textfield__icon {
+    @include textfield-icon;
+
+    &--align-right {
+      // only right icons can have hover style
+      @include button-hover-text-only(darken($textfield-icon-color, 10%));
+
+      top: 0;
+      right: 0;
+      bottom: 0;
+    }
+
+    &--align-left {
+      left: 0;
+      cursor: default !important;
+
+      + .textfield__input {
+        padding-left: $textfield-icon-padding !important;
+      }
+    }
+
+    &--disabled {
+      color: $textfield-muted-color;
+    }
+  }
+}
+
+/* stylelint-disable plugin/selector-bem-pattern */
+
+// Inputs type classes
+@each $style, $color in $theme-colors {
+  .textfield--#{$style} {
+    > .textfield__input {
+      @include bottom-line($color, 1px);
+
+      &:focus {
+        @include bottom-line(darken($color, 20%), 1px);
+      }
+
+      &::placeholder {
+        color: lighten($color, 25%);
+      }
+    }
+
+    > .textfield__caption {
+      color: $color;
+    }
+  }
+}
+
+textarea {
+  height: $textfield-height * 2 !important;
+  padding: $offset-xs !important;
+  resize: none;
+}
+
+/* stylelint-enable plugin/selector-bem-pattern */
+
+/* postcss-bem-linter: end */

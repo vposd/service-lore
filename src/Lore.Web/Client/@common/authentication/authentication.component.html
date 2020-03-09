@@ -1,0 +1,7 @@
+<div
+  class="page page--fixed page--centered page--auth-bg"
+  *ngIf="!(isAuthenticated$ | async)"
+  @fadeInOut
+>
+  <auth-login-form></auth-login-form>
+</div>

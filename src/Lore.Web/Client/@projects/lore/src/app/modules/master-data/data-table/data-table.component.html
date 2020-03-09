@@ -1,0 +1,120 @@
+<!-- <div class="row row--offset offset--sm table-caption">
+  <div class="mat-headline">
+    {{ sourceParams.label.plural }}
+  </div>
+</div> -->
+<div class="table-content">
+  <div
+    class="progress-container offset--md"
+    *ngIf="!initialized && !tableHidden"
+  >
+    <p class="progress-container__header">Получение данных...</p>
+    <div class="progress-container__progress progress progress--info">
+      <div class="progress-indeterminate"></div>
+    </div>
+  </div>
+
+  <request-progress
+    [requestProgress]="requestProgress"
+    [hidden]="!tableHidden && requestProgress.state.progress"
+  ></request-progress>
+
+  <mat-table
+    [hidden]="tableHidden"
+    class="data-table table--hover"
+    [class.table--hover]="selectable"
+    [dataSource]="dataSource"
+    multiTemplateDataRows
+    matSort
+    [style.opacity]="requestProgress.state.progress ? 0.5 : 1"
+  >
+    <ng-container matColumnDef="actions">
+      <mat-header-cell *matHeaderCellDef>
+        <mat-checkbox
+          *ngIf="multipleSelection"
+          (change)="$event ? masterToggle() : null"
+          [checked]="selectionModel.hasValue() && isAllSelected"
+          [indeterminate]="selectionModel.hasValue() && !isAllSelected"
+        ></mat-checkbox>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        <mat-checkbox
+          [checked]="selectionModel.isSelected(row.id)"
+          (click)="$event.stopPropagation()"
+          (change)="$event ? selectRow(row) : null"
+        ></mat-checkbox>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container *ngFor="let column of columns">
+      <ng-container
+        [matColumnDef]="column.key"
+        *ngIf="column.name !== 'actions'"
+      >
+        <mat-header-cell *matHeaderCellDef mat-sort-header>
+          {{ column.name }}
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row">
+          {{
+            row[column.key] | formatByType: sourceParams.entity:column.key
+          }}</mat-cell
+        >
+      </ng-container>
+    </ng-container>
+
+    <ng-container matColumnDef="expandedDetail">
+      <mat-cell *matCellDef="let row">
+        <div
+          class="expanded-detail"
+          [@detailExpand]="row.id == expandedRowId ? 'expanded' : 'collapsed'"
+        >
+          <ng-container
+            *appExpandableRowHost="
+              let row;
+              expanded: row.id == expandedRowId;
+              template: expandableRow;
+              context: row
+            "
+          ></ng-container>
+        </div>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true">
+      <div class="mat-header-row header-group-row">
+        <div class="mat-header-cell" role="columnheader"></div>
+      </div>
+    </mat-header-row>
+
+    <mat-row
+      class="table__row"
+      [class.table__row--selected]="selectionModel.isSelected(row.id)"
+      [class.table__row--expanded]="expandedRowId == row.id"
+      (click)="selectRow(row)"
+      @rowsAnimation
+      *matRowDef="let row; columns: displayedColumns"
+    ></mat-row>
+    <mat-row
+      *matRowDef="let element; columns: ['expandedDetail']"
+      class="detail-row"
+    >
+    </mat-row>
+  </mat-table>
+
+  <div class="row flex-full row--sticky" [hidden]="tableHidden">
+    <section
+      class="row__section row__section--align-start text--secondary offset--left-sm mat-caption text--truncate hidden-xs-down"
+    >
+      <ng-container *ngIf="selectable && multipleSelection">
+        Выбрано: {{ selectionModel.selected.length }}
+      </ng-container>
+    </section>
+    <span class="row__spacer"></span>
+    <section class="row__section row__section--align-end">
+      <mat-paginator
+        showFirstLastButtons
+        class="mat-paginator--bg"
+      ></mat-paginator>
+    </section>
+  </div>
+</div>

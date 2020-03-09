@@ -1,0 +1,10 @@
+@import '../../variables';
+@import 'variables';
+
+@mixin dialog-toolbar {
+  display: flex;
+  align-items: center;
+  height: $dialog-toolbar-height;
+  min-height: $dialog-toolbar-height;
+  padding: 0 $offset-sm;
+}

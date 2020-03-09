@@ -1,0 +1,91 @@
+import { HttpParams } from '@angular/common/http';
+import { isArray } from 'lodash/fp';
+
+export enum SortDirection {
+  Asc = 'asc',
+  Desc = 'desc'
+}
+
+/**
+ * Provides methods for build query data request
+ */
+export class QueryRequestBuilder {
+  static readonly PageSizeDefault = 30;
+
+  private params: HttpParams;
+  private pageSize = QueryRequestBuilder.PageSizeDefault;
+  private _pageNo = 0;
+  private _sortProp = null;
+  private _sortDir: SortDirection = null;
+
+  get request() {
+    let request =
+      this.pageSize === Infinity
+        ? this.params
+        : this.params
+            .set('take', this.pageSize.toString())
+            .set('skip', (this.pageSize * this._pageNo).toString());
+
+    if (this._sortProp) {
+      const desc = this._sortDir === SortDirection.Desc;
+      const prefix = desc ? '-' : '';
+      request = request.set('sort', `${prefix}${this._sortProp}`);
+    }
+
+    return request;
+  }
+
+  get requestParams() {
+    return this.params;
+  }
+
+  constructor() {
+    this.params = new HttpParams();
+  }
+
+  setFilter(expression: string) {
+    if (!expression) {
+      return this;
+    }
+    this.setParam('filter', expression);
+    return this;
+  }
+
+  setParam(key: string, value: string | string[]) {
+    if (!value) {
+      return this;
+    }
+    const paramValue = isArray(value) ? value.join(',') : value;
+    this.params = this.params.set(key, paramValue);
+    return this;
+  }
+
+  setParams(params: Map<string, string | string[]>) {
+    if (!params) {
+      return this;
+    }
+    params.forEach((value, key) => this.setParam(key, value));
+    return this;
+  }
+
+  setPageSize(count: number) {
+    this.pageSize = count;
+    return this;
+  }
+
+  setPage(pageNo: number) {
+    this._pageNo = pageNo;
+    return this;
+  }
+
+  sort(propertyPath: string, dir: SortDirection) {
+    if (!dir) {
+      this._sortDir = null;
+      this._sortProp = null;
+      return this;
+    }
+    this._sortProp = propertyPath;
+    this._sortDir = dir;
+    return this;
+  }
+}

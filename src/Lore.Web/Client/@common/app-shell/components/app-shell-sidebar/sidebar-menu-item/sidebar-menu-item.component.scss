@@ -1,0 +1,9 @@
+@import '~@ui/kit/src/variables';
+@import '~@ui/kit/src/packages/lists/mixins';
+@import '~@ui/kit/src/packages/app-shell/variables';
+
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: $screen-atom * 6;
+}

@@ -1,0 +1,25 @@
+@import '~@ui/kit/src/variables';
+
+mat-form-field {
+  width: 100%;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+
+  .form-header {
+    height: 3rem;
+    border-bottom: 1px solid $gray-300;
+    padding: 0 $offset-sm;
+  }
+
+  .mat-headline,
+  .mat-title {
+    margin: 0;
+  }
+
+  .form-body {
+    flex: 1 1 auto;
+  }
+}

@@ -1,0 +1,29 @@
+<li
+  #li
+  class="list-item"
+  tabindex="1"
+  (click)="onItemClick(item, $event)"
+  [class.list-item--active]="
+    item.children?.length ? false : (isRouteActive$ | async)
+  "
+>
+  <span class="list-item__icon" [ngClass]="item.icon"></span>
+  <span class="list-item__text text--truncate">
+    {{ item.label }}
+  </span>
+  <span
+    tabindex="-1"
+    class="list-item__icon mdi"
+    *ngIf="item.children"
+    [ngClass]="item.isCollapsed ? 'mdi-chevron-down' : 'mdi-chevron-up'"
+  ></span>
+</li>
+
+<sidebar-submenu-list
+  #submenu
+  [tabindex]="item.isCollapsed ? '-1' : 1"
+  *ngIf="!item.isCollapsed"
+  [menuItem]="item"
+  [@transformHeightAnimation]
+  (selected)="onSelectItem()"
+></sidebar-submenu-list>

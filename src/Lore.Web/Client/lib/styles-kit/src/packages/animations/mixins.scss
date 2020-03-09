@@ -1,0 +1,49 @@
+@import 'variables';
+
+@function animation-enter($name, $duration, $delay: 0ms) {
+  @return $name $duration $delay $animation-deceleration-curve-timing-function;
+}
+
+@function animation-exit-permanent($name, $duration, $delay: 0ms) {
+  @return $name $duration $delay $animation-acceleration-curve-timing-function;
+}
+
+@function animation-exit-temporary($name, $duration, $delay: 0ms) {
+  @return $name $duration $delay $animation-sharp-curve-timing-function;
+}
+
+@mixin keyframe($animation_name) {
+  @keyframes #{$animation_name} {
+    @content;
+  }
+}
+
+@mixin animation($animation, $function, $delay: 0ms, $duration: 1000ms) {
+  -webkit-animation-delay: $delay;
+  -webkit-animation-duration: $duration;
+  -webkit-animation-name: $animation;
+  -webkit-animation-timing-function: $function;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-fill-mode: forwards;
+
+  -moz-animation-delay: $delay;
+  -moz-animation-duration: $duration;
+  -moz-animation-name: $animation;
+  -moz-animation-timing-function: $function;
+  -moz-animation-iteration-count: infinite;
+  -moz-animation-fill-mode: forwards;
+
+  -o-animation-delay: $delay;
+  -o-animation-duration: $duration;
+  -o-animation-name: $animation;
+  -o-animation-timing-function: $function;
+  -o-animation-iteration-count: infinite;
+  -o-animation-fill-mode: forwards;
+
+  animation-delay: $delay;
+  animation-duration: $duration;
+  animation-name: $animation;
+  animation-timing-function: $function;
+  animation-iteration-count: infinite;
+  animation-fill-mode: forwards;
+}

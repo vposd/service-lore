@@ -1,0 +1,10 @@
+<div class="shell">
+  <div
+    class="row shell__warning mat-elevation-z5"
+    *ngIf="isOnline === false"
+    @slideInOutTop
+  >
+    Отсутствует подключение к Интернету.
+  </div>
+  <ng-content></ng-content>
+</div>

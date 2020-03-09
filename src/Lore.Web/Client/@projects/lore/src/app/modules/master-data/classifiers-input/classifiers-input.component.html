@@ -1,0 +1,69 @@
+<mat-form-field [style.opacity]="disabled ? '0.6' : ''">
+  <mat-chip-list #chipList>
+    <mat-chip
+      class="text--truncate"
+      *ngFor="let selected of value"
+      [disabled]="disabled"
+      [selectable]="false"
+      [removable]="true"
+      (removed)="remove(selected)"
+    >
+      {{ selected.name }} / {{ selected.values[0].name }}
+      <i class="mdi mdi-close-circle mdi--sm" matChipRemove></i>
+    </mat-chip>
+    <input
+      #lookupInput
+      autofocus
+      matChipInput
+      [placeholder]="placeholder"
+      [formControl]="groupLookupControl"
+      [matAutocomplete]="autoGroup"
+      [matChipInputFor]="chipList"
+      [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+    />
+  </mat-chip-list>
+  <button
+    mat-button
+    matSuffix
+    color="primary"
+    [disabled]="disabled"
+    appClassifiersSelection
+    [source]="source"
+    [(selection)]="value"
+    (click)="$event.stopPropagation()"
+  >
+    + Добавить
+  </button>
+  <mat-autocomplete
+    #autoGroup="matAutocomplete"
+    (optionSelected)="select($event)"
+  >
+    <cdk-virtual-scroll-viewport
+      class="viewport-select"
+      itemSize="5"
+      maxBufferPx="400"
+      minBufferPx="200"
+    >
+      <ng-container
+        *cdkVirtualFor="
+          let group of lookupValues$ | async;
+          templateCacheSize: 0
+        "
+      >
+        <mat-optgroup
+          appHighlight
+          [highlightQuery]="query"
+          *ngIf="group.values.length"
+          [label]="group.name"
+        >
+          <mat-option
+            *ngFor="let value of group.values | limit: 20"
+            [value]="[group, value]"
+          >
+            <span highlightTarget>{{ value['name'] }}</span>
+          </mat-option>
+        </mat-optgroup>
+      </ng-container>
+    </cdk-virtual-scroll-viewport>
+  </mat-autocomplete>
+</mat-form-field>

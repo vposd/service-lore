@@ -1,0 +1,14 @@
+@import 'variables/global';
+@import 'variables/authentication';
+@import '@common/app-shell/styles/main';
+@import 'material';
+
+[routerLink] {
+  outline: none;
+}
+
+/* stylelint-disable */
+* {
+  outline: none;
+}
+/* stylelint-enable */

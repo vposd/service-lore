@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "baseUrl": "tsconfig",
+    "declaration": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "lib": ["esnext", "dom"],
+    "moduleResolution": "node",
+    "module": "commonjs",
+    "noEmitHelpers": true,
+    "noImplicitAny": false,
+    "outDir": "./scripts",
+    "removeComments": true,
+    "rootDir": ".",
+    "sourceMap": true,
+    "target": "es5"
+  },
+  "compileOnSave": false,
+  "include": ["src/**/*", "public/**/*"],
+  "exclude": ["node_modules", "dist", "dist-demo", "test"]
+}

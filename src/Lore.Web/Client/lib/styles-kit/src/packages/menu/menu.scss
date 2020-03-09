@@ -1,0 +1,45 @@
+@import '../../variables';
+@import '../elevation/mixins';
+@import '../buttons/mixins';
+@import './variables';
+
+.menu {
+  @include elevation(2);
+
+  display: flex;
+  flex-direction: column;
+  max-width: $menu-max-width;
+  padding: $offset-xs 0;
+  transition: visibility 0s, animation-enter(opacity, 100ms),
+    animation-enter(transform, 100ms);
+  background-color: $white;
+
+  &--absolute {
+    position: absolute;
+  }
+
+  .menu__item {
+    @include icon-button;
+
+    justify-content: flex-start;
+    width: 100%;
+    height: $menu-item-height;
+    padding: 0 $offset-sm;
+    background: $white;
+    color: map-get($theme-colors, dark);
+
+    &:hover {
+      background-color: $gray-200;
+    }
+
+    &:disabled {
+      color: $gray-600;
+    }
+
+    .mdi {
+      padding-right: $offset-sm;
+      font-size: $menu-item-font-size;
+      line-height: $menu-item-height;
+    }
+  }
+}

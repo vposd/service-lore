@@ -1,0 +1,27 @@
+@keyframes checkbox-indeterminate {
+  0%,
+  68.2% {
+    transform: scaleX(0);
+  }
+
+  68.2% {
+    animation-timing-function: cubic-bezier(0, 0, 0, 1);
+  }
+
+  100% {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes checkbox-checked {
+  from {
+    animation-timing-function: $animation-acceleration-curve-timing-function;
+    opacity: 1;
+    stroke-dashoffset: 0;
+  }
+
+  to {
+    opacity: 0;
+    stroke-dashoffset: 29.7833385 * -1;
+  }
+}

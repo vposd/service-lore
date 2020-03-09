@@ -1,0 +1,54 @@
+@import '~@ui/kit/src/variables';
+@import '~@ui/kit/src/packages/app-shell/variables';
+
+app-shell-main {
+  width: 100%;
+}
+
+.shell__warning {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3rem;
+  background: map_get($theme-colors, warning);
+  color: $gray-100;
+  justify-content: center;
+  z-index: 1090;
+}
+
+.sidebar {
+  z-index: 1550;
+}
+
+.sidebar--absolute {
+  position: absolute;
+}
+
+.list .list-item--active {
+  background: $sidebar-menu-hover-bg !important;
+  &:hover {
+    background: $sidebar-menu-hover-bg !important;
+  }
+}
+
+.sidebar-backdrop {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 1080;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.shell--disabled {
+  .sidebar,
+  .toolbar {
+    display: none;
+  }
+
+  .content {
+    top: 0;
+  }
+}

@@ -1,0 +1,101 @@
+@import '~@ui/kit/src/variables';
+
+$table-cell-selected: $gray-400;
+
+:host {
+  display: flex;
+  flex-direction: column;
+}
+
+.data-table {
+  width: 100%;
+  transition: 280ms opacity;
+  table-layout: fixed;
+}
+
+.table--hover {
+  transition: 180ms;
+}
+
+.table__row--selected {
+  background-color: $table-cell-selected !important;
+
+  &:hover {
+    background-color: $table-cell-selected !important;
+  }
+}
+
+.table-content {
+  display: flex;
+  position: absolute;
+  top: 56px;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  border-top: 1px solid $gray-400;
+  flex-direction: column;
+  overflow: auto;
+}
+
+.mat-column-actions {
+  width: 4rem !important;
+  min-width: 4rem !important;
+}
+
+.row {
+  max-height: 7rem;
+}
+
+.row--sticky {
+  bottom: 0px;
+  position: sticky;
+  z-index: 10;
+  border-top: 1px solid $gray-300;
+  background: $gray-100;
+}
+
+.offset--left-sm {
+  padding-left: $offset-sm;
+}
+
+.mat-paginator--bg {
+  background: $gray-100;
+}
+
+.table__row {
+  position: relative;
+  border-bottom-width: 0;
+}
+
+.table__row:not(.table__row--expanded) {
+  cursor: pointer;
+}
+
+.table__row:not(.table__row--expanded):hover {
+  background: $gray-100;
+}
+
+.table__row.table__row--expanded {
+  background: $gray-100;
+  cursor: pointer;
+  border-bottom-color: transparent;
+
+  &:hover {
+    background: $gray-200;
+  }
+}
+
+.detail-row {
+  min-height: 0;
+}
+
+.mat-column-expandedDetail {
+  background: $gray-100;
+}
+
+.expanded-detail {
+  background: $gray-100;
+  overflow: hidden;
+  flex: 1 1 auto;
+  display: flex;
+}

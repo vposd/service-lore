@@ -1,0 +1,30 @@
+<form [formGroup]="form">
+  <table
+    @fadeIn
+    mat-table
+    appTable
+    formArrayName="table"
+    [dataSource]="dataSource"
+    multiTemplateDataRows
+    *ngIf="dataSource.data.length"
+  >
+    <app-product-columns></app-product-columns>
+
+    <app-summary-columns [summary]="summary$ | async"></app-summary-columns>
+    <app-baseline-columns appTableRow [form]="form"></app-baseline-columns>
+    <app-plan-columns [form]="form"></app-plan-columns>
+    <app-fact-columns [form]="form"></app-fact-columns>
+    <app-planfact-columns [form]="form"></app-planfact-columns>
+
+    <tr
+      mat-header-row
+      *matHeaderRowDef="highLevelColumns; sticky: stickyHeader"
+    ></tr>
+    <tr mat-header-row *matHeaderRowDef="columns; sticky: stickyHeader"></tr>
+    <tr
+      mat-header-row
+      *matHeaderRowDef="summaryColumns; sticky: stickyHeader"
+    ></tr>
+    <tr mat-row *matRowDef="let row; columns: columns; let i = dataIndex"></tr>
+  </table>
+</form>

@@ -1,0 +1,11 @@
+@import '../../variables';
+
+$list-horizontal-padding: $offset-sm;
+$list-vertical-padding: $offset-xs;
+$list-item-height: $screen-atom * 5;
+$list-item-height-sm: $screen-atom * 5;
+$list-icon-color: $gray-700;
+
+$tree-list-item-height: $screen-atom * 4;
+$tree-list-caret-size: $screen-atom * 4;
+$tree-list-item-active-color: $block-active-color;

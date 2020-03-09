@@ -1,0 +1,38 @@
+<div class="fullscreen-page" *ngIf="reportMetadata$ | async as reportMetadata">
+  <mat-accordion [multi]="false" displayMode="flat" class="body-1">
+    <mat-expansion-panel [expanded]="true" class="mat-elevation-z0" #panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <span class="mat-title text--underline">{{
+            reportMetadata.label
+          }}</span>
+        </mat-panel-title>
+        <mat-panel-description></mat-panel-description>
+      </mat-expansion-panel-header>
+      <app-report-params-form
+        [reportMetadata]="reportMetadata"
+        (formChange)="onFormChange($event)"
+      ></app-report-params-form>
+      <div class="buttons-group">
+        <button
+          mat-stroked-button
+          color="primary"
+          (click)="getReport()"
+          [disabled]="isFormInvalid"
+        >
+          Сформировать
+        </button>
+        <button
+          mat-stroked-button
+          color="primary"
+          (click)="export()"
+          [disabled]="isFormInvalid"
+        >
+          Экспортировать в Excel
+        </button>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>
+
+  <app-report-grid></app-report-grid>
+</div>

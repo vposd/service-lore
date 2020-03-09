@@ -1,0 +1,32 @@
+<nav
+  class="sidebar"
+  [class.sidebar--absolute]="phoneModeEnabled"
+  [style.width.px]="0"
+  [@sidebarSlideInOut]="sidebarAnimationState"
+  *ngIf="isEnabled$ | async"
+>
+  <div class="toolbar toolbar--dark sidebar__toolbar">
+    <app-shell-user></app-shell-user>
+  </div>
+
+  <div class="navigation">
+    <div class="navigation__body">
+      <ul class="navigation__list list list--hover">
+        <sidebar-menu-item
+          tabindex="0"
+          *ngFor="let menuItem of menuModules$ | async"
+          [item]="menuItem"
+          (selectedChange)="closeSidebar()"
+          @slideInOutTop
+        ></sidebar-menu-item>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div
+  @fadeInOut
+  class="sidebar-backdrop"
+  *ngIf="sidebarAnimationState === 'full' && phoneModeEnabled"
+  (click)="closeSidebar()"
+></div>

@@ -1,0 +1,154 @@
+@import '../typography/mixins';
+@import 'variables';
+@import 'keyframes';
+
+// Container for checkbox and radio
+@mixin input-box-container {
+  display: flex;
+  position: relative;
+  align-items: center;
+  width: 100%;
+  height: $checkbox-container-height;
+  margin: $offset-xs 0;
+}
+
+@mixin input-box-input {
+  display: inline-block;
+  position: relative;
+  width: $input-box-width;
+  height: $input-box-height;
+  margin: 0;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  appearance: none;
+}
+
+@mixin input-box-label {
+  @include typography(regular-small);
+
+  padding-left: $offset-xs;
+  cursor: pointer;
+  user-select: none;
+}
+
+@mixin input-box-disabled {
+  &:disabled {
+    opacity: 0.5;
+    cursor: default;
+    pointer-events: none;
+  }
+}
+
+@mixin input-box-filled($color) {
+  border-color: $color;
+  background-color: $color;
+  content: '';
+}
+
+// Set up checkbox, its checked and indeterminated styles
+@mixin checkbox {
+  @include checkbox-base-bg;
+  @include input-box-disabled;
+  @include input-box-input;
+
+  &:checked {
+    @include checkbox-checked-bg($input-box-checked-bg);
+  }
+
+  &:indeterminate {
+    @include checkbox-indeterminate-bg($input-box-checked-bg);
+  }
+}
+
+@mixin checkbox-base-bg {
+  &::before {
+    display: block;
+    width: $input-box-width;
+    height: $input-box-height;
+    transition: 180ms all $animation-acceleration-curve-timing-function;
+    border: $input-box-border;
+    border-radius: $input-box-border-width;
+    content: '';
+  }
+}
+
+@mixin checkbox-checked-bg($color) {
+  &::before {
+    @include input-box-filled($color);
+
+    background-image: $input-box-icon-checked;
+  }
+
+  &::after {
+    display: block;
+    position: absolute;
+    top: 0;
+    width: $input-box-width;
+    height: $input-box-height;
+    border-radius: $input-box-border-width;
+    content: '';
+  }
+}
+
+@mixin checkbox-indeterminate-bg($color) {
+  &::before {
+    @include input-box-filled($color);
+  }
+
+  &::after {
+    display: block;
+    position: absolute;
+    top: $input-box-width / 2 - $input-box-border-width / 2;
+    width: $input-box-width - $input-box-border-width * 2;
+    height: $input-box-border-width;
+    margin: 0 $input-box-border-width;
+    animation: 100ms linear 0s checkbox-indeterminate;
+    background-color: $input-box-stroke-color;
+    content: '';
+  }
+}
+
+// Set up radio, its checked styles
+@mixin radio {
+  @include input-box-input;
+  @include input-box-disabled;
+  @include radio-base-bg;
+
+  &:checked {
+    @include radio-checked-bg;
+  }
+}
+
+@mixin radio-base-bg {
+  &::before,
+  &::after {
+    display: block;
+    width: $input-box-width;
+    height: $input-box-height;
+    transition: 180ms all $animation-acceleration-curve-timing-function;
+    border-radius: 50%;
+    content: '';
+  }
+
+  &::before {
+    position: absolute;
+    transform: scale(0);
+    background-color: $input-box-checked-bg;
+  }
+
+  &::after {
+    position: relative;
+    border: $input-box-border;
+  }
+}
+
+@mixin radio-checked-bg {
+  &::before {
+    transform: scale(0.5);
+  }
+
+  &::after {
+    border-color: $input-box-checked-bg;
+  }
+}

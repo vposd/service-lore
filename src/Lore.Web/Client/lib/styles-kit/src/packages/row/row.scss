@@ -1,0 +1,31 @@
+@import 'mixins';
+
+.row {
+  @include row;
+
+  &--offset {
+    padding: 0 $offset-sm;
+  }
+
+  .row__spacer {
+    flex: 1;
+  }
+
+  .row__section {
+    @include row-section;
+
+    + .row__section {
+      padding-left: $offset-md;
+    }
+
+    &--align-start {
+      justify-content: flex-start;
+      order: -1;
+    }
+
+    &--align-end {
+      justify-content: flex-end;
+      order: 1;
+    }
+  }
+}

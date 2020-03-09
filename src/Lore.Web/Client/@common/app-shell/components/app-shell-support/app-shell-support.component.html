@@ -1,0 +1,112 @@
+<core-dialog [style.width.px]="500">
+  <core-dialog-header
+    title="Информация и поддержка"
+    [canMaximize]="false"
+  ></core-dialog-header>
+  <core-dialog-body>
+    <div class="d-flex align-items-center">
+      <div class="offset--md">
+        <p class="mat-headline">{{ productName }}</p>
+        <span class="text--secondary"
+          >Версия {{ supportDetails.appVersion }} (API
+          {{ supportDetails.apiVersion }})</span
+        >
+      </div>
+    </div>
+
+    <div class="dialog__body__delimiter"></div>
+
+    <div class="layout-grid" *ngIf="supportDetails.portal" @fadeInOut>
+      <div class="layout-grid__inner">
+        <div class="layout-grid__cell layout-grid__cell--span-12">
+          <a [href]="supportDetails.portal" target="blank"
+            >Открыть портал поддержки</a
+          >
+        </div>
+      </div>
+    </div>
+
+    <div class="dialog__body__delimiter"></div>
+
+    <div class="layout-grid">
+      <div class="layout-grid__inner" *ngIf="supportDetails.phone" @fadeInOut>
+        <div
+          class="layout-grid__cell layout-grid__cell--align-middle layout-grid__cell--span-6"
+        >
+          <p
+            class="p--sm text--secondary font--bold"
+            *ngIf="supportDetails.phone"
+          >
+            Телефон поддержки
+          </p>
+          <div class="mat-headline">
+            {{ supportDetails.phone }}
+          </div>
+          <span class="text--secondary" *ngIf="supportDetails.phoneCallIsFree"
+            >(звонок бесплатный)</span
+          >
+        </div>
+        <div class="layout-grid__cell layout-grid__cell--span-6">
+          <span class="mat-caption text--secondary"
+            >При звонке, пожалуйста, представьтесь, сообщите название вашей
+            компании, город и контактный телефон, после чего опишите свою
+            проблему или задайте вопрос.</span
+          >
+        </div>
+      </div>
+    </div>
+    <div class="layout-grid" *ngIf="supportDetails.skype" @fadeInOut>
+      <div class="layout-grid__inner">
+        <div
+          class="layout-grid__cell layout-grid__cell--align-middle layout-grid__cell--span-6"
+        >
+          <p class="p--sm text--secondary font--bold">Skype</p>
+          <a [href]="supportDetails.skype">{{ supportDetails.skype }}</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="dialog__body__delimiter"></div>
+
+    <div class="layout-grid" *ngIf="supportDetails.email" @fadeInOut>
+      <div class="layout-grid__inner">
+        <div
+          class="layout-grid__cell layout-grid__cell--align-middle layout-grid__cell--span-6"
+        >
+          <p class="p--sm text--secondary font--bold">Эл.почта</p>
+          <a href="mailto:{{ supportDetails.email }}">{{
+            supportDetails.email
+          }}</a>
+        </div>
+        <div class="layout-grid__cell layout-grid__cell--span-6">
+          <span class="mat-caption text--warning"
+            >Просьба использовать эл. почту только в случае, если нет
+            возможности связаться со Службой поддержки другим способом.</span
+          >
+        </div>
+      </div>
+    </div>
+
+    <div class="dialog__body__delimiter"></div>
+
+    <div class="layout-grid">
+      <div class="layout-grid__inner">
+        <div class="layout-grid__cell layout-grid__cell--span-6">
+          <span class="mat-caption">© Системные Технологии, 2001–2020</span>
+        </div>
+        <div class="layout-grid__cell layout-grid__cell--span-6">
+          <a class="mat-caption" href="https://st-mobile.ru" target="blank"
+            >st-mobile.ru</a
+          >
+        </div>
+      </div>
+    </div>
+  </core-dialog-body>
+  <core-dialog-footer>
+    <ng-container coreDialogActions>
+      <button mat-button coreDialogClose>
+        Закрыть
+      </button>
+    </ng-container>
+  </core-dialog-footer>
+</core-dialog>

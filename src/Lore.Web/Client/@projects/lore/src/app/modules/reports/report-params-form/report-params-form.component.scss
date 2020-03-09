@@ -1,0 +1,11 @@
+@import '~@ui/kit/src/variables';
+
+:host {
+  display: flex;
+}
+
+.form-control {
+  + .form-control {
+    margin-left: $offset-sm;
+  }
+}

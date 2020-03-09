@@ -1,0 +1,58 @@
+@import '../tables/mixins';
+@import '../animations/mixins';
+@import '../typography/variables';
+@import '../../variables';
+@import 'variables';
+
+/* postcss-bem-linter: define expanded-panel */
+
+.expanded-panel {
+  position: relative;
+  overflow: hidden;
+
+  .expanded-panel__title {
+    display: flex;
+    position: relative;
+    align-items: center;
+    height: $expanded-panel-title-height;
+    margin: 0;
+    padding: 0 $offset-sm;
+    transition: animation-enter(all, 180ms);
+    border-bottom: 1px solid $gray-400;
+    background: $white;
+    color: map-get($theme-colors, secondary);
+    cursor: pointer;
+    user-select: none;
+    z-index: 1005;
+
+    &:hover {
+      color: $body-color;
+    }
+  }
+
+  &.expanded-panel--stretch {
+    height: 100%;
+
+    .expanded-panel__body {
+      height: calc(100% - #{$expanded-panel-title-height}) !important;
+      min-height: calc(100% - #{$expanded-panel-title-height}) !important;
+      max-height: calc(100% - #{$expanded-panel-title-height}) !important;
+      padding: $offset-sm;
+    }
+  }
+
+  .expanded-panel__body {
+    min-height: $expanded-panel-height;
+    padding: $offset-sm;
+  }
+
+  .expanded-panel__grid {
+    display: flex;
+    flex-flow: row wrap;
+    padding: 0 $offset-sm;
+    transform: translateZ(0);
+    overflow: hidden;
+  }
+}
+
+/* postcss-bem-linter: end */
