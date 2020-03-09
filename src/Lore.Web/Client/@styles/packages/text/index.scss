@@ -1,0 +1,65 @@
+@import '~@styles/variables';
+
+// Alignment
+.text--justify {
+  text-align: justify !important;
+}
+
+.text--truncate {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.text--nowrap {
+  white-space: nowrap;
+}
+
+// Responsive alignment
+.text--left {
+  text-align: left !important;
+}
+
+.text--right {
+  text-align: right !important;
+}
+
+.text--center {
+  text-align: center !important;
+}
+
+// Transformation
+.text--lowercase {
+  text-transform: lowercase !important;
+}
+
+.text--uppercase {
+  text-transform: uppercase !important;
+}
+
+.text--capitalize {
+  text-transform: capitalize !important;
+}
+
+// Decoration
+.text--underline {
+  border-bottom: 1px solid;
+}
+
+.text--underline-dotted {
+  border-bottom: 1px dotted;
+}
+
+.text--underline-dashed {
+  border-bottom: 1px dashed;
+}
+
+.text--line-through {
+  text-decoration: line-through !important;
+}
+
+// Colors
+
+.text--secondary {
+  color: mat-color($grey-palette, 800);
+}

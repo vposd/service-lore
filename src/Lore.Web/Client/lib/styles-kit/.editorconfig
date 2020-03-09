@@ -1,5 +1,0 @@
-[*]
-indent_style = space
-
-[*.{ts, js, json, html, scss}]
-indent_size = 2

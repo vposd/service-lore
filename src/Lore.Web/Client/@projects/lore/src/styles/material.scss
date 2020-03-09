@@ -1,12 +1,4 @@
 @import '~@angular/material/theming';
-@import '~@ui/kit/src/variables';
-@import '~@ui/kit/src/packages/buttons/mixins';
-@import '~@ui/kit/src/packages/card/mixins';
-@import '~@ui/kit/src/packages/lists/variables';
-@import '~@ui/kit/src/packages/typography/mixins';
-@import '~@ui/kit/src/packages/typography/variables';
-@import '~@ui/kit/src/packages/elevation/mixins';
-@import '~@ui/kit/src/packages/utilites/mixins/breakpoints';
 @include cdk-overlay();
 
 $datepicker-calendar-cell-size: $screen-atom * 5;
@@ -87,7 +79,7 @@ $small-point-size: 6px;
 .mat-calendar-body-cell-content {
   border-top: 0 !important;
   border-right: 0 !important;
-  border-bottom: 1px solid $gray-300 !important;
+  border-bottom: 1px solid mat-color($grey-palette, 300) !important;
   border-left: 0 !important;
   border-radius: 0 !important;
   width: 100% !important;
@@ -139,11 +131,11 @@ $small-point-size: 6px;
 }
 
 .mat-calendar-body-disabled {
-  color: $gray-600;
+  color: mat-color($grey-palette, 600);
 
   .mat-calendar-body-selected {
-    color: $gray-600;
-    border-color: $gray-600 !important;
+    color: mat-color($grey-palette, 600);
+    border-color: mat-color($grey-palette, 600) !important;
     border-width: 1px !important;
   }
 }
@@ -188,7 +180,7 @@ $small-point-size: 6px;
 }
 
 .mat-popover-dialog {
-  background: $gray-100;
+  background: mat-color($grey-palette, 100);
 }
 
 .mat-tooltip {

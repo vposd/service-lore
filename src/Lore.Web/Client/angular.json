@@ -29,7 +29,8 @@
               "@projects/lore/src/assets"
             ],
             "styles": [
-              "@projects/lore/src/styles.scss",
+              "@projects/lore/src/styles/index.scss",
+              "@styles/index.scss",
               "node_modules/@mdi/font/scss/materialdesignicons.scss"
             ],
             "scripts": []

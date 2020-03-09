@@ -1,5 +1,4 @@
 @import '~@angular/material/theming';
-@import '~@ui/kit/src/variables';
 
 table {
   width: 100%;
@@ -8,14 +7,14 @@ table {
 
 td,
 th {
-  border-right: 1px solid $gray-400;
+  border-right: 1px solid mat-color($grey-palette, 400);
   padding: 0 $offset-sm !important;
   min-width: 9rem;
   width: 9rem;
 }
 
 th {
-  background: $gray-200;
+  background: mat-color($grey-palette, 200);
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
@@ -28,7 +27,7 @@ tr.mat-row {
 
 tr.mat-row {
   &:hover {
-    background: $gray-200;
+    background: mat-color($grey-palette, 200);
     transition: 180ms ease;
   }
 }
@@ -80,9 +79,9 @@ td {
 }
 
 .border-right--bold {
-  border-right: 2px solid $gray-500;
+  border-right: 2px solid mat-color($grey-palette, 500);
 }
 
 .border-bottom--bold {
-  border-bottom: 2px solid $gray-500;
+  border-bottom: 2px solid mat-color($grey-palette, 500);
 }

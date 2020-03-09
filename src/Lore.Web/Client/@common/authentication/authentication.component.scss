@@ -1,4 +1,4 @@
-@import '~@ui/kit/src/packages/utilites/mixins/page';
+@import '~@styles/mixins/page';
 
 .page {
   @include page-full;
@@ -6,10 +6,10 @@
   z-index: 1090;
 
   &--fixed {
-    @include page-full--fixed;
+    @include page-full-fixed;
   }
 
   &--centered {
-    @include page-full--centered;
+    @include page-full-centered;
   }
 }

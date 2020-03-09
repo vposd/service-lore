@@ -23,9 +23,6 @@ import { AppShellMainComponent } from './components/app-shell-main/app-shell-mai
 import { AppShellSidebarComponent } from './components/app-shell-sidebar/app-shell-sidebar.component';
 import { AppShellSupportComponent } from './components/app-shell-support/app-shell-support.component';
 import { AppShellToolbarComponent } from './components/app-shell-main/app-shell-toolbar/app-shell-toolbar.component';
-import { HeadersInterceptor } from './components/interceptors/headers-interceptor.service';
-import { LicenceCheckInterceptor } from './components/interceptors/lisense-check-interceptor.service';
-import { ServiceUnavailableInterceptor } from './components/interceptors/service-unavailable-interceptor.service';
 import { SidebarMenuItemComponent } from './components/app-shell-sidebar/sidebar-menu-item/sidebar-menu-item.component';
 import { SidebarSubMenuListComponent } from './components/app-shell-sidebar/sidebar-menu-item/sidebar-submenu-list/sidebar-submenu-list.component';
 import { SupportService } from './components/app-shell-support/app-shell-support.service';
@@ -80,28 +77,7 @@ export class AppShellModule {
   static forRoot(): ModuleWithProviders<AppShellModule> {
     return {
       ngModule: AppShellModule,
-      providers: [
-        // {
-        //   provide: HTTP_INTERCEPTORS,
-        //   useClass: LicenceCheckInterceptor,
-        //   multi: true
-        // },
-        // {
-        //   provide: HTTP_INTERCEPTORS,
-        //   useClass: VersionCheckInterceptor,
-        //   multi: true
-        // },
-        // {
-        //   provide: HTTP_INTERCEPTORS,
-        //   useClass: ServiceUnavailableInterceptor,
-        //   multi: true
-        // },
-        // {
-        //   provide: HTTP_INTERCEPTORS,
-        //   useClass: HeadersInterceptor,
-        //   multi: true
-        // }
-      ]
+      providers: []
     };
   }
 }

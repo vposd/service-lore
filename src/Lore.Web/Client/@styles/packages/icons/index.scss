@@ -1,0 +1,14 @@
+@import '~@styles/variables';
+
+.mdi {
+  font-size: mat-font-size($application-typography, display-1);
+
+  &::before {
+    display: flex;
+    justify-content: center;
+  }
+
+  &--sm {
+    font-size: mat-font-size($application-typography, title);
+  }
+}

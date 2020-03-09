@@ -1,8 +1,15 @@
-@import '~@ui/kit/src/variables';
 @import '../styles/variables';
 @import '../styles/mixins';
 
 .auth-card {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  min-width: 0;
+  word-wrap: break-word;
+  border-radius: 0.2rem;
+  background-clip: border-box;
+  background: mat-color($grey-palette, 100);
   width: $login-form-width;
   padding: $offset-md;
   margin: auto;
@@ -35,10 +42,6 @@
   }
 }
 
-.card__delimiter {
-  margin: $offset-md 0;
-}
-
 .card__footer {
-  padding-top: $offset-md;
+  padding-top: $offset-xs;
 }

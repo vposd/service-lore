@@ -1,4 +1,4 @@
-@import '~@ui/kit/src/variables';
+@import '~@styles/variables';
 
 .splash {
   display: flex;
@@ -26,7 +26,7 @@
   }
 
   .splash__body__header {
-    color: $gray-800;
+    color: mat-color($grey-palette, 800);
     padding: $offset-sm 0 0 0;
   }
 }

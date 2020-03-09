@@ -1,6 +1,6 @@
-@import '~@ui/kit/src/variables';
+@import '~@styles/variables';
 
-$table-cell-selected: $gray-400;
+$table-cell-selected: mat-color($grey-palette, 100);
 
 :host {
   display: flex;
@@ -32,7 +32,7 @@ $table-cell-selected: $gray-400;
   right: 0;
   bottom: 0;
   left: 0;
-  border-top: 1px solid $gray-400;
+  border-top: 1px solid mat-color($grey-palette, 400);
   flex-direction: column;
   overflow: auto;
 }
@@ -50,8 +50,8 @@ $table-cell-selected: $gray-400;
   bottom: 0px;
   position: sticky;
   z-index: 10;
-  border-top: 1px solid $gray-300;
-  background: $gray-100;
+  border-top: 1px solid mat-color($grey-palette, 300);
+  background: mat-color($grey-palette, 100);
 }
 
 .offset--left-sm {
@@ -59,7 +59,7 @@ $table-cell-selected: $gray-400;
 }
 
 .mat-paginator--bg {
-  background: $gray-100;
+  background: mat-color($grey-palette, 100);
 }
 
 .table__row {
@@ -72,16 +72,16 @@ $table-cell-selected: $gray-400;
 }
 
 .table__row:not(.table__row--expanded):hover {
-  background: $gray-100;
+  background: mat-color($grey-palette, 100);
 }
 
 .table__row.table__row--expanded {
-  background: $gray-100;
+  background: mat-color($grey-palette, 100);
   cursor: pointer;
   border-bottom-color: transparent;
 
   &:hover {
-    background: $gray-200;
+    background: mat-color($grey-palette, 200);
   }
 }
 
@@ -90,11 +90,11 @@ $table-cell-selected: $gray-400;
 }
 
 .mat-column-expandedDetail {
-  background: $gray-100;
+  background: mat-color($grey-palette, 100);
 }
 
 .expanded-detail {
-  background: $gray-100;
+  background: mat-color($grey-palette, 100);
   overflow: hidden;
   flex: 1 1 auto;
   display: flex;

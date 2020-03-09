@@ -1,4 +1,4 @@
-@import '~@ui/kit/src/packages/utilites/mixins/page';
+@import '~@styles/mixins/page';
 
 // Variable $auth-backgrounds-map must be contain map of screen sizes and its background images
 // For example: 1280px: './assets/1280.jpg'
@@ -7,18 +7,18 @@
 $auth-backgrounds-map: () !default;
 $auth-backgrounds-map: map-merge(
   (
-    1280px: 'assets/auth-bg/bg_1280x1024.jpg',
-    1366px: 'assets/auth-bg/bg_1366x768.jpg',
-    1920px: 'assets/auth-bg/bg_1920x1080.jpg',
-    2560px: 'assets/auth-bg/bg_2560x1440.jpg',
-    3840px: 'assets/auth-bg/bg_3840x2160.jpg'
+    1280px: '../assets/auth-bg/bg-auth.jpg',
+    1366px: '../assets/auth-bg/bg-auth.jpg',
+    1920px: '../assets/auth-bg/bg-auth.jpg',
+    2560px: '../assets/auth-bg/bg-auth.jpg',
+    3840px: '../assets/auth-bg/bg-auth.jpg'
   ),
   $auth-backgrounds-map
 );
 
 .page--auth-bg {
-  background: url(assets/auth-bg/bg_1280x1024.jpg);
+  background: url(../assets/auth-bg/bg-auth.jpg);
 
   @include page-full-bg($auth-backgrounds-map);
-  @include page-full--background-color-hover;
+  @include page-full-background-color-hover;
 }

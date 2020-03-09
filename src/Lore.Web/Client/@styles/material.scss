@@ -1,0 +1,88 @@
+@import './variables';
+
+.mat-cell {
+  font-size: $font-size-xs;
+}
+
+.highlight {
+  background-color: mat-color(mat-palette($mat-amber), 800);
+  color: $white;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  box-shadow: 0 0 0 30px mat-color($grey-palette, 100) inset !important;
+}
+
+.mat-button-base {
+  line-height: 2rem !important;
+}
+
+.mat-menu-item {
+  height: 2rem;
+}
+
+.mat-list-base .mat-list-item {
+  font-size: mat-font-size($application-typography, body-1);
+}
+
+.mat-chip {
+  font-weight: mat-font-weight($application-typography, body-1);
+}
+
+mat-form-field {
+  font-size: mat-font-size($application-typography, body-1) !important;
+  width: 100%;
+}
+
+.mat-badge-content {
+  width: auto !important;
+  min-width: 22px;
+  padding: 0 4px;
+  border-radius: 12px !important;
+}
+
+.mat-option {
+  font-size: mat-font-size($application-typography, body-1) !important;
+  height: auto !important;
+}
+
+.mat-optgroup {
+  display: block;
+  border-bottom: 1px solid mat-color($grey-palette, 300);
+  .mat-option {
+    padding-left: 16px !important;
+  }
+}
+
+.mat-optgroup-label {
+  color: mat-color($grey-palette, 600) !important;
+}
+
+.mat-chip-list-wrapper {
+  min-height: 42px;
+}
+
+.mat-option.mat-active {
+  &:before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: mat-color($grey-palette, 500);
+    content: '';
+  }
+}
+
+::ng-deep .cdk-virtual-scroll-content-wrapper {
+  transform: translateY(0px) !important;
+}
+
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}

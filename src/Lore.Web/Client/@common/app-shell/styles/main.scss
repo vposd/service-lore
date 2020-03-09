@@ -1,6 +1,3 @@
-@import '~@ui/kit/src/variables';
-@import '~@ui/kit/src/packages/app-shell/variables';
-
 app-shell-main {
   width: 100%;
 }
@@ -12,7 +9,7 @@ app-shell-main {
   right: 0;
   height: 3rem;
   background: map_get($theme-colors, warning);
-  color: $gray-100;
+  color: mat-color($grey-palette, 100);
   justify-content: center;
   z-index: 1090;
 }

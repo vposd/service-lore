@@ -1,0 +1,40 @@
+.row {
+  display: flex;
+  position: relative;
+  align-items: center;
+  box-sizing: border-box;
+  width: 100%;
+  height: auto;
+  padding: 0;
+
+  &--offset {
+    padding: 0 $offset-sm;
+  }
+
+  .row__spacer {
+    flex: 1;
+  }
+
+  .row__section {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 0;
+    height: 100%;
+    z-index: 1;
+
+    + .row__section {
+      padding-left: $offset-md;
+    }
+
+    &--align-start {
+      justify-content: flex-start;
+      order: -1;
+    }
+
+    &--align-end {
+      justify-content: flex-end;
+      order: 1;
+    }
+  }
+}
