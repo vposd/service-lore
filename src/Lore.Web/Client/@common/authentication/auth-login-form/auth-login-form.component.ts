@@ -14,7 +14,6 @@ import {
 } from '@angular/forms';
 import { map } from 'rxjs/operators';
 
-import { AppShellConfig } from '@common/app-shell/config/app-shell.config.service';
 import { FadeInOut } from '@common/animations/fade-in-out.animation';
 import { RequestProgressState } from '@common/utils/request-progress/request-progress.class';
 
@@ -34,10 +33,9 @@ export class LoginFormComponent implements OnInit {
   requestState$: Observable<RequestProgressState>;
 
   constructor(
-    private readonly appShellConfig: AppShellConfig,
     private readonly authService: AuthenticationService,
     private readonly fb: FormBuilder
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.credentials = this.fb.group({
@@ -45,8 +43,6 @@ export class LoginFormComponent implements OnInit {
       password: new FormControl('', Validators.required)
     });
 
-    this.productName =
-      this.appShellConfig.productOptions.productName || this.productName;
     this.requestState$ = this.authService.state$.pipe(
       map(state => state.authProgress)
     );

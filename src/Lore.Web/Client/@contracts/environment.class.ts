@@ -4,21 +4,9 @@ export interface Endpoints {
     signOut: string;
     refreshAccess: string;
   };
-  classifiers: string;
   data: {
     clients: string;
-    outlets: string;
     employees: string;
-    products: string;
-    promotions: string;
-    promotionStatuses: string;
-    promotionMechanics: string;
-  };
-  promotions: {
-    process: string;
-  };
-  reports: {
-    promotionProgress: string;
   };
   users: {
     currentUser: string;

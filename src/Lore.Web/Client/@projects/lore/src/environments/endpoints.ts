@@ -7,21 +7,9 @@ export const endpoints: Endpoints = {
     signOut: '/api/authentication/signOut',
     refreshAccess: '/api/authentication/refreshAccess'
   },
-  classifiers: '/api/classifiers/{codeKey}',
   data: {
     clients: '/api/clients',
-    outlets: '/api/outlets',
     employees: '/api/employees',
-    products: '/api/products',
-    promotions: '/api/loretions',
-    promotionStatuses: '/api/loretionStatuses',
-    promotionMechanics: '/api/loretionMechanics'
-  },
-  promotions: {
-    process: '/api/loretions/{id}'
-  },
-  reports: {
-    promotionProgress: '/api/reports/loretionProgress'
   },
   users: {
     currentUser: '/api/users/current'

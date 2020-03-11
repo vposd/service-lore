@@ -6,9 +6,11 @@
 @import './utils/display';
 @import './utils/cursor';
 @import './utils/flex';
+@import './utils/offset';
 
 body {
   @include mat-typography-level-to-styles($application-typography, body-1);
+  margin: 0;
 }
 
 html {

@@ -9,5 +9,5 @@ export class FormState<T> {
     return this.form.invalid;
   }
 
-  constructor(readonly form: FormGroup) {}
+  constructor(readonly form: FormGroup) { }
 }

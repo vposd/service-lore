@@ -1,7 +1,7 @@
 @import '~@styles/variables';
 
 .mdi {
-  font-size: mat-font-size($application-typography, display-1);
+  font-size: 1.5rem;
 
   &::before {
     display: flex;
@@ -9,6 +9,6 @@
   }
 
   &--sm {
-    font-size: mat-font-size($application-typography, title);
+    font-size: 1rem;
   }
 }

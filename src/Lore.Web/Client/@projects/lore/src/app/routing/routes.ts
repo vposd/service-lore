@@ -2,7 +2,6 @@ import { Routes } from '@angular/router';
 
 import { AuthenticationComponent } from '@common/authentication/authentication.component';
 import { GlobalAuthGuard } from '@common/authentication/auth-guard/global-auth-guard.service';
-import { RolesAccessGuard } from '@common/app-shell/components/route-guards/roles-access-guard.service';
 import { UserRole } from '@contracts/authentication/user';
 
 export const routes: Routes = [
@@ -34,7 +33,6 @@ export const routes: Routes = [
     path: 'settings',
     loadChildren: () =>
       import('../modules/settings/settings.module').then(x => x.SettingsModule),
-    canLoad: [RolesAccessGuard],
     data: {
       forRoles: [UserRole.Admin],
       title: 'Настройки'
@@ -42,7 +40,7 @@ export const routes: Routes = [
   },
   {
     path: '**',
-    redirectTo: 'promotions',
+    redirectTo: '',
     canActivate: [GlobalAuthGuard],
     data: {
       title: ''
