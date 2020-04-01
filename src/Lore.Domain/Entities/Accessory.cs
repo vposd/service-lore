@@ -2,7 +2,7 @@
 
 namespace Lore.Domain.Entities
 {
-    public class Client : Entity
+    public class Accessory : DeletableEntity
     {
         public string Name { get; set; }
     }

@@ -32,7 +32,7 @@ namespace Lore.Persistence
             LinqToDBForEFTools.Initialize();
         }
 
-        public DbSet<Client> Clients { get; set; }
+        public DbSet<Customer> Clients { get; set; }
         public DbSet<Employee> Employees { get; set; }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())

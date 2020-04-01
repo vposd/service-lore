@@ -11,7 +11,7 @@ namespace Lore.Application.Common.Interfaces
 {
     public interface ILoreDbContext : IDisposable
     {
-        public DbSet<Client> Clients { get; set; }
+        public DbSet<Customer> Clients { get; set; }
         public DbSet<Employee> Employees { get; set; }
 
         DatabaseFacade Database { get; }

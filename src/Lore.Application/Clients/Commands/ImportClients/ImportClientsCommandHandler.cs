@@ -29,7 +29,7 @@ namespace Lore.Application.Clients.Commands.ImportClients
             context.ChangeTracker.AutoDetectChangesEnabled = false;
             context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
 
-            var results = new List<Client>();
+            var results = new List<Customer>();
 
             context.Clients.AddRange(results);
             var rowsCount = await context.SaveChangesAsync(cancellationToken);
