@@ -1,5 +1,5 @@
 {
-  "name": "@st/lore",
+  "name": "@lore/client",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Lore.Domain.Entities;
@@ -17,7 +16,6 @@ namespace Lore.Application.Common.Interfaces
         DatabaseFacade Database { get; }
         ChangeTracker ChangeTracker { get; }
 
-        Task<int> BulkSaveChanges<T>(List<T> source, CancellationToken cancellationToken) where T : class;
         void SaveChanges();
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }

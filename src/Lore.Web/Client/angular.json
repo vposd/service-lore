@@ -18,7 +18,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/lore",
+            "outputPath": "dist",
             "index": "@projects/lore/src/index.html",
             "main": "@projects/lore/src/main.ts",
             "polyfills": "@projects/lore/src/polyfills.ts",

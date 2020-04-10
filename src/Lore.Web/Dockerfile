@@ -7,15 +7,6 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 
-# Install nodejs
-RUN apt-get update -yq \
-    && apt-get install curl gnupg -yq \
-    && curl -sL https://deb.nodesource.com/setup_12.x | bash \
-    && apt-get install nodejs -y
-
-RUN npm --version
-# Nodejs install finish
-
 WORKDIR /src
 COPY ["src/Lore.Web/Lore.Web.csproj", "src/Lore.Web/"]
 COPY ["src/Lore.Application/Lore.Application.csproj", "src/Lore.Application/"]

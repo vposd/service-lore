@@ -1,10 +1,23 @@
-version: "3.7"
+version: "3.4"
 
 networks:
   back-tier:
     driver: bridge
 
 services:
+  lore-client:
+    build:
+      context: .
+      dockerfile: src/Lore.Web/Client/Dockerfile
+    image: dockerhub.northeurope.cloudapp.azure.com/lore-client:latest
+    ports:
+      - "8000:80"
+      - "9000:443"
+    networks:
+      - back-tier
+    depends_on:
+      - lore-api
+
   lore-api:
     image: dockerhub.northeurope.cloudapp.azure.com/lore-api:latest
     depends_on:
@@ -12,9 +25,6 @@ services:
     build:
       context: .
       dockerfile: src/Lore.Web/Dockerfile
-    ports:
-      - "8000:80"
-      - "9000:443"
     restart: always
     environment:
       DB_CONNECTION_STRING: host=lore-db;port=5432;database=db-test;username=db-user;password=db-pass
@@ -33,44 +43,6 @@ services:
       POSTGRES_USER: "db-user"
       POSTGRES_PASSWORD: "db-pass"
       POSTGRES_DB: "db-test"
-    networks:
-      - back-tier
-
-  pgadmin:
-    image: dpage/pgadmin4
-    depends_on:
-      - lore-db
-    ports:
-      - "5000:80"
-    environment:
-      PGADMIN_DEFAULT_EMAIL: admin@localhost
-      PGADMIN_DEFAULT_PASSWORD: admin
-    networks:
-      - back-tier
-    restart: unless-stopped
-
-  prometheus:
-    image: prom/prometheus:v2.1.0
-    restart: always
-    ports:
-      - 9090:9090
-    volumes:
-      - ./prometheus/:/etc/prometheus/
-      - prometheus_data:/prometheus
-    networks:
-      - back-tier
-
-  grafana:
-    image: grafana/grafana
-    volumes:
-      - grafana_data:/var/lib/grafana
-      - ./grafana/provisioning/:/etc/grafana/provisioning/
-    environment:
-      - GF_SECURITY_ADMIN_PASSWORD=admin
-      - GF_USERS_ALLOW_SIGN_UP=false
-    restart: always
-    ports:
-      - 3000:3000
     networks:
       - back-tier
 

@@ -4,9 +4,10 @@ namespace Lore.Domain.Entities
 {
     public class AttributeValue : DeletableEntity
     {
-        public long ClassifierTypeId { get; set; }
-        public string Name { get; set; }
+        public string Value { get; set; }
+        public bool IsDefault { get; set; }
+        public long AttributeId { get; set; }
 
-        public AttributeType Type { get; set; }
+        public Attribute Attribute { get; set; }
     }
 }

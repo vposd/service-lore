@@ -12,12 +12,12 @@ namespace Lore.Domain.Entities
             StateHistory = new HashSet<OrderStateHistory>();
         }
 
-        public long DeviceId { get; set; }
         public string Description { get; set; }
         public long CustomerId { get; set; }
+        public long OrderDeviceId { get; set; }
 
         public Customer Customer { get; set; }
-        public OrderDevice Device { get; set; }
+        public OrderDevice OrderDevice { get; set; }
         public ICollection<OrderItem> Items { get; set; }
         public ICollection<OrderStateHistory> StateHistory { get; set; }
 

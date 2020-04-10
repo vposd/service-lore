@@ -14,7 +14,7 @@ namespace Lore.Web.Config
             var env = hostingContext.HostingEnvironment;
             if (env.IsProduction())
             {
-                webHostBuilder.UseSentry();
+                // webHostBuilder.UseSentry();
             }
         };
     }

@@ -20,7 +20,6 @@ namespace Lore.Persistence
 
         private static void SeedDefaultEntities(LoreDbContext context)
         {
-
         }
     }
 }

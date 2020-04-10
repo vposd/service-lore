@@ -1,0 +1,13 @@
+{
+  "folders": [
+    {
+      "path": "src\\Lore.Web\\Client"
+    }
+  ],
+  "settings": {
+    "files.autoSave": "off",
+    "files.defaultLanguage": "typescript",
+    "material-icon-theme.folders.theme": "none",
+    "material-icon-theme.opacity": 0.5
+  }
+}

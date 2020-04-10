@@ -1,9 +1,9 @@
 ﻿using System.Reflection;
+using Lore.Web.Config;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using Lore.Web.Config;
 
 namespace Lore
 {
@@ -25,7 +25,7 @@ namespace Lore
                     var appAssembly = Assembly.Load(new AssemblyName(env.ApplicationName));
                     if (appAssembly != null)
                     {
-                        config.AddUserSecrets(appAssembly, optional : true);
+                        config.AddUserSecrets(appAssembly, optional: true);
                     }
                 }
 

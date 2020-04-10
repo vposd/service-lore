@@ -2,12 +2,12 @@
 
 namespace Lore.Domain.Entities
 {
-    public class DeviceClassifier : Entity
+    public class OrderDeviceAttribute : Entity
     {
-        public long DeviceId { get; set; }
-        public long ClassifierId { get; set; }
+        public long OrderDeviceId { get; set; }
+        public long AttributeValueId { get; set; }
 
-        public Device Device { get; set; }
-        public Classifier Classifier { get; set; }
+        public OrderDevice OrderDevice { get; set; }
+        public AttributeValue AttributeValue { get; set; }
     }
 }

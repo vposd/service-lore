@@ -12,7 +12,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NSwag;
-using Prometheus;
 
 namespace Lore
 {
@@ -62,12 +61,6 @@ namespace Lore
                 {
                     options.InvalidModelStateResponseFactory = ModelStateValidator.ValidateModelState;
                 });
-
-            // In production, the Angular files will be served from this directory
-            services.AddSpaStaticFiles(configuration =>
-            {
-                configuration.RootPath = "Client/dist/promo";
-            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -85,8 +78,6 @@ namespace Lore
 
             app.UseStaticFiles();
 
-            app.UseSpaStaticFiles();
-
             app.UseRouting();
 
             app.UseOpenApi();
@@ -103,19 +94,9 @@ namespace Lore
 
             app.SeedData();
 
-            app.UseHttpMetrics();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                endpoints.MapMetrics();
-            });
-
-            app.UseSpa(spa =>
-            {
-                // To learn more about options for serving an Angular SPA from ASP.NET Core,
-                // see https://go.microsoft.com/fwlink/?linkid=864501
-                spa.Options.SourcePath = "Client";
             });
         }
     }
