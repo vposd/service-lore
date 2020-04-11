@@ -22,6 +22,6 @@ import { ShellUserDetailsModule } from './shell-user-details/shell-user-details.
     MatSidenavModule,
     MatToolbarModule,
     ShellUserDetailsModule,
-  ]
+  ],
 })
-export class ShellModule { }
+export class ShellModule {}

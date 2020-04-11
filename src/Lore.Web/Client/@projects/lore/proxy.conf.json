@@ -1,9 +1,9 @@
 {
   "/api": {
-    "target": "https://localhost:9000",
+    "target": "http://localhost:8000",
     "secure": false,
     "changeOrigin": true,
     "logLevel": "debug",
-    "pathRewrite": { "^/api": "https://localhost:9000/api" }
+    "pathRewrite": { "^/api": "http://localhost:8000/api" }
   }
 }

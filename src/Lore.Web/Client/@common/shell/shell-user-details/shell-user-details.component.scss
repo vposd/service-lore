@@ -1,0 +1,19 @@
+@import '~@styles/material';
+
+:host {
+  display: block;
+  padding: $offset-sm;
+}
+
+.letters-circle {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 2rem;
+  background: mat-color($grey-palette, 200);
+  color: mat-color($grey-palette, 700);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  margin-right: $offset-sm;
+}

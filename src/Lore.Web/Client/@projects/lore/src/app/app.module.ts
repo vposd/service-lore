@@ -9,11 +9,11 @@ import { AuthenticationModule } from '@common/authentication/authentication.modu
 import { Environment } from '@contracts/environment.class';
 import { HttpCacheModule } from '@common/utils/http-cache/http-cache.module';
 import { InformationModule } from '@common/information/information.module';
+import { ShellModule } from '@common/shell/shell.module';
 
 import { AppComponent } from './app.component';
 import { MasterDataConfig } from './modules/master-data/config/master-data-config.service';
 import { RoutingModule } from './routing/routing.module';
-import { ShellModule } from './shared/shell/shell.module';
 import { environment } from '../environments/environment';
 import { getRussianPaginatorIntl } from './config/mat-paginator-local';
 import { masterDataConfig } from './config/master-data-config';
@@ -29,15 +29,15 @@ import { masterDataConfig } from './config/master-data-config';
     InformationModule,
     HttpCacheModule.forRoot(),
     BrowserAnimationsModule,
-    AuthenticationModule.forRoot()
+    AuthenticationModule.forRoot(),
   ],
   providers: [
     { provide: Environment, useValue: environment },
     { provide: LOCALE_ID, useValue: 'ru' },
     { provide: MAT_DATE_LOCALE, useValue: 'ru-RU' },
     { provide: MasterDataConfig, useValue: masterDataConfig },
-    { provide: MatPaginatorIntl, useValue: getRussianPaginatorIntl() }
+    { provide: MatPaginatorIntl, useValue: getRussianPaginatorIntl() },
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

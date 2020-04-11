@@ -1,0 +1,18 @@
+<div *ngIf="user$ | async as user" class="row">
+  <span class="mat-subheading-2 letters-circle">{{ user.initials }}</span>
+  <p class="text--muted">{{ user.positionName || 'Administrator' }}</p>
+  <button
+    mat-icon-button
+    [matMenuTriggerFor]="menu"
+    (menuOpened)="menuOpened = true"
+    (menuClosed)="menuOpened = false"
+  >
+    <i
+      class="mdi mdi-chevron-down"
+      [@chevronAnimation]="menuOpened ? 'up' : 'down'"
+    ></i>
+  </button>
+</div>
+<mat-menu #menu="matMenu" xPosition="before">
+  <button mat-menu-item (click)="logout()">Logout</button>
+</mat-menu>

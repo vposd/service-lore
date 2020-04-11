@@ -1,0 +1,49 @@
+<div class="shell-content">
+  <mat-drawer-container class="shell-drawer-container" autosize>
+    <mat-drawer
+      *ngIf="isHandset$ | async as isHandset"
+      class="shell-drawer"
+      [class.shell-drawer--collapsed]="menuCollapsed"
+      [@drawerChange]="menuCollapsed ? 'collapsed' : 'expanded'"
+      [mode]="isHandset.matches ? 'over' : 'side'"
+      [fixedInViewport]="isHandset.matches"
+      [fixedTopGap]="isHandset.matches ? 0 : 56"
+      opened
+    >
+      <div class="shell-drawer__header">
+        <div class="shell-drawer__header__logo" *ngIf="!menuCollapsed" @fadeIn>
+          <img src="assets/service_logo.svg" />
+        </div>
+        <button mat-icon-button (click)="toggleMenu()">
+          <i class="mdi mdi-menu"></i>
+        </button>
+      </div>
+      <mat-nav-list class="shell-menu">
+        <a mat-list-item routerLink=".">
+          <i class="mdi mdi-book-open-page-variant" mat-list-icon></i>
+          <p class="shell-menu__text" mat-line>Main</p>
+        </a>
+        <a mat-list-item routerLink=".">
+          <i class="mdi mdi-settings" mat-list-icon></i>
+          <p class="shell-menu__text" mat-line>Settings</p>
+        </a>
+      </mat-nav-list>
+    </mat-drawer>
+
+    <mat-drawer-content
+      class="shell-content"
+      [@drawerContentChange]="
+        menuCollapsed ? 'menu-collapsed' : 'menu-expanded'
+      "
+    >
+      <mat-toolbar class="shell-toolbar">
+        <mat-toolbar-row>
+          <span>Main search</span>
+          <span class="flex-full"></span>
+          <app-shell-user-details></app-shell-user-details>
+        </mat-toolbar-row>
+      </mat-toolbar>
+      <router-outlet></router-outlet
+    ></mat-drawer-content>
+  </mat-drawer-container>
+</div>

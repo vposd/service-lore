@@ -4,36 +4,45 @@ import {
   ViewChild,
   ChangeDetectorRef,
   Output,
-  EventEmitter
+  EventEmitter,
+  ChangeDetectionStrategy,
+  ViewEncapsulation,
 } from '@angular/core';
-import { MatSidenav } from '@angular/material/sidenav';
+import { MatDrawer } from '@angular/material/sidenav';
 import {
   BreakpointObserver,
   Breakpoints,
-  BreakpointState
+  BreakpointState,
 } from '@angular/cdk/layout';
 import { Observable, Subject, combineLatest } from 'rxjs';
 import { Router, ResolveEnd } from '@angular/router';
-import { filter, tap, takeUntil } from 'rxjs/operators';
+import { tap, takeUntil } from 'rxjs/operators';
 import { isUndefined } from 'lodash';
 
 import { AuthenticationService } from '@common/authentication/auth-service/authentication.service';
 import { RequestProgress } from '@common/utils/request-progress/request-progress.class';
+import { FadeIn } from '@common/animations/fade-in-out.animation';
+
+import { DrawerChange, DrawerContentChange } from './drawer-state-animations';
 
 @Component({
   selector: 'app-shell',
   templateUrl: './shell.component.html',
-  styleUrls: ['./shell.component.scss']
+  styleUrls: ['./shell.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
+  animations: [DrawerChange, DrawerContentChange, FadeIn],
 })
 export class ShellComponent implements OnInit {
   isOnline: boolean;
   settingsSyncProgress = new RequestProgress();
   isHandset$: Observable<BreakpointState>;
+  menuCollapsed = true;
 
   @Output() userLogin = new EventEmitter();
   @Output() userLogout = new EventEmitter();
   @Output() settingsSync = new EventEmitter();
-  @ViewChild(MatSidenav) sidenav: MatSidenav;
+  @ViewChild(MatDrawer) drawer: MatDrawer;
 
   private readonly destroy$ = new Subject();
 
@@ -42,7 +51,7 @@ export class ShellComponent implements OnInit {
     private readonly breakpointObserver: BreakpointObserver,
     private readonly authService: AuthenticationService,
     private readonly router: Router
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.isHandset$ = this.breakpointObserver.observe([Breakpoints.Handset]);
@@ -53,8 +62,12 @@ export class ShellComponent implements OnInit {
     this.listenOnlineStatus();
   }
 
+  toggleMenu() {
+    this.menuCollapsed = !this.menuCollapsed;
+  }
+
   close() {
-    this.sidenav.close();
+    this.drawer.close();
   }
 
   private updateOnlineStatus() {
@@ -87,7 +100,7 @@ export class ShellComponent implements OnInit {
       .pipe(
         tap(async ({ isAuthenticated }) => {
           if (!isAuthenticated) {
-            this.close();
+            // this.close();
             return this.userLogout.emit();
           }
           this.userLogin.emit();

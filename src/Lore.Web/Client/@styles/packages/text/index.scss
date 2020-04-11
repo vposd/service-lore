@@ -1,4 +1,4 @@
-@import '~@styles/variables';
+@import '~@styles/material';
 
 // Alignment
 .text--justify {
@@ -61,7 +61,7 @@
 // Colors
 
 .text--secondary {
-  color: mat-color($grey-palette, 800);
+  color: mat-color($grey-palette, 700);
 }
 
 .text--muted {

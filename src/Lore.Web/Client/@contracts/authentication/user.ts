@@ -19,7 +19,7 @@ export class User {
 
   get initials() {
     if (!this.employee) {
-      return;
+      return this.roles[0] ? this.roles[0][0] : '';
     }
 
     const lettersArray = [];
@@ -58,5 +58,5 @@ class UserPosition {
 
 export enum UserRole {
   Admin = 'Admin',
-  User = 'User'
+  User = 'User',
 }
