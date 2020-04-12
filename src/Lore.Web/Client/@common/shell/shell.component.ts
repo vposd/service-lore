@@ -77,10 +77,6 @@ export class ShellComponent implements OnInit {
     this.listenOnlineStatus();
   }
 
-  ngAfterContentInit() {
-    console.log(this);
-  }
-
   toggleMenu() {
     this.menuCollapsed = !this.menuCollapsed;
   }
