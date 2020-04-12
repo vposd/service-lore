@@ -7,20 +7,24 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
+import { RequestProgressModule } from '@common/utils/request-progress/request-progress/request-progress.module';
+
 import { ShellComponent } from './shell.component';
 import { ShellUserDetailsModule } from './shell-user-details/shell-user-details.module';
+import { ShellToolbarStartDirective } from './shell-toolbar-start.directive';
 
 @NgModule({
-  declarations: [ShellComponent],
-  exports: [ShellComponent],
+  declarations: [ShellComponent, ShellToolbarStartDirective],
+  exports: [ShellComponent, ShellToolbarStartDirective],
   imports: [
     CommonModule,
     LayoutModule,
     MatButtonModule,
-    RouterModule,
     MatListModule,
     MatSidenavModule,
     MatToolbarModule,
+    RequestProgressModule,
+    RouterModule,
     ShellUserDetailsModule,
   ],
 })

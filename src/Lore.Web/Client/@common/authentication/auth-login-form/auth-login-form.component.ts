@@ -3,19 +3,20 @@ import {
   OnInit,
   ChangeDetectorRef,
   ChangeDetectionStrategy,
-  HostListener
+  HostListener,
 } from '@angular/core';
 import { Observable } from 'rxjs';
 import {
   FormBuilder,
   FormGroup,
   FormControl,
-  Validators
+  Validators,
 } from '@angular/forms';
 import { map } from 'rxjs/operators';
 
 import { FadeInOut } from '@common/animations/fade-in-out.animation';
 import { RequestProgressState } from '@common/utils/request-progress/request-progress.class';
+import { ShellConfig } from '@common/shell/config/shell-config.service';
 
 import { AuthenticationService } from '../auth-service/authentication.service';
 
@@ -24,27 +25,27 @@ import { AuthenticationService } from '../auth-service/authentication.service';
   templateUrl: './auth-login-form.component.html',
   styleUrls: ['./auth-login-form.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  animations: [FadeInOut]
+  animations: [FadeInOut],
 })
 export class LoginFormComponent implements OnInit {
-  productName = 'ST Promo';
   error = '';
   credentials: FormGroup;
   requestState$: Observable<RequestProgressState>;
 
   constructor(
+    readonly shellConfig: ShellConfig,
     private readonly authService: AuthenticationService,
     private readonly fb: FormBuilder
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.credentials = this.fb.group({
       userName: new FormControl('', Validators.required),
-      password: new FormControl('', Validators.required)
+      password: new FormControl('', Validators.required),
     });
 
     this.requestState$ = this.authService.state$.pipe(
-      map(state => state.authProgress)
+      map((state) => state.authProgress)
     );
   }
 

@@ -1,14 +1,15 @@
-<div class="shell-content">
+<div class="shell-content" *ngIf="isAuthenticated$ | async" @fadeIn>
   <mat-drawer-container class="shell-drawer-container" autosize>
+    <!-- Shell drawer -->
     <mat-drawer
       *ngIf="isHandset$ | async as isHandset"
       class="shell-drawer"
+      mode="side"
+      opened
       [class.shell-drawer--collapsed]="menuCollapsed"
       [@drawerChange]="menuCollapsed ? 'collapsed' : 'expanded'"
-      [mode]="isHandset.matches ? 'over' : 'side'"
       [fixedInViewport]="isHandset.matches"
       [fixedTopGap]="isHandset.matches ? 0 : 56"
-      opened
     >
       <div class="shell-drawer__header">
         <div class="shell-drawer__header__logo" *ngIf="!menuCollapsed" @fadeIn>
@@ -19,31 +20,50 @@
         </button>
       </div>
       <mat-nav-list class="shell-menu">
-        <a mat-list-item routerLink=".">
-          <i class="mdi mdi-book-open-page-variant" mat-list-icon></i>
-          <p class="shell-menu__text" mat-line>Main</p>
-        </a>
-        <a mat-list-item routerLink=".">
-          <i class="mdi mdi-settings" mat-list-icon></i>
-          <p class="shell-menu__text" mat-line>Settings</p>
+        <a
+          mat-list-item
+          [routerLink]="item.href"
+          *ngFor="let item of shellConfig.menu.items"
+        >
+          <i [ngClass]="item.iconClass" mat-list-icon></i>
+          <p class="shell-menu__text" mat-line>{{ item.title }}</p>
         </a>
       </mat-nav-list>
     </mat-drawer>
 
+    <!-- Shell Content -->
     <mat-drawer-content
       class="shell-content"
       [@drawerContentChange]="
         menuCollapsed ? 'menu-collapsed' : 'menu-expanded'
       "
     >
+      <!-- Shell toolbar -->
       <mat-toolbar class="shell-toolbar">
         <mat-toolbar-row>
-          <span>Main search</span>
+          <ng-template
+            [ngTemplateOutlet]="toolbarStartItem.template"
+            *ngFor="let toolbarStartItem of toolbarStartItems.toArray()"
+          ></ng-template>
           <span class="flex-full"></span>
           <app-shell-user-details></app-shell-user-details>
         </mat-toolbar-row>
       </mat-toolbar>
-      <router-outlet></router-outlet
-    ></mat-drawer-content>
+
+      <!-- Shell router outlet -->
+      <router-outlet></router-outlet>
+    </mat-drawer-content>
   </mat-drawer-container>
 </div>
+
+<!-- Authentication progress splash -->
+<ng-container *ngIf="authProgress$ | async as authProgress">
+  <div class="shell-auth-splash" *ngIf="authProgress.progress">
+    <request-progress-spinner
+      [requestProgressState]="authProgress"
+    ></request-progress-spinner>
+  </div>
+</ng-container>
+
+<!-- Display router outlet for authentication module routes -->
+<router-outlet *ngIf="!(isAuthenticated$ | async)"></router-outlet>

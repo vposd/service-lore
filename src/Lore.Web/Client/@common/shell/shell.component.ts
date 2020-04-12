@@ -7,6 +7,10 @@ import {
   EventEmitter,
   ChangeDetectionStrategy,
   ViewEncapsulation,
+  ContentChild,
+  ContentChildren,
+  QueryList,
+  TemplateRef,
 } from '@angular/core';
 import { MatDrawer } from '@angular/material/sidenav';
 import {
@@ -16,14 +20,19 @@ import {
 } from '@angular/cdk/layout';
 import { Observable, Subject, combineLatest } from 'rxjs';
 import { Router, ResolveEnd } from '@angular/router';
-import { tap, takeUntil } from 'rxjs/operators';
+import { tap, takeUntil, pluck } from 'rxjs/operators';
 import { isUndefined } from 'lodash';
 
 import { AuthenticationService } from '@common/authentication/auth-service/authentication.service';
-import { RequestProgress } from '@common/utils/request-progress/request-progress.class';
+import {
+  RequestProgress,
+  RequestProgressState,
+} from '@common/utils/request-progress/request-progress.class';
 import { FadeIn } from '@common/animations/fade-in-out.animation';
 
 import { DrawerChange, DrawerContentChange } from './drawer-state-animations';
+import { ShellConfig } from './config/shell-config.service';
+import { ShellToolbarStartDirective } from './shell-toolbar-start.directive';
 
 @Component({
   selector: 'app-shell',
@@ -37,17 +46,21 @@ export class ShellComponent implements OnInit {
   isOnline: boolean;
   settingsSyncProgress = new RequestProgress();
   isHandset$: Observable<BreakpointState>;
+  isAuthenticated$: Observable<boolean>;
+  authProgress$: Observable<RequestProgressState>;
   menuCollapsed = true;
 
   @Output() userLogin = new EventEmitter();
   @Output() userLogout = new EventEmitter();
   @Output() settingsSync = new EventEmitter();
   @ViewChild(MatDrawer) drawer: MatDrawer;
+  @ContentChildren(ShellToolbarStartDirective)
+  toolbarStartItems: QueryList<ShellToolbarStartDirective>;
 
   private readonly destroy$ = new Subject();
 
   constructor(
-    cdr: ChangeDetectorRef,
+    readonly shellConfig: ShellConfig,
     private readonly breakpointObserver: BreakpointObserver,
     private readonly authService: AuthenticationService,
     private readonly router: Router
@@ -55,11 +68,17 @@ export class ShellComponent implements OnInit {
 
   ngOnInit() {
     this.isHandset$ = this.breakpointObserver.observe([Breakpoints.Handset]);
+    this.isAuthenticated$ = this.authService.isAuthenticated$;
+    this.authProgress$ = this.authService.state$.pipe(pluck('authProgress'));
     this.authService.getCurrentUser();
 
     this.listenDocumentTitleUpdates();
     this.listenAuth();
     this.listenOnlineStatus();
+  }
+
+  ngAfterContentInit() {
+    console.log(this);
   }
 
   toggleMenu() {
@@ -100,7 +119,6 @@ export class ShellComponent implements OnInit {
       .pipe(
         tap(async ({ isAuthenticated }) => {
           if (!isAuthenticated) {
-            // this.close();
             return this.userLogout.emit();
           }
           this.userLogin.emit();

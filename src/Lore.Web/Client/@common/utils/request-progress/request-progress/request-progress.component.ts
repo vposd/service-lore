@@ -2,18 +2,25 @@ import {
   Component,
   Input,
   HostBinding,
-  ChangeDetectionStrategy
+  ChangeDetectionStrategy,
 } from '@angular/core';
 
-import { RequestProgress } from '../request-progress.class';
+import {
+  RequestProgress,
+  RequestProgressState,
+} from '../request-progress.class';
 
 @Component({
   selector: 'request-progress',
   templateUrl: './request-progress.component.html',
   styleUrls: ['./request-progress.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RequestProgressComponent {
+  @Input() set requestProgressState(state: RequestProgressState) {
+    this.requestProgress.state = state;
+  }
+
   @Input() requestProgress = new RequestProgress();
   @Input() fetchingTitle = 'Подождите, идет загрузка';
   @Input() fetchingMessage: string;
