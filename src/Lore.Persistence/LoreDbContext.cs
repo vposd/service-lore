@@ -8,6 +8,7 @@ using Lore.Application.Common.Interfaces.Services;
 using Lore.Domain.Common;
 using Lore.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using Attribute = Lore.Domain.Entities.Attribute;
 
 namespace Lore.Persistence
 {
@@ -27,8 +28,15 @@ namespace Lore.Persistence
             this.currentUser = currentUser;
         }
 
-        public DbSet<Customer> Clients { get; set; }
+        public DbSet<Customer> Customers { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderItem> OrderItems { get; set; }
+        public DbSet<OrderDevice> OrderDevices { get; set; }
+        public DbSet<Device> Devices { get; set; }
+        public DbSet<OrderState> OrderStates { get; set; }
         public DbSet<Employee> Employees { get; set; }
+        public DbSet<Attribute> Attributes { get; set; }
+        public DbSet<AttributeValue> AttributesValues { get; set; }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {

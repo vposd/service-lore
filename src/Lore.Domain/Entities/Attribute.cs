@@ -6,7 +6,7 @@ namespace Lore.Domain.Entities
     public enum AttributeValueType
     {
         ListSingleValue = 2,
-        ListMultipleValue = 3
+        ListMultipleValue = 3,
     }
 
     public class Attribute : DeletableEntity

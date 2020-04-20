@@ -31,7 +31,7 @@ namespace Lore.Application.Clients.Commands.ImportClients
 
             var results = new List<Customer>();
 
-            context.Clients.AddRange(results);
+            context.Customers.AddRange(results);
             var rowsCount = await context.SaveChangesAsync(cancellationToken);
 
             return ImportOperationResult.Success(rowsCount);

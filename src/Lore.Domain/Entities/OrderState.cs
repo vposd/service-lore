@@ -7,5 +7,6 @@ namespace Lore.Domain.Entities
         public string Name { get; set; }
         public string Color { get; set; }
         public int SortOrder { get; set; }
+        public int IsDefault { get; set; } = 0;
     }
 }

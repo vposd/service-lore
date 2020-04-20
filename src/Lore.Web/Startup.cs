@@ -1,4 +1,6 @@
-﻿using Lore.Application;
+﻿using FluentValidation.AspNetCore;
+using Lore.Application;
+using Lore.Application.Common.Interfaces;
 using Lore.Application.Common.Interfaces.Services;
 using Lore.Infrastructure;
 using Lore.Infrastructure.Common.JsonConverters;
@@ -37,6 +39,8 @@ namespace Lore
 
             services.AddScoped<ICurrentUserService, CurrentUserService>();
 
+            //services.AddSignalR();
+
             // Api docs generation
             services.AddOpenApiDocument(configure =>
             {
@@ -60,7 +64,8 @@ namespace Lore
                 .ConfigureApiBehaviorOptions(options =>
                 {
                     options.InvalidModelStateResponseFactory = ModelStateValidator.ValidateModelState;
-                });
+                })
+                 .AddFluentValidation(x => x.RegisterValidatorsFromAssemblyContaining<ILoreDbContext>());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -97,6 +102,7 @@ namespace Lore
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                //endpoints.MapHub<NotificationHub>("/notifications");
             });
         }
     }

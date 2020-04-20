@@ -21,6 +21,14 @@ namespace Lore.Domain.Entities
         public ICollection<OrderItem> Items { get; set; }
         public ICollection<OrderStateHistory> StateHistory { get; set; }
 
+        public void AddItems(ICollection<OrderItem> items)
+        {
+            foreach (var x in items)
+            {
+                Items.Add(x);
+            }
+        }
+
         public void SetState(long stateId)
             => StateHistory.Add(
                 new OrderStateHistory

@@ -5,13 +5,21 @@ using Lore.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Attribute = Lore.Domain.Entities.Attribute;
 
 namespace Lore.Application.Common.Interfaces
 {
     public interface ILoreDbContext : IDisposable
     {
-        public DbSet<Customer> Clients { get; set; }
+        public DbSet<Customer> Customers { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderItem> OrderItems { get; set; }
+        public DbSet<OrderDevice> OrderDevices { get; set; }
+        public DbSet<Device> Devices { get; set; }
+        public DbSet<OrderState> OrderStates { get; set; }
         public DbSet<Employee> Employees { get; set; }
+        public DbSet<Attribute> Attributes { get; set; }
+        public DbSet<AttributeValue> AttributesValues { get; set; }
 
         DatabaseFacade Database { get; }
         ChangeTracker ChangeTracker { get; }
