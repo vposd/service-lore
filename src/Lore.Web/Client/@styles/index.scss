@@ -1,11 +1,11 @@
-@import 'material';
-@import './packages/text';
-@import './packages/row';
 @import './packages/icons';
-@import './utils/display';
+@import './packages/row';
+@import './packages/text';
 @import './utils/cursor';
+@import './utils/display';
 @import './utils/flex';
 @import './utils/offset';
+@import 'material';
 
 body {
   @include mat-typography-level-to-styles($application-typography, body-1);
@@ -20,4 +20,9 @@ html {
   -ms-text-size-adjust: 100%;
   -ms-overflow-style: scrollbar;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+.mat-flat-button,
+.mat-button {
+  letter-spacing: 0.1rem;
 }

@@ -1,4 +1,4 @@
-import { Entity } from '@contracts/master-data/entity.class';
+import { Entity } from '@contracts/common';
 
 export class MasterDataSource<T extends Entity> {
   href: string;
@@ -19,6 +19,6 @@ export class MasterDataConfig {
   sources: MasterDataSource<any>[];
 
   getSource(source: string) {
-    return this.sources.find(s => s.href.includes(source));
+    return this.sources.find((s) => s.href.includes(source));
   }
 }

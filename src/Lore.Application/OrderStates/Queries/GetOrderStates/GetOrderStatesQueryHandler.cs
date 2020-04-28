@@ -21,22 +21,22 @@ namespace Lore.Application.Orders.Queries.GetOrderStates
             this.contextFactory = contextFactory;
         }
 
-        public async Task<QueryResult<OrderStateModel>> Handle(GetOrderStatesQuery request, CancellationToken cancellationToken)
+        public async Task<QueryResult<OrderStateModel>> Handle(GetOrderStatesQuery query, CancellationToken cancellationToken)
         {
             using var context = contextFactory.Create();
 
             var results = await context.OrderStates
                 .AsNoTracking()
-                .Where(x => x.Deleted == 0)
                 .OrderBy(x => x.SortOrder)
                 .Select(x => new OrderStateModel
                 {
                     Id = x.Id,
                     Name = x.Name,
                     Color = x.Color,
+                    Deleted = x.Deleted == 0,
                     IsDefault = x.IsDefault
                 })
-                .ApplyQuery(request, out var count)
+                .ApplyQuery(query, out var count)
                 .ToListAsync(cancellationToken);
 
             return new QueryResult<OrderStateModel>

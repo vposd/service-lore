@@ -1,0 +1,10 @@
+@import '~@styles/material';
+
+.option-item {
+  display: flex;
+  align-items: center;
+
+  .mdi {
+    margin-right: $offset-sm;
+  }
+}

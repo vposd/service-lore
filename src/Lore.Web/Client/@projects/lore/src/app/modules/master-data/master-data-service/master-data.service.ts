@@ -1,15 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 
-import { QueryResult } from '@contracts/master-data/query-result.class';
-import { Entity } from '@contracts/master-data/entity.class';
 import { ENABLED_CACHE_OPTIONS } from '@common/utils/http-cache/http-cache-constant';
+import { Entity, QueryResult } from '@contracts/common';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class MasterDataService {
-  constructor(private readonly http: HttpClient) { }
+  constructor(private readonly http: HttpClient) {}
 
   query<T extends Entity>(
     endpoint: string,
@@ -18,8 +17,7 @@ export class MasterDataService {
   ) {
     return this.http.get<QueryResult<T>>(endpoint, {
       ...(cache ? ENABLED_CACHE_OPTIONS : {}),
-      params: queryParams
+      params: queryParams,
     });
   }
-
 }

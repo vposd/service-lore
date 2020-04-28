@@ -17,24 +17,24 @@ namespace Lore.Application.OrderStates.Commands.UpsertOrderState
             this.contextFactory = contextFactory;
         }
 
-        public async Task<OperationResult> Handle(UpsertOrderStateCommand request, CancellationToken cancellationToken)
+        public async Task<OperationResult> Handle(UpsertOrderStateCommand command, CancellationToken cancellationToken)
         {
             using var context = contextFactory.Create();
 
             var orderState = new OrderState();
 
-            if (request.Id != 0L)
+            if (command.Id != 0L)
             {
-                orderState = await context.OrderStates.FindAsync(request.Id);
+                orderState = await context.OrderStates.FindAsync(command.Id);
             }
             else
             {
                 context.OrderStates.Add(orderState);
             }
 
-            orderState.Name = request.Name;
-            orderState.SortOrder = request.SortOrder;
-            orderState.Color = request.Color;
+            orderState.Name = command.Name;
+            orderState.SortOrder = command.SortOrder;
+            orderState.Color = command.Color;
 
             await context.SaveChangesAsync(cancellationToken);
 

@@ -1,0 +1,107 @@
+<div class="table-container-header row">
+  <div class="row__spacer"></div>
+  <div class="row__section">
+    <button mat-flat-button color="accent" (click)="addEntry()">
+      Add entry
+    </button>
+  </div>
+</div>
+
+<mat-table
+  [hidden]="tableHidden"
+  class="data-table table--hover"
+  [dataSource]="dataSource"
+  multiTemplateDataRows
+  matSort
+  [style.opacity]="requestProgress.state.progress ? 0.5 : 1"
+>
+  <!-- <ng-container matColumnDef="actions">
+    <mat-header-cell *matHeaderCellDef>
+      <mat-checkbox
+        (change)="$event ? masterToggle() : null"
+        [checked]="selectionModel.hasValue() && isAllSelected"
+        [indeterminate]="selectionModel.hasValue() && !isAllSelected"
+      ></mat-checkbox>
+    </mat-header-cell>
+    <mat-cell *matCellDef="let row">
+      <mat-checkbox
+        [checked]="selectionModel.isSelected(row.id)"
+        (click)="$event.stopPropagation()"
+        (change)="$event ? selectRow(row) : null"
+      ></mat-checkbox>
+    </mat-cell>
+  </ng-container> -->
+
+  <ng-container matColumnDef="id">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>
+      Order No
+    </mat-header-cell>
+    <mat-cell *matCellDef="let row">{{ row.id }}</mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="statusId">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>
+      Status
+    </mat-header-cell>
+    <mat-cell *matCellDef="let row"
+      ><app-order-status-select></app-order-status-select
+    ></mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="customerName">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>
+      Customer
+    </mat-header-cell>
+    <mat-cell *matCellDef="let row">
+      <p>
+        <a href="#">{{ row.customerName }}</a>
+      </p>
+      {{ row.customerPhone }}
+    </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="deviceName">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>
+      Device
+    </mat-header-cell>
+    <mat-cell *matCellDef="let row">
+      {{ row.orderDeviceName }}
+    </mat-cell>
+  </ng-container>
+
+  <!-- <ng-container matColumnDef="expandedDetail">
+    <mat-cell *matCellDef="let row">
+      <div class="expanded-detail">
+        <ng-container
+          *appExpandableRowHost="
+            let row;
+            expanded: row.id == expandedRowId;
+            template: expandableRow;
+            context: row
+          "
+        ></ng-container>
+      </div>
+    </mat-cell>
+  </ng-container> -->
+
+  <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true">
+    <div class="mat-header-row header-group-row">
+      <div class="mat-header-cell" role="columnheader"></div>
+    </div>
+  </mat-header-row>
+
+  <mat-row
+    class="table__row"
+    [class.table__row--selected]="selectionModel.isSelected(row.id)"
+    [class.table__row--expanded]="expandedRowId == row.id"
+    [style.background]="row.status.color"
+    (click)="selectRow(row)"
+    @rowsAnimation
+    *matRowDef="let row; columns: displayedColumns"
+  ></mat-row>
+  <!-- <mat-row
+    *matRowDef="let element; columns: ['expandedDetail']"
+    class="detail-row"
+  >
+  </mat-row> -->
+</mat-table>

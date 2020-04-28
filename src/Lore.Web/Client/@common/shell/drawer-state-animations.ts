@@ -19,7 +19,10 @@ export const DrawerChange = trigger('drawerChange', [
       width: '180px',
     })
   ),
-  transition('* => *', animate(`180ms cubic-bezier(0, 0, .2, 1)`)),
+  transition(
+    'collapsed <=> expanded',
+    animate(`180ms cubic-bezier(0, 0, .2, 1)`)
+  ),
 ]);
 
 export const DrawerContentChange = trigger('drawerContentChange', [

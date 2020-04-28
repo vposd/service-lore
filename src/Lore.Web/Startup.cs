@@ -4,6 +4,7 @@ using Lore.Application.Common.Interfaces;
 using Lore.Application.Common.Interfaces.Services;
 using Lore.Infrastructure;
 using Lore.Infrastructure.Common.JsonConverters;
+using Lore.Infrastructure.Notifications;
 using Lore.Persistence;
 using Lore.Web.Helpers;
 using Lore.Web.Middleware;
@@ -39,7 +40,7 @@ namespace Lore
 
             services.AddScoped<ICurrentUserService, CurrentUserService>();
 
-            //services.AddSignalR();
+            services.AddSignalR();
 
             // Api docs generation
             services.AddOpenApiDocument(configure =>
@@ -52,6 +53,15 @@ namespace Lore
                     Name = "Authorization",
                     Type = OpenApiSecuritySchemeType.ApiKey
                 });
+            });
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy", builder => builder
+                .WithOrigins("http://localhost:4200")
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials());
             });
 
             // Controllers behaviour
@@ -73,7 +83,7 @@ namespace Lore
         {
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+                app.UseCustomExceptionHandler();
             }
             else
             {
@@ -99,10 +109,12 @@ namespace Lore
 
             app.SeedData();
 
+            app.UseCors("CorsPolicy");
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                //endpoints.MapHub<NotificationHub>("/notifications");
+                endpoints.MapHub<NotificationHub>("/notifications");
             });
         }
     }

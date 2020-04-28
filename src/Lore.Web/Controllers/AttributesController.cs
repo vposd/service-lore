@@ -4,6 +4,7 @@ using Lore.Application.Attributes.Commands.CreateAttribute;
 using Lore.Application.Attributes.Commands.CreateAttributeValue;
 using Lore.Application.Attributes.Queries.GetAttributes;
 using Lore.Application.Common.Models;
+using Lore.Web.Contracts.Attributes;
 using Lore.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -23,21 +24,25 @@ namespace Lore.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateAttributeCommand command)
+        public async Task<IActionResult> Create([FromBody] CreateAttributeRequest request)
         {
-            var result = await Mediator.Send(command);
+            var result = await Mediator.Send(new CreateAttributeCommand
+            {
+                Type = request.Type,
+                Name = request.Name
+            });
             return Ok(result);
         }
 
         [HttpPost]
         [Route("{attributeId}/values")]
-        public async Task<IActionResult> Create(long attributeId, [FromBody] CreateAttributeValueCommand command)
+        public async Task<IActionResult> Create(long attributeId, [FromBody] CreateAttributeValueRequest request)
         {
             var result = await Mediator.Send(new CreateAttributeValueCommand
             {
                 AttributeId = attributeId,
-                IsDefault = command.IsDefault,
-                Value = command.Value,
+                IsDefault = request.IsDefault,
+                Value = request.Value,
             });
 
             return Ok(result);

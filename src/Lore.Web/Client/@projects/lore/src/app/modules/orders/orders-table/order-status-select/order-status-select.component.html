@@ -1,0 +1,25 @@
+<!-- <mat-form-field appearance="fill">
+  <mat-select [(value)]="selected">
+    <mat-option [value]="state.id" *ngFor="let state of orderStates$ | async">
+      <div class="option-item">
+        <i class="mdi mdi-circle" [style.color]="state.color"></i
+        >{{ state.name }}
+      </div>
+    </mat-option>
+  </mat-select>
+</mat-form-field> -->
+
+<span [matMenuTriggerFor]="menu">
+  {{ selected?.name || 'None' }}
+</span>
+<mat-menu #menu="matMenu">
+  <button
+    mat-menu-item
+    *ngFor="let state of orderStates$ | async"
+    (click)="selected = state"
+  >
+    <div class="option-item">
+      <i class="mdi mdi-circle" [style.color]="state.color"></i>{{ state.name }}
+    </div>
+  </button>
+</mat-menu>

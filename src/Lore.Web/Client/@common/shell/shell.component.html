@@ -1,15 +1,13 @@
-<div class="shell-content" *ngIf="isAuthenticated$ | async" @fadeIn>
+<div class="shell-content" @fadeIn>
   <mat-drawer-container class="shell-drawer-container" autosize>
     <!-- Shell drawer -->
     <mat-drawer
-      *ngIf="isHandset$ | async as isHandset"
+      *ngIf="isAuthenticated$ | async"
       class="shell-drawer"
       mode="side"
       opened
       [class.shell-drawer--collapsed]="menuCollapsed"
       [@drawerChange]="menuCollapsed ? 'collapsed' : 'expanded'"
-      [fixedInViewport]="isHandset.matches"
-      [fixedTopGap]="isHandset.matches ? 0 : 56"
     >
       <div class="shell-drawer__header">
         <div class="shell-drawer__header__logo" *ngIf="!menuCollapsed" @fadeIn>
@@ -23,6 +21,7 @@
         <a
           mat-list-item
           [routerLink]="item.href"
+          [routerLinkActive]="'active'"
           *ngFor="let item of shellConfig.menu.items"
         >
           <i [ngClass]="item.iconClass" mat-list-icon></i>
@@ -39,7 +38,7 @@
       "
     >
       <!-- Shell toolbar -->
-      <mat-toolbar class="shell-toolbar">
+      <mat-toolbar class="shell-toolbar" *ngIf="isAuthenticated$ | async">
         <mat-toolbar-row>
           <ng-template
             [ngTemplateOutlet]="toolbarStartItem.template"
@@ -51,7 +50,9 @@
       </mat-toolbar>
 
       <!-- Shell router outlet -->
-      <router-outlet></router-outlet>
+      <div class="shell-content-body">
+        <router-outlet></router-outlet>
+      </div>
     </mat-drawer-content>
   </mat-drawer-container>
 </div>
@@ -64,6 +65,3 @@
     ></request-progress-spinner>
   </div>
 </ng-container>
-
-<!-- Display router outlet for authentication module routes -->
-<router-outlet *ngIf="!(isAuthenticated$ | async)"></router-outlet>

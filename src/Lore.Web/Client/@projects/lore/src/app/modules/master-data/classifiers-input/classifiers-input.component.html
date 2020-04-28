@@ -57,7 +57,7 @@
           [label]="group.name"
         >
           <mat-option
-            *ngFor="let value of group.values | limit: 20"
+            *ngFor="let value of group.values | slice: 0:20"
             [value]="[group, value]"
           >
             <span highlightTarget>{{ value['name'] }}</span>

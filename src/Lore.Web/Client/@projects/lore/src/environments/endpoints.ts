@@ -5,15 +5,18 @@ export const endpoints: Endpoints = {
   authentication: {
     signIn: '/api/authentication/signIn',
     signOut: '/api/authentication/signOut',
-    refreshAccess: '/api/authentication/refreshAccess'
-  },
-  data: {
-    clients: '/api/clients',
-    employees: '/api/employees',
+    refreshAccess: '/api/authentication/refreshAccess',
   },
   users: {
-    currentUser: '/api/users/current'
-  }
+    currentUser: '/api/users/current',
+  },
+  orders: {
+    root: '/api/orders',
+  },
+  orderStates: {
+    root: '/api/orderStates',
+  },
+  data: {},
 };
 
 export const format = <T>(
@@ -23,7 +26,7 @@ export const format = <T>(
   let output = urlTemplate;
   let queryIndex = 0;
 
-  Object.keys(params).map(key => {
+  Object.keys(params).map((key) => {
     const keyMatch = `{${key}}`;
 
     if (urlTemplate.includes(keyMatch)) {

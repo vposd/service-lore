@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Net;
 using System.Threading.Tasks;
+using Lore.Application.Common.Exceptions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
-using Lore.Application.Common.Exceptions;
 
 namespace Lore.Web.Middleware
 {
@@ -36,7 +36,7 @@ namespace Lore.Web.Middleware
             {
                 case ValidationException validationException:
                     code = HttpStatusCode.BadRequest;
-                    result = JsonConvert.SerializeObject(validationException.Failures);
+                    result = JsonConvert.SerializeObject(new { errors = validationException.Failures });
                     break;
                 case BadRequestException badRequestException:
                     code = HttpStatusCode.BadRequest;

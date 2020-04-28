@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using FluentValidation;
 using MediatR;
+using ValidationException = Lore.Application.Common.Exceptions.ValidationException;
 
 namespace Lore.Application.Common.Behaviours
 {

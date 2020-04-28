@@ -10,7 +10,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Lore.Persistence.Migrations
 {
     [DbContext(typeof(LoreDbContext))]
-    [Migration("20200419103854_InitialCreate")]
+    [Migration("20200426182642_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -19,7 +19,7 @@ namespace Lore.Persistence.Migrations
             modelBuilder
                 .HasDefaultSchema("dbo")
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn)
-                .HasAnnotation("ProductVersion", "3.1.0")
+                .HasAnnotation("ProductVersion", "3.1.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             modelBuilder.Entity("Lore.Domain.Entities.Attribute", b =>
@@ -33,14 +33,16 @@ namespace Lore.Persistence.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("Name")
-                        .HasColumnType("text");
+                        .IsRequired()
+                        .HasColumnType("character varying(50)")
+                        .HasMaxLength(50);
 
                     b.Property<int>("Type")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Attribute");
+                    b.ToTable("Attributes");
                 });
 
             modelBuilder.Entity("Lore.Domain.Entities.AttributeValue", b =>
@@ -60,13 +62,15 @@ namespace Lore.Persistence.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<string>("Value")
-                        .HasColumnType("text");
+                        .IsRequired()
+                        .HasColumnType("character varying(50)")
+                        .HasMaxLength(50);
 
                     b.HasKey("Id");
 
                     b.HasIndex("AttributeId");
 
-                    b.ToTable("AttributeValue");
+                    b.ToTable("AttributesValues");
                 });
 
             modelBuilder.Entity("Lore.Domain.Entities.Customer", b =>
@@ -323,10 +327,7 @@ namespace Lore.Persistence.Migrations
                     b.Property<long>("OrderId")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("OrderStateId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("StateId")
+                    b.Property<long>("OrderStateId")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
@@ -349,13 +350,20 @@ namespace Lore.Persistence.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("Description")
-                        .HasColumnType("text");
+                        .IsRequired()
+                        .HasColumnType("character varying(255)")
+                        .HasMaxLength(255);
 
                     b.Property<long>("GroupId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Name")
-                        .HasColumnType("text");
+                        .IsRequired()
+                        .HasColumnType("character varying(50)")
+                        .HasMaxLength(50);
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("numeric");
 
                     b.Property<long?>("ProductGroupId")
                         .HasColumnType("bigint");
@@ -364,7 +372,7 @@ namespace Lore.Persistence.Migrations
 
                     b.HasIndex("ProductGroupId");
 
-                    b.ToTable("Product");
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("Lore.Domain.Entities.ProductGroup", b =>
@@ -378,14 +386,16 @@ namespace Lore.Persistence.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("Name")
-                        .HasColumnType("text");
+                        .IsRequired()
+                        .HasColumnType("character varying(50)")
+                        .HasMaxLength(50);
 
                     b.Property<long>("ParentId")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProductGroup");
+                    b.ToTable("ProductGroups");
                 });
 
             modelBuilder.Entity("Lore.Domain.Entities.AttributeValue", b =>
@@ -461,7 +471,9 @@ namespace Lore.Persistence.Migrations
 
                     b.HasOne("Lore.Domain.Entities.OrderState", "OrderState")
                         .WithMany()
-                        .HasForeignKey("OrderStateId");
+                        .HasForeignKey("OrderStateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Lore.Domain.Entities.Product", b =>

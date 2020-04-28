@@ -33,12 +33,12 @@ namespace Lore.Domain.Entities
             => StateHistory.Add(
                 new OrderStateHistory
                 {
-                    StateId = stateId
+                    OrderStateId = stateId
                 });
 
-        public OrderState GetActiveState()
+        public long? GetActiveStateId()
             => StateHistory
                 .OrderBy(x => x.Created)
-                .LastOrDefault()?.OrderState;
+                .LastOrDefault()?.OrderStateId;
     }
 }

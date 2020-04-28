@@ -4,12 +4,15 @@ export interface Endpoints {
     signOut: string;
     refreshAccess: string;
   };
-  data: {
-    clients: string;
-    employees: string;
-  };
   users: {
     currentUser: string;
+  };
+  data: {};
+  orders: {
+    root: string;
+  };
+  orderStates: {
+    root: string;
   };
 }
 

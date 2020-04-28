@@ -7,6 +7,7 @@ namespace Lore.Domain.Entities
         public long GroupId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        public decimal Price { get; set; }
 
         public ProductGroup ProductGroup { get; set; }
     }

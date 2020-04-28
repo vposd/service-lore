@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
 using Lore.Api.Controllers;
 using Lore.Application.Common.Models;
-using Lore.Application.Employees.Queries.GetEmployee;
 using Lore.Application.Orders.Commands.CreateOrder;
+using Lore.Application.Orders.Events;
 using Lore.Application.Orders.Queries.GetOrders;
 using Lore.Web.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -26,8 +26,8 @@ namespace Lore.Web.Controllers
         [Route("{id}")]
         public async Task<IActionResult> Get(long id)
         {
-            var vm = await Mediator.Send(new GetEmployeeQuery { Id = id });
-            return Ok(vm);
+            await Mediator.Publish(new OrderCreatedEvent { OrderId = id });
+            return Ok();
         }
 
         [HttpPost]

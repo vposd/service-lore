@@ -31,10 +31,11 @@ namespace Lore.Application.Orders.Queries.GetOrders
                 {
                     Id = x.Id,
                     CustomerId = x.CustomerId,
+                    StatusId = x.StateHistory.OrderBy(s => s.Created).LastOrDefault().OrderStateId,
                     CustomerName = x.Customer.Name,
                     CustomerPhone = x.Customer.Phone,
                     OrderDeviceName = x.OrderDevice.Device.Name,
-                    OrderDeviceDescription = x.OrderDevice.Description
+                    OrderDeviceDescription = x.OrderDevice.Description,
                 })
                 .ApplyQuery(request, out var count)
                 .ToListAsync(cancellationToken);

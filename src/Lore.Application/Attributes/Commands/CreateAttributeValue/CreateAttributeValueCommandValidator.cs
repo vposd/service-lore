@@ -7,7 +7,6 @@ namespace Lore.Application.OrderStates.Commands.UpsertOrderState
     {
         public CreateAttributeValueCommandValidator()
         {
-            RuleFor(x => x.AttributeId).NotEmpty();
             RuleFor(x => x.Value).MaximumLength(50).NotEmpty();
         }
     }

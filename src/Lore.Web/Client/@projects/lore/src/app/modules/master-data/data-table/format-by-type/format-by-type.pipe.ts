@@ -3,19 +3,19 @@ import { DatePipe } from '@angular/common';
 
 import {
   DataType,
-  getDataType
+  getDataType,
 } from '@common/utils/decorators/data-type.decorator';
-import { SimpleEntity } from '@contracts/master-data/simplie-entity.class';
+import { SimpleEntity } from '@contracts/common';
 
 @Pipe({
-  name: 'formatByType'
+  name: 'formatByType',
 })
 export class FormatByTypePile implements PipeTransform {
   private readonly datePipe = new DatePipe('ru');
 
   transform(value: any, classRef: Type<any>, propertyName: string): string {
     const { type } = getDataType(classRef, propertyName) || {
-      type: DataType.String
+      type: DataType.String,
     };
     switch (type) {
       case DataType.Date:

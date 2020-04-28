@@ -20,6 +20,8 @@ namespace Lore.Application.Common.Interfaces
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Attribute> Attributes { get; set; }
         public DbSet<AttributeValue> AttributesValues { get; set; }
+        public DbSet<ProductGroup> ProductGroups { get; set; }
+        public DbSet<Product> Products { get; set; }
 
         DatabaseFacade Database { get; }
         ChangeTracker ChangeTracker { get; }

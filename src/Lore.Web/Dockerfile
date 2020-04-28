@@ -9,6 +9,7 @@ FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 
 WORKDIR /src
 COPY ["src/Lore.Web/Lore.Web.csproj", "src/Lore.Web/"]
+COPY ["src/Lore.Web.Contracts/Lore.Web.Contracts.csproj", "src/Lore.Web.Contracts/"]
 COPY ["src/Lore.Application/Lore.Application.csproj", "src/Lore.Application/"]
 COPY ["src/Lore.Domain/Lore.Domain.csproj", "src/Lore.Domain/"]
 COPY ["src/Lore.Infrastructure/Lore.Infrastructure.csproj", "src/Lore.Infrastructure/"]

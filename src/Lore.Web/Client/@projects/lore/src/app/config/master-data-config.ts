@@ -1,21 +1,19 @@
-import { Employee } from '@contracts/master-data/entities/employee.class';
-
 import {
   MasterDataConfig,
-  MasterDataSource
+  MasterDataSource,
 } from '../modules/master-data/config/master-data-config.service';
 import { environment } from '../../environments/environment';
 
 const config = new MasterDataConfig();
 
 config.sources = [
-  new MasterDataSource<Employee>({
-    href: 'employees',
-    endpoint: environment.endpoints.data.employees,
-    label: { plural: 'Сотрудники', single: 'Сотрудник' },
-    entity: new Employee(),
-    entityName: 'Employee'
-  })
+  // new MasterDataSource<Employee>({
+  //   href: 'employees',
+  //   endpoint: environment.endpoints.data.employees,
+  //   label: { plural: 'Сотрудники', single: 'Сотрудник' },
+  //   entity: new Employee(),
+  //   entityName: 'Employee',
+  // }),
 ];
 
 export const masterDataConfig = config;

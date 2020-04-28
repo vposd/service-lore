@@ -13,9 +13,9 @@ config.product = {
 config.menu = {
   items: [
     new MenuItem({
-      title: 'Main',
+      title: 'Orders',
       iconClass: 'mdi mdi-book-open-page-variant',
-      href: '/',
+      href: '/orders',
     }),
     new MenuItem({
       title: 'Settings',
