@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Lore.Application.Orders.Events
+namespace Lore.Application.Orders.Events.OrderCreated
 {
     public class OrderCreatedEvent : INotification
     {

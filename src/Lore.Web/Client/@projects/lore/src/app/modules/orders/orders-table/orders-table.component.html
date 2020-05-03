@@ -15,23 +15,6 @@
   matSort
   [style.opacity]="requestProgress.state.progress ? 0.5 : 1"
 >
-  <!-- <ng-container matColumnDef="actions">
-    <mat-header-cell *matHeaderCellDef>
-      <mat-checkbox
-        (change)="$event ? masterToggle() : null"
-        [checked]="selectionModel.hasValue() && isAllSelected"
-        [indeterminate]="selectionModel.hasValue() && !isAllSelected"
-      ></mat-checkbox>
-    </mat-header-cell>
-    <mat-cell *matCellDef="let row">
-      <mat-checkbox
-        [checked]="selectionModel.isSelected(row.id)"
-        (click)="$event.stopPropagation()"
-        (change)="$event ? selectRow(row) : null"
-      ></mat-checkbox>
-    </mat-cell>
-  </ng-container> -->
-
   <ng-container matColumnDef="id">
     <mat-header-cell *matHeaderCellDef mat-sort-header>
       Order No
@@ -44,7 +27,10 @@
       Status
     </mat-header-cell>
     <mat-cell *matCellDef="let row"
-      ><app-order-status-select></app-order-status-select
+      ><app-order-status-select
+        [orderId]="row.id"
+        [statusId]="row.statusId"
+      ></app-order-status-select
     ></mat-cell>
   </ng-container>
 
@@ -53,9 +39,15 @@
       Customer
     </mat-header-cell>
     <mat-cell *matCellDef="let row">
-      <p>
-        <a href="#">{{ row.customerName }}</a>
-      </p>
+      <a href="#" class="table-link">{{ row.customerName }}</a>
+    </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="customerPhone">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>
+      Customer phone
+    </mat-header-cell>
+    <mat-cell *matCellDef="let row">
       {{ row.customerPhone }}
     </mat-cell>
   </ng-container>
@@ -84,6 +76,20 @@
     </mat-cell>
   </ng-container> -->
 
+  <ng-container matColumnDef="actions">
+    <mat-header-cell *matHeaderCellDef> </mat-header-cell>
+    <mat-cell *matCellDef="let row">
+      <button mat-icon-button [matMenuTriggerFor]="menu">
+        <i class="mdi mdi-dots-vertical"></i>
+      </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item>Edit</button>
+        <button mat-menu-item>Clone</button>
+        <button mat-menu-item>Mark as delete</button>
+      </mat-menu>
+    </mat-cell>
+  </ng-container>
+
   <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true">
     <div class="mat-header-row header-group-row">
       <div class="mat-header-cell" role="columnheader"></div>
@@ -93,7 +99,6 @@
   <mat-row
     class="table__row"
     [class.table__row--selected]="selectionModel.isSelected(row.id)"
-    [class.table__row--expanded]="expandedRowId == row.id"
     [style.background]="row.status.color"
     (click)="selectRow(row)"
     @rowsAnimation

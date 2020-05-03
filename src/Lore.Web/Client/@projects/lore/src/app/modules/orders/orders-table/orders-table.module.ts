@@ -1,6 +1,8 @@
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatMenuModule } from '@angular/material/menu';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
@@ -15,8 +17,10 @@ import { OrderStatusSelectModule } from './order-status-select/order-status-sele
   exports: [OrdersTableComponent],
   imports: [
     CommonModule,
+    FormsModule,
     MatButtonModule,
     MatCheckboxModule,
+    MatMenuModule,
     MatPaginatorModule,
     MatSortModule,
     MatTableModule,

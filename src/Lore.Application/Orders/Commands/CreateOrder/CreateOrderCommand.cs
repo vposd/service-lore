@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Lore.Application.Orders.Commands.CreateOrder
 {
-    public class CreateOrderCommand : OrderModel, IRequest<OperationResult>
+    public class CreateOrderCommand : OrderWriteModel, IRequest<OperationResult>
     {
     }
 }

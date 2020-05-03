@@ -4,13 +4,13 @@ using Lore.Application.Common.Interfaces.Services;
 using Lore.Application.Notifications.Models;
 using MediatR;
 
-namespace Lore.Application.Orders.Events
+namespace Lore.Application.Orders.Events.OrderCreated
 {
-    public class OrderCreatedEventHandler : INotificationHandler<OrderCreatedEvent>
+    public class OrderStateUpdatedEventHandler : INotificationHandler<OrderCreatedEvent>
     {
         private readonly INotificationService notificationsService;
 
-        public OrderCreatedEventHandler(INotificationService notificationsService)
+        public OrderStateUpdatedEventHandler(INotificationService notificationsService)
             => this.notificationsService = notificationsService;
 
         public async Task Handle(OrderCreatedEvent @event, CancellationToken cancellationToken)

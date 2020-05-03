@@ -9,8 +9,15 @@ import {
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
-import { map, tap, startWith, switchMap, takeUntil } from 'rxjs/operators';
-import { merge, Subject } from 'rxjs';
+import {
+  map,
+  tap,
+  startWith,
+  switchMap,
+  takeUntil,
+  take,
+} from 'rxjs/operators';
+import { merge, Subject, of } from 'rxjs';
 
 import { RequestProgress } from '@common/utils/request-progress/request-progress.class';
 import {
@@ -22,6 +29,14 @@ import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { RowsAnimation } from '../../master-data/data-table/data-table-animations';
 import { OrdersService } from '../orders.service';
 import { OrderTableRow } from '../models/order-table-row';
+import {
+  NotificationHub,
+  listenEvent,
+} from '@common/utils/notifications/notification-bus.service';
+import { OrderStateUpdatedEvent } from '@contracts/events/order-state-updated.class';
+import { OrderState } from '@contracts/order-states';
+import { endpoints } from '@projects/lore/src/environments/endpoints';
+import { HttpParams } from '@angular/common/http';
 
 @Component({
   selector: 'app-orders-table',
@@ -31,7 +46,14 @@ import { OrderTableRow } from '../models/order-table-row';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OrdersTableComponent implements OnInit, OnDestroy {
-  columns = ['id', 'statusId', 'customerName', 'deviceName'];
+  columns = [
+    'id',
+    'statusId',
+    'customerName',
+    'customerPhone',
+    'deviceName',
+    'actions',
+  ];
   displayedColumns = this.columns;
   dataSource: MatTableDataSource<OrderTableRow>;
   selectionModel: SelectionModel<string>;
@@ -58,6 +80,7 @@ export class OrdersTableComponent implements OnInit, OnDestroy {
   constructor(
     cdr: ChangeDetectorRef,
     private readonly masterData: MasterDataService,
+    private readonly notifications: NotificationHub,
     private readonly orders: OrdersService
   ) {
     this.paginator = new MatPaginator(new MatPaginatorIntl(), cdr, {});
@@ -67,6 +90,32 @@ export class OrdersTableComponent implements OnInit, OnDestroy {
     this.dataSource = new MatTableDataSource([]);
     this.selectionModel = new SelectionModel<string>(true, []);
     this.listenTableInteraction();
+
+    this.notifications.events$
+      .pipe(
+        listenEvent<OrderStateUpdatedEvent>('OrderStateUpdatedEvent'),
+        switchMap((x) => {
+          const order = this.dataSource.data.find((e) => x.payload.orderId);
+          if (!order) {
+            return of();
+          }
+          return this.orders.getOrderState(x.payload.stateId).pipe(
+            tap(
+              (status) =>
+                (this.dataSource.data = this.dataSource.data.map((v) =>
+                  v.id === x.payload.orderId
+                    ? {
+                        ...v,
+                        statusId: x.payload.stateId,
+                        status,
+                      }
+                    : v
+                ))
+            )
+          );
+        })
+      )
+      .subscribe();
   }
 
   ngOnDestroy() {

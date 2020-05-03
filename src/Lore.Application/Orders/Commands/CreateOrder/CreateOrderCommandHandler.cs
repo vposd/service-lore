@@ -4,11 +4,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using Lore.Application.Common.Interfaces;
 using Lore.Application.Common.Models;
-using Lore.Application.Orders.Events;
-using Lore.Application.Orders.Models;
+using Lore.Application.Orders.Events.OrderCreated;
 using Lore.Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using static Lore.Application.Orders.Models.OrderWriteModel;
 
 namespace Lore.Application.Orders.Commands.CreateOrder
 {
@@ -53,16 +53,16 @@ namespace Lore.Application.Orders.Commands.CreateOrder
         {
             var customerId = model.Id;
 
-            if (customerId == 0L)
+            if (customerId == null)
             {
                 var customer = await CreateCustomerAsync(model, context, cancellationToken);
                 customerId = customer.Id;
             }
 
-            return customerId;
+            return (long)customerId;
         }
 
-        private async Task<OrderState> GetDefaultStateAsync(ILoreDbContext context, CancellationToken cancellationToken)
+        private async Task<OrderStatus> GetDefaultStateAsync(ILoreDbContext context, CancellationToken cancellationToken)
         {
             var defaultState = await context.OrderStates
                 .AsNoTracking()
@@ -81,13 +81,13 @@ namespace Lore.Application.Orders.Commands.CreateOrder
         {
             var orderDeviceId = model.Id;
 
-            if (orderDeviceId == 0L)
+            if (orderDeviceId == null)
             {
                 var orderDevice = await CreateOrderDeviceAsync(model, context, cancellationToken);
                 orderDeviceId = orderDevice.Id;
             }
 
-            return orderDeviceId;
+            return (long)orderDeviceId;
         }
 
         private async Task<Customer> CreateCustomerAsync(CustomerModel model, ILoreDbContext context, CancellationToken cancellationToken)
@@ -111,17 +111,36 @@ namespace Lore.Application.Orders.Commands.CreateOrder
         {
             var orderDevice = new OrderDevice
             {
-                Description = model.Description,
-                OrderDeviceAttributes = model.Attributes?.Select(x => new OrderDeviceAttribute { Id = x.Id, AttributeValueId = x.ValueId }).ToList(),
+                OrderDeviceFailures = model.Failures?
+                    .Select(x => new OrderDeviceFailure { Id = x.Id })
+                    .ToList(),
+                OrderDeviceAttributes = model.Attributes?
+                    .Select(x => new ObjectAttributeValue
+                    {
+                        AttributeId = x.Id,
+                        AttributeValueId = x.ValueId,
+                    })
+                    .ToList(),
             };
 
-            if (model.Device.Id != 0L)
+            if (model.Device.Id != null)
             {
-                orderDevice.DeviceId = model.Device.Id;
+                orderDevice.DeviceId = (long)model.Device.Id;
             }
             else
             {
-                orderDevice.Device = new Device { Name = model.Device.Name };
+                orderDevice.Device = new Device
+                {
+                    Name = model.Device.Name,
+                    SerialNumber = model.Device.SerialNumber,
+                    Attributes = model.Device.Attributes?
+                        .Select(x => new ObjectAttributeValue
+                        {
+                            AttributeId = x.Id,
+                            AttributeValueId = x.ValueId
+                        })
+                        .ToList(),
+                };
             }
 
             context.OrderDevices.Add(orderDevice);

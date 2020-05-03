@@ -4,31 +4,31 @@ using System.Threading.Tasks;
 using Lore.Application.Common.Extensions.Linq;
 using Lore.Application.Common.Interfaces;
 using Lore.Application.Common.Models;
-using Lore.Application.OrderStates.Models;
-using Lore.Application.OrderStates.Queries.GetOrderStates;
+using Lore.Application.OrderStatuses.Models;
+using Lore.Application.OrderStatuses.Queries.GetOrderStatuses;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Lore.Application.Orders.Queries.GetOrderStates
+namespace Lore.Application.Orders.Queries.GetOrderStatuses
 {
-    public class GetOrderStatesQueryHandler : IRequestHandler<GetOrderStatesQuery, QueryResult<OrderStateModel>>
+    public class GetOrderStatusQueryHandler : IRequestHandler<GetOrderStatusesQuery, QueryResult<OrderStatusModel>>
     {
         private readonly ILoreDbContextFactory contextFactory;
 
-        public GetOrderStatesQueryHandler(
+        public GetOrderStatusQueryHandler(
             ILoreDbContextFactory contextFactory)
         {
             this.contextFactory = contextFactory;
         }
 
-        public async Task<QueryResult<OrderStateModel>> Handle(GetOrderStatesQuery query, CancellationToken cancellationToken)
+        public async Task<QueryResult<OrderStatusModel>> Handle(GetOrderStatusesQuery query, CancellationToken cancellationToken)
         {
             using var context = contextFactory.Create();
 
             var results = await context.OrderStates
                 .AsNoTracking()
                 .OrderBy(x => x.SortOrder)
-                .Select(x => new OrderStateModel
+                .Select(x => new OrderStatusModel
                 {
                     Id = x.Id,
                     Name = x.Name,
@@ -39,7 +39,7 @@ namespace Lore.Application.Orders.Queries.GetOrderStates
                 .ApplyQuery(query, out var count)
                 .ToListAsync(cancellationToken);
 
-            return new QueryResult<OrderStateModel>
+            return new QueryResult<OrderStatusModel>
             {
                 Results = results,
                 Count = count

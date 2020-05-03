@@ -8,7 +8,7 @@ import { QueryResult, QueryRequest } from '@contracts/common';
 import { map } from 'rxjs/operators';
 import { Order } from '@contracts/orders';
 
-import { endpoints } from '../../../environments/endpoints';
+import { endpoints, format } from '../../../environments/endpoints';
 import { MasterDataService } from '../master-data/master-data-service/master-data.service';
 import { OrderTableRow } from './models/order-table-row';
 
@@ -37,6 +37,20 @@ export class OrdersService {
           status: orderStates.results.find((s) => s.id === x.statusId),
         })),
       }))
+    );
+  }
+
+  getOrderState(id: string) {
+    return this.http.get<OrderState>(
+      format(endpoints.orderStates.single, { id }),
+      ENABLED_CACHE_OPTIONS
+    );
+  }
+
+  updateState(orderId: string, stateId: string) {
+    return this.http.post(
+      format(endpoints.orders.updateState, { orderId, stateId }),
+      null
     );
   }
 }

@@ -1,8 +1,9 @@
 ﻿using System.Threading.Tasks;
 using Lore.Api.Controllers;
 using Lore.Application.Common.Models;
-using Lore.Application.OrderStates.Commands.UpsertOrderState;
-using Lore.Application.OrderStates.Queries.GetOrderStates;
+using Lore.Application.OrderStatuses.Commands.UpsertOrderState;
+using Lore.Application.OrderStatuses.Queries.GetOrderStatus;
+using Lore.Application.OrderStatuses.Queries.GetOrderStatuses;
 using Lore.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -17,7 +18,15 @@ namespace Lore.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> Query(DataQuery query)
         {
-            var vm = await Mediator.Send(query.ToRequest<GetOrderStatesQuery>());
+            var vm = await Mediator.Send(query.ToRequest<GetOrderStatusesQuery>());
+            return Ok(vm);
+        }
+
+        [HttpGet]
+        [Route("{id}")]
+        public async Task<IActionResult> Get(long id)
+        {
+            var vm = await Mediator.Send(new GetOrderStatusQuery { Id = id });
             return Ok(vm);
         }
 

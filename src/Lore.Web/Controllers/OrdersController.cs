@@ -2,7 +2,8 @@
 using Lore.Api.Controllers;
 using Lore.Application.Common.Models;
 using Lore.Application.Orders.Commands.CreateOrder;
-using Lore.Application.Orders.Events;
+using Lore.Application.Orders.Commands.UpdateOrderState;
+using Lore.Application.Orders.Events.OrderCreated;
 using Lore.Application.Orders.Queries.GetOrders;
 using Lore.Web.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -28,6 +29,14 @@ namespace Lore.Web.Controllers
         {
             await Mediator.Publish(new OrderCreatedEvent { OrderId = id });
             return Ok();
+        }
+
+        [HttpPost]
+        [Route("{id}/state/{stateId}")]
+        public async Task<IActionResult> UpdateOrderState(long id, long stateId)
+        {
+            var result = await Mediator.Send(new UpdateOrderStateCommand { OrderId = id, StateId = stateId });
+            return Ok(result);
         }
 
         [HttpPost]

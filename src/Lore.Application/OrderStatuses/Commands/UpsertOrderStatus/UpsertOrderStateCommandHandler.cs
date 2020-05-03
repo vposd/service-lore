@@ -5,7 +5,7 @@ using Lore.Application.Common.Models;
 using Lore.Domain.Entities;
 using MediatR;
 
-namespace Lore.Application.OrderStates.Commands.UpsertOrderState
+namespace Lore.Application.OrderStatuses.Commands.UpsertOrderState
 {
     public class UpsertOrderStateCommandHandler : IRequestHandler<UpsertOrderStateCommand, OperationResult>
     {
@@ -21,7 +21,7 @@ namespace Lore.Application.OrderStates.Commands.UpsertOrderState
         {
             using var context = contextFactory.Create();
 
-            var orderState = new OrderState();
+            var orderState = new OrderStatus();
 
             if (command.Id != 0L)
             {

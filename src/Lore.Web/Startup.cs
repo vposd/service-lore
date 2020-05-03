@@ -40,7 +40,11 @@ namespace Lore
 
             services.AddScoped<ICurrentUserService, CurrentUserService>();
 
-            services.AddSignalR();
+            services.AddSignalR()
+                .AddJsonProtocol(x =>
+                {
+                    x.PayloadSerializerOptions.Converters.Add(new LongToStringConverter());
+                });
 
             // Api docs generation
             services.AddOpenApiDocument(configure =>

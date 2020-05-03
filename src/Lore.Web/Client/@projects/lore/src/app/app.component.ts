@@ -23,14 +23,14 @@ export class AppComponent implements OnInit {
 
   constructor(private readonly notifications: NotificationHub) {}
 
-  ngOnInit() {
+  ngOnInit() {}
+
+  onUserLogin() {
     this.contextReady = true;
     this.notifications.start();
+  }
 
-    this.notifications.events$.subscribe(console.log);
-
-    this.notifications.events$
-      .pipe(listenEvent('OrderCreatedEvent'))
-      .subscribe((x) => console.log('direct', x));
+  onUserLogout() {
+    this.notifications.stop();
   }
 }

@@ -10,9 +10,11 @@ export interface Endpoints {
   data: {};
   orders: {
     root: string;
+    updateState: string;
   };
   orderStates: {
     root: string;
+    single: string;
   };
 }
 

@@ -33,7 +33,7 @@ namespace Lore.Persistence
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<OrderDevice> OrderDevices { get; set; }
         public DbSet<Device> Devices { get; set; }
-        public DbSet<OrderState> OrderStates { get; set; }
+        public DbSet<OrderStatus> OrderStates { get; set; }
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Attribute> Attributes { get; set; }
         public DbSet<AttributeValue> AttributesValues { get; set; }

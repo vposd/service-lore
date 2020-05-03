@@ -1,6 +1,6 @@
-﻿namespace Lore.Application.OrderStates.Models
+﻿namespace Lore.Application.OrderStatuses.Models
 {
-    public class OrderStateModel
+    public class OrderStatusModel
     {
         public long Id { get; set; }
         public string Name { get; set; }

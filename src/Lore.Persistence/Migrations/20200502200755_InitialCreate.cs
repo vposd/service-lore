@@ -20,7 +20,8 @@ namespace Lore.Persistence.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Deleted = table.Column<int>(nullable: false),
                     Name = table.Column<string>(maxLength: 50, nullable: false),
-                    Type = table.Column<int>(nullable: false)
+                    Type = table.Column<int>(nullable: false),
+                    Object = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -51,6 +52,7 @@ namespace Lore.Persistence.Migrations
                     Id = table.Column<long>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Deleted = table.Column<int>(nullable: false),
+                    SerialNumber = table.Column<string>(nullable: true),
                     Name = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -59,22 +61,18 @@ namespace Lore.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Employees",
+                name: "Failure",
                 schema: "dbo",
                 columns: table => new
                 {
                     Id = table.Column<long>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Deleted = table.Column<int>(nullable: false),
-                    UserId = table.Column<string>(nullable: true),
-                    FirstName = table.Column<string>(maxLength: 50, nullable: false),
-                    LastName = table.Column<string>(maxLength: 50, nullable: false),
-                    Phone = table.Column<string>(maxLength: 24, nullable: true),
-                    Email = table.Column<string>(maxLength: 50, nullable: true)
+                    Name = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Employees", x => x.Id);
+                    table.PrimaryKey("PK_Failure", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -88,11 +86,28 @@ namespace Lore.Persistence.Migrations
                     Name = table.Column<string>(maxLength: 50, nullable: false),
                     Color = table.Column<string>(maxLength: 7, nullable: false),
                     SortOrder = table.Column<int>(nullable: false),
-                    IsDefault = table.Column<int>(nullable: false)
+                    IsDefault = table.Column<int>(nullable: false),
+                    isFinal = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_OrderStates", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Position",
+                schema: "dbo",
+                columns: table => new
+                {
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Deleted = table.Column<int>(nullable: false),
+                    Name = table.Column<string>(nullable: true),
+                    ParentId = table.Column<long>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Position", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -142,7 +157,6 @@ namespace Lore.Persistence.Migrations
                 {
                     Id = table.Column<long>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Description = table.Column<string>(nullable: true),
                     DeviceId = table.Column<long>(nullable: false)
                 },
                 constraints: table =>
@@ -158,6 +172,31 @@ namespace Lore.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Employees",
+                schema: "dbo",
+                columns: table => new
+                {
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Deleted = table.Column<int>(nullable: false),
+                    UserId = table.Column<string>(nullable: true),
+                    FirstName = table.Column<string>(maxLength: 50, nullable: false),
+                    LastName = table.Column<string>(maxLength: 50, nullable: false),
+                    PositionId = table.Column<long>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Employees", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Employees_Position_PositionId",
+                        column: x => x.PositionId,
+                        principalSchema: "dbo",
+                        principalTable: "Position",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Products",
                 schema: "dbo",
                 columns: table => new
@@ -165,11 +204,10 @@ namespace Lore.Persistence.Migrations
                     Id = table.Column<long>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Deleted = table.Column<int>(nullable: false),
-                    GroupId = table.Column<long>(nullable: false),
                     Name = table.Column<string>(maxLength: 50, nullable: false),
                     Description = table.Column<string>(maxLength: 255, nullable: false),
                     Price = table.Column<decimal>(nullable: false),
-                    ProductGroupId = table.Column<long>(nullable: true)
+                    ProductGroupId = table.Column<long>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -180,36 +218,53 @@ namespace Lore.Persistence.Migrations
                         principalSchema: "dbo",
                         principalTable: "ProductGroups",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "OrderDeviceAttribute",
+                name: "ObjectAttributeValue",
                 schema: "dbo",
                 columns: table => new
                 {
                     Id = table.Column<long>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    OrderDeviceId = table.Column<long>(nullable: false),
-                    AttributeValueId = table.Column<long>(nullable: false)
+                    Deleted = table.Column<int>(nullable: false),
+                    AttributeId = table.Column<long>(nullable: true),
+                    AttributeValueId = table.Column<long>(nullable: true),
+                    DeviceId = table.Column<long>(nullable: true),
+                    OrderDeviceId = table.Column<long>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_OrderDeviceAttribute", x => x.Id);
+                    table.PrimaryKey("PK_ObjectAttributeValue", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_OrderDeviceAttribute_AttributesValues_AttributeValueId",
+                        name: "FK_ObjectAttributeValue_Attributes_AttributeId",
+                        column: x => x.AttributeId,
+                        principalSchema: "dbo",
+                        principalTable: "Attributes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ObjectAttributeValue_AttributesValues_AttributeValueId",
                         column: x => x.AttributeValueId,
                         principalSchema: "dbo",
                         principalTable: "AttributesValues",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_OrderDeviceAttribute_OrderDevices_OrderDeviceId",
+                        name: "FK_ObjectAttributeValue_Devices_DeviceId",
+                        column: x => x.DeviceId,
+                        principalSchema: "dbo",
+                        principalTable: "Devices",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ObjectAttributeValue_OrderDevices_OrderDeviceId",
                         column: x => x.OrderDeviceId,
                         principalSchema: "dbo",
                         principalTable: "OrderDevices",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -226,7 +281,9 @@ namespace Lore.Persistence.Migrations
                     LastModifiedBy = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true),
                     CustomerId = table.Column<long>(nullable: false),
-                    OrderDeviceId = table.Column<long>(nullable: false)
+                    OrderDeviceId = table.Column<long>(nullable: false),
+                    DateIn = table.Column<DateTime>(nullable: false),
+                    DateOut = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -245,6 +302,43 @@ namespace Lore.Persistence.Migrations
                         principalTable: "OrderDevices",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "OrderDeviceFailure",
+                schema: "dbo",
+                columns: table => new
+                {
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    OrderId = table.Column<long>(nullable: true),
+                    FailureId = table.Column<long>(nullable: true),
+                    OrderDeviceId = table.Column<long>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OrderDeviceFailure", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_OrderDeviceFailure_Failure_FailureId",
+                        column: x => x.FailureId,
+                        principalSchema: "dbo",
+                        principalTable: "Failure",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_OrderDeviceFailure_OrderDevices_OrderDeviceId",
+                        column: x => x.OrderDeviceId,
+                        principalSchema: "dbo",
+                        principalTable: "OrderDevices",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_OrderDeviceFailure_Orders_OrderId",
+                        column: x => x.OrderId,
+                        principalSchema: "dbo",
+                        principalTable: "Orders",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -279,7 +373,7 @@ namespace Lore.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "OrderStateHistory",
+                name: "OrderStatusHistory",
                 schema: "dbo",
                 columns: table => new
                 {
@@ -291,21 +385,21 @@ namespace Lore.Persistence.Migrations
                     LastModified = table.Column<DateTime>(nullable: true),
                     LastModifiedBy = table.Column<string>(nullable: true),
                     OrderId = table.Column<long>(nullable: false),
-                    OrderStateId = table.Column<long>(nullable: false)
+                    OrderStatusId = table.Column<long>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_OrderStateHistory", x => x.Id);
+                    table.PrimaryKey("PK_OrderStatusHistory", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_OrderStateHistory_Orders_OrderId",
+                        name: "FK_OrderStatusHistory_Orders_OrderId",
                         column: x => x.OrderId,
                         principalSchema: "dbo",
                         principalTable: "Orders",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_OrderStateHistory_OrderStates_OrderStateId",
-                        column: x => x.OrderStateId,
+                        name: "FK_OrderStatusHistory_OrderStates_OrderStatusId",
+                        column: x => x.OrderStatusId,
                         principalSchema: "dbo",
                         principalTable: "OrderStates",
                         principalColumn: "Id",
@@ -315,8 +409,12 @@ namespace Lore.Persistence.Migrations
             migrationBuilder.InsertData(
                 schema: "dbo",
                 table: "OrderStates",
-                columns: new[] { "Id", "Color", "Deleted", "IsDefault", "Name", "SortOrder" },
-                values: new object[] { 1L, "#ffffff", 0, 1, "Default", 0 });
+                columns: new[] { "Id", "Color", "Deleted", "IsDefault", "Name", "SortOrder", "isFinal" },
+                values: new object[,]
+                {
+                    { 1L, "#ffffff", 0, 1, "Default", 0, 0 },
+                    { 2L, "#ffffff", 0, 0, "Ready", 999, 1 }
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AttributesValues_AttributeId",
@@ -325,16 +423,52 @@ namespace Lore.Persistence.Migrations
                 column: "AttributeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrderDeviceAttribute_AttributeValueId",
+                name: "IX_Employees_PositionId",
                 schema: "dbo",
-                table: "OrderDeviceAttribute",
+                table: "Employees",
+                column: "PositionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ObjectAttributeValue_AttributeId",
+                schema: "dbo",
+                table: "ObjectAttributeValue",
+                column: "AttributeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ObjectAttributeValue_AttributeValueId",
+                schema: "dbo",
+                table: "ObjectAttributeValue",
                 column: "AttributeValueId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrderDeviceAttribute_OrderDeviceId",
+                name: "IX_ObjectAttributeValue_DeviceId",
                 schema: "dbo",
-                table: "OrderDeviceAttribute",
+                table: "ObjectAttributeValue",
+                column: "DeviceId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ObjectAttributeValue_OrderDeviceId",
+                schema: "dbo",
+                table: "ObjectAttributeValue",
                 column: "OrderDeviceId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrderDeviceFailure_FailureId",
+                schema: "dbo",
+                table: "OrderDeviceFailure",
+                column: "FailureId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrderDeviceFailure_OrderDeviceId",
+                schema: "dbo",
+                table: "OrderDeviceFailure",
+                column: "OrderDeviceId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrderDeviceFailure_OrderId",
+                schema: "dbo",
+                table: "OrderDeviceFailure",
+                column: "OrderId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_OrderDevices_DeviceId",
@@ -367,16 +501,16 @@ namespace Lore.Persistence.Migrations
                 column: "OrderDeviceId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrderStateHistory_OrderId",
+                name: "IX_OrderStatusHistory_OrderId",
                 schema: "dbo",
-                table: "OrderStateHistory",
+                table: "OrderStatusHistory",
                 column: "OrderId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrderStateHistory_OrderStateId",
+                name: "IX_OrderStatusHistory_OrderStatusId",
                 schema: "dbo",
-                table: "OrderStateHistory",
-                column: "OrderStateId");
+                table: "OrderStatusHistory",
+                column: "OrderStatusId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Products_ProductGroupId",
@@ -392,7 +526,11 @@ namespace Lore.Persistence.Migrations
                 schema: "dbo");
 
             migrationBuilder.DropTable(
-                name: "OrderDeviceAttribute",
+                name: "ObjectAttributeValue",
+                schema: "dbo");
+
+            migrationBuilder.DropTable(
+                name: "OrderDeviceFailure",
                 schema: "dbo");
 
             migrationBuilder.DropTable(
@@ -400,11 +538,19 @@ namespace Lore.Persistence.Migrations
                 schema: "dbo");
 
             migrationBuilder.DropTable(
-                name: "OrderStateHistory",
+                name: "OrderStatusHistory",
+                schema: "dbo");
+
+            migrationBuilder.DropTable(
+                name: "Position",
                 schema: "dbo");
 
             migrationBuilder.DropTable(
                 name: "AttributesValues",
+                schema: "dbo");
+
+            migrationBuilder.DropTable(
+                name: "Failure",
                 schema: "dbo");
 
             migrationBuilder.DropTable(

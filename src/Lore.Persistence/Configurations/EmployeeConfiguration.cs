@@ -15,12 +15,6 @@ namespace Lore.Persistence.Configurations
             builder.Property(e => e.LastName)
                 .IsRequired()
                 .HasMaxLength(50);
-
-            builder.Property(e => e.Email)
-                .HasMaxLength(50);
-
-            builder.Property(e => e.Phone)
-                .HasMaxLength(24);
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace Lore.Application.OrderStates.Commands.UpsertOrderState
+namespace Lore.Application.OrderStatuses.Commands.UpsertOrderState
 {
     public class UpsertOrderStateCommandValidator : AbstractValidator<UpsertOrderStateCommand>
     {

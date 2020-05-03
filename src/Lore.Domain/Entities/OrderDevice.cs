@@ -7,13 +7,14 @@ namespace Lore.Domain.Entities
     {
         public OrderDevice()
         {
-            OrderDeviceAttributes = new HashSet<OrderDeviceAttribute>();
+            OrderDeviceAttributes = new HashSet<ObjectAttributeValue>();
+            OrderDeviceFailures = new HashSet<OrderDeviceFailure>();
         }
 
-        public string Description { get; set; }
         public long DeviceId { get; set; }
 
         public Device Device { get; set; }
-        public ICollection<OrderDeviceAttribute> OrderDeviceAttributes { get; set; }
+        public ICollection<ObjectAttributeValue> OrderDeviceAttributes { get; set; }
+        public ICollection<OrderDeviceFailure> OrderDeviceFailures { get; set; }
     }
 }

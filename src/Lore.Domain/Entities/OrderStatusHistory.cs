@@ -2,12 +2,12 @@
 
 namespace Lore.Domain.Entities
 {
-    public class OrderStateHistory : AuditableEntity
+    public class OrderStatusHistory : AuditableEntity
     {
         public long OrderId { get; set; }
-        public long OrderStateId { get; set; }
+        public long OrderStatusId { get; set; }
 
         public Order Order { get; set; }
-        public OrderState OrderState { get; set; }
+        public OrderStatus OrderStatus { get; set; }
     }
 }

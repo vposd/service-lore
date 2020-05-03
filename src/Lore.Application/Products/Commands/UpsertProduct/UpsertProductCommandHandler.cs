@@ -34,7 +34,7 @@ namespace Lore.Application.ProductGroups.Commands.UpsertProduct
             }
 
             product.Name = request.Name;
-            product.GroupId = request.GroupId;
+            product.ProductGroupId = request.GroupId;
             product.Description = request.Description;
             product.Price = request.Price;
 

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HubConnectionBuilder } from '@microsoft/signalr';
+import { HubConnectionBuilder, HubConnection } from '@microsoft/signalr';
 import { Subject } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
@@ -19,6 +19,7 @@ export class NotificationHub {
     return this.eventsBroadcast.asObservable();
   }
 
+  private _connection: HubConnection;
   private readonly eventsBroadcast = new Subject<NotificationMessage<object>>();
 
   async start() {
@@ -34,5 +35,11 @@ export class NotificationHub {
       .catch(() =>
         console.error('[NotificationHub] Error start notifications hub')
       );
+  }
+
+  async stop() {
+    if (this._connection) {
+      this._connection.stop();
+    }
   }
 }

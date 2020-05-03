@@ -1,7 +1,7 @@
 ﻿using Lore.Application.Common.Models;
 using MediatR;
 
-namespace Lore.Application.OrderStates.Commands.UpsertOrderState
+namespace Lore.Application.OrderStatuses.Commands.UpsertOrderState
 {
     public class UpsertOrderStateCommand : IRequest<OperationResult>
     {

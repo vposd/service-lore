@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Lore.Application.Orders.Queries.GetOrders
 {
-    public class GetOrdersQuery : QueryRequest, IRequest<QueryResult<OrderQueryModel>>
+    public class GetOrdersQuery : QueryRequest, IRequest<QueryResult<OrderReadModel>>
     {
     }
 }

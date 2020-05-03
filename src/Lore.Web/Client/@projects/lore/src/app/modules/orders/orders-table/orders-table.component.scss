@@ -1,1 +1,45 @@
 @import '~@styles/material';
+
+.table__row {
+  transition: 180ms;
+}
+
+.mat-table {
+  background: transparent;
+
+  .mat-header-row {
+    border: 1px solid mat-color($mat-grey, 200);
+    border-radius: 0.2rem;
+    background: #ffffff;
+  }
+
+  .mat-row {
+    margin-top: 0.25rem;
+    border-radius: 0.2rem;
+  }
+}
+
+.table-container-header {
+  margin-bottom: $offset-md;
+}
+
+.table-link {
+  color: mat-color($mat-light-blue, 700);
+  text-decoration: none;
+}
+
+.mat-column-actions {
+  width: 2rem;
+  max-width: 2rem;
+}
+
+.mat-column-id {
+  width: 4rem;
+  max-width: 4rem;
+  text-align: center;
+}
+
+.mat-column-statusId {
+  width: 10rem;
+  max-width: 10rem;
+}

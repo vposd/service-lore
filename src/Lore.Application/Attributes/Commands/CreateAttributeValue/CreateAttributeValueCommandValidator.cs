@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using Lore.Application.Attributes.Commands.CreateAttributeValue;
 
-namespace Lore.Application.OrderStates.Commands.UpsertOrderState
+namespace Lore.Application.OrderStatuses.Commands.UpsertOrderState
 {
     public class CreateAttributeValueCommandValidator : AbstractValidator<CreateAttributeValueCommand>
     {
