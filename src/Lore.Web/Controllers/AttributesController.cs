@@ -29,6 +29,7 @@ namespace Lore.Web.Controllers
             var result = await Mediator.Send(new CreateAttributeCommand
             {
                 Type = request.Type,
+                ObjectType = request.ObjectType,
                 Name = request.Name
             });
             return Ok(result);

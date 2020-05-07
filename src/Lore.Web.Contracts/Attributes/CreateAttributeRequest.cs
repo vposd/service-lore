@@ -6,5 +6,6 @@ namespace Lore.Web.Contracts.Attributes
     {
         public string Name { get; set; }
         public AttributeValueType Type { get; set; }
+        public AttributeObject ObjectType { get; set; }
     }
 }

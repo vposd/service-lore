@@ -34,6 +34,18 @@ export const routes: Routes = [
     },
   },
   {
+    path: 'references',
+    loadChildren: () =>
+      import('../modules/master-data/master-data.module').then(
+        (x) => x.MasterDataModule
+      ),
+    canActivate: [GlobalAuthGuard],
+    data: {
+      forRoles: [UserRole.Admin],
+      title: 'Order states',
+    },
+  },
+  {
     path: '**',
     redirectTo: '/orders',
     canActivate: [GlobalAuthGuard],

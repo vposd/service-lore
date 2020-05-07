@@ -1,11 +1,13 @@
-import { NgModule, Directive } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatMenuModule } from '@angular/material/menu';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
+import { NgModule } from '@angular/core';
 
 import { RequestProgressModule } from '@common/utils/request-progress/request-progress/request-progress.module';
 
@@ -19,22 +21,24 @@ import { ExpandableRowHostDirective } from './expandable-row/expandable-row-host
     DataTableComponent,
     FormatByTypePile,
     ExpandableRowDirective,
-    ExpandableRowHostDirective
+    ExpandableRowHostDirective,
   ],
   exports: [
     DataTableComponent,
     ExpandableRowDirective,
-    ExpandableRowHostDirective
+    ExpandableRowHostDirective,
   ],
   imports: [
     CommonModule,
-    RequestProgressModule,
     FormsModule,
     MatCheckboxModule,
+    MatMenuModule,
+    MatButtonModule,
     MatPaginatorModule,
     MatProgressSpinnerModule,
     MatSortModule,
-    MatTableModule
-  ]
+    MatTableModule,
+    RequestProgressModule,
+  ],
 })
 export class DataTableModule {}

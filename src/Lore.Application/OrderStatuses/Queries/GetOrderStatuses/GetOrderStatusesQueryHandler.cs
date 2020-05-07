@@ -33,7 +33,7 @@ namespace Lore.Application.Orders.Queries.GetOrderStatuses
                     Id = x.Id,
                     Name = x.Name,
                     Color = x.Color,
-                    Deleted = x.Deleted == 0,
+                    Deleted = x.Deleted,
                     IsDefault = x.IsDefault
                 })
                 .ApplyQuery(query, out var count)

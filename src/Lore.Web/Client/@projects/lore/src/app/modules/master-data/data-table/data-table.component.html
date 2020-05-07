@@ -1,23 +1,24 @@
-<!-- <div class="row row--offset offset--sm table-caption">
-  <div class="mat-headline">
-    {{ sourceParams.label.plural }}
-  </div>
-</div> -->
+<div class="table-container-header row">
+  <div class="row__section mat-headline">{{ sourceParams.label.plural }}</div>
+  <div class="row__spacer"></div>
+  <div class="row__section"></div>
+</div>
+
 <div class="table-content">
   <div
     class="progress-container offset--md"
     *ngIf="!initialized && !tableHidden"
   >
-    <p class="progress-container__header">Получение данных...</p>
+    <p class="progress-container__header">Loading...</p>
     <div class="progress-container__progress progress progress--info">
       <div class="progress-indeterminate"></div>
     </div>
   </div>
 
-  <request-progress
+  <request-progress-spinner
     [requestProgress]="requestProgress"
-    [hidden]="!tableHidden && requestProgress.state.progress"
-  ></request-progress>
+    *ngIf="tableHidden && requestProgress.state.progress"
+  ></request-progress-spinner>
 
   <mat-table
     [hidden]="tableHidden"
@@ -56,10 +57,25 @@
         </mat-header-cell>
         <mat-cell *matCellDef="let row">
           {{
-            row[column.key] | formatByType: sourceParams.entity:column.key
+            row[column.key] | formatByType: sourceParams.metadata:column.key
           }}</mat-cell
         >
       </ng-container>
+    </ng-container>
+
+    <ng-container matColumnDef="row-actions">
+      <mat-header-cell *matHeaderCellDef> </mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        <button mat-icon-button [matMenuTriggerFor]="menu">
+          <i class="mdi mdi-dots-vertical"></i>
+        </button>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item>Edit</button>
+          <button mat-menu-item>Clone</button>
+          <button mat-menu-item *ngIf="!row.deleted">Mark as delete</button>
+          <button mat-menu-item *ngIf="row.deleted">Restore</button>
+        </mat-menu>
+      </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="expandedDetail">

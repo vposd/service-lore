@@ -8,7 +8,7 @@ import {
   ChangeDetectorRef,
   ContentChild,
   QueryList,
-  ViewChildren
+  ViewChildren,
 } from '@angular/core';
 import { SelectionModel } from '@angular/cdk/collections';
 import { Subject, merge } from 'rxjs';
@@ -18,20 +18,16 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 
-import { Entity } from '@contracts/master-data/entity.class';
 import { InformationService } from '@common/information/information.service';
 import { RequestProgress } from '@common/utils/request-progress/request-progress.class';
-import {
-  getColumnsKeys,
-  getColumns
-} from '@common/utils/decorators/column.decorator';
+import { Entity } from '@contracts/common';
 
 import { MasterDataSource } from '../config/master-data-config.service';
 import { RowsAnimation, DetailExpanded } from './data-table-animations';
 import { MasterDataService } from '../master-data-service/master-data.service';
 import {
   QueryRequestBuilder,
-  SortDirection
+  SortDirection,
 } from '../master-data-service/query-request-builder.class';
 import { ExpandableRowDirective } from './expandable-row/expandable-row.directive';
 
@@ -45,7 +41,7 @@ class TableColumn {
   templateUrl: './data-table.component.html',
   styleUrls: ['./data-table.component.scss'],
   animations: [RowsAnimation, DetailExpanded],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DataTableComponent<T extends Entity> implements OnInit, OnDestroy {
   @Input()
@@ -57,10 +53,10 @@ export class DataTableComponent<T extends Entity> implements OnInit, OnDestroy {
     this.initialized = false;
     this._sourceParams = params;
     this.dataSource = new MatTableDataSource([]);
-    this.displayedColumns = getColumnsKeys(params.entity);
-    this.columns = Array.from(getColumns(params.entity)).map(([key, name]) => ({
-      key,
-      name
+    this.displayedColumns = params.metadata.map((x) => x.property as string);
+    this.columns = params.metadata.map(({ property, label }) => ({
+      key: property as string,
+      name: label,
     }));
 
     this.destroy$.next();
@@ -125,6 +121,7 @@ export class DataTableComponent<T extends Entity> implements OnInit, OnDestroy {
     );
     this.paginator.pageSize = QueryRequestBuilder.PageSizeDefault;
     this.paginator.pageSizeOptions = [30, 50, 100];
+    this.displayedColumns.push('row-actions');
   }
 
   ngOnDestroy() {
@@ -144,7 +141,9 @@ export class DataTableComponent<T extends Entity> implements OnInit, OnDestroy {
   masterToggle() {
     this.isAllSelected
       ? this.selectionModel.clear()
-      : this.dataSource.data.forEach(row => this.selectionModel.select(row.id));
+      : this.dataSource.data.forEach((row) =>
+          this.selectionModel.select(row.id)
+        );
   }
 
   private listenTableInteraction() {
@@ -170,7 +169,7 @@ export class DataTableComponent<T extends Entity> implements OnInit, OnDestroy {
       .pipe(
         tap(() => this.requestProgress.start()),
         startWith(query.request),
-        switchMap(request =>
+        switchMap((request) =>
           this.masterData.query<T>(this._sourceParams.endpoint, request)
         ),
         takeUntil(this.destroy$)
@@ -182,7 +181,7 @@ export class DataTableComponent<T extends Entity> implements OnInit, OnDestroy {
           this.dataSource.data = results;
           this.requestProgress.stop(!count);
         },
-        error => {
+        (error) => {
           this.initialized = true;
           this.requestProgress.stop(true);
           this.information.error(RequestProgress.formatError(error));

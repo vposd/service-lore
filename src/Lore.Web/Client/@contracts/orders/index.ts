@@ -1,4 +1,5 @@
-import { Entity } from '../common';
+import { Entity, SimpleEntity } from '../common';
+import { AttributeValueType } from '@contracts/enums';
 
 export class Customer {
   id: string;
@@ -6,29 +7,40 @@ export class Customer {
   phone: string;
 }
 
-export class Device {
+export class OrderItem {
+  id: string;
+  product: SimpleEntity;
+  quantity: number;
+  amount: number;
+}
+
+export class Attribute {
   id: string;
   name: string;
+  type: AttributeValueType;
+  value: AttributeValue;
 }
 
-export class OrderDevice {
+export class AttributeValue {
   id: string;
-  description: string;
-  device: Device;
+  value: string;
 }
 
-export class OrderDetails extends Entity {
-  description: string;
-  customer: Customer;
+export class Device {
+  id: string;
+  attributes: Attribute[];
+  name: string;
+  serialNumber: string;
 }
 
 export class Order extends Entity {
-  customerId: string;
-  customerName: string;
-  customerPhone: string;
-  description: string;
   id: string;
-  orderDeviceDescription: string;
-  orderDeviceName: string;
+  customer: Customer;
   statusId: string;
+  device: Device;
+  dateIn: string;
+  dateOut: string;
+  description: string;
+  failures: SimpleEntity[];
+  items: OrderItem[];
 }

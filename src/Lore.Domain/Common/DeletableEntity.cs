@@ -2,6 +2,6 @@
 {
     public class DeletableEntity : Entity
     {
-        public int Deleted { get; set; } = 0;
+        public bool Deleted { get; set; } = false;
     }
 }

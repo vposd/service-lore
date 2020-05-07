@@ -87,7 +87,8 @@ namespace Lore
         {
             if (env.IsDevelopment())
             {
-                app.UseCustomExceptionHandler();
+                app.UseDeveloperExceptionPage();
+                // app.UseCustomExceptionHandler();
             }
             else
             {

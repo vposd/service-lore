@@ -26,17 +26,19 @@ namespace Lore.Application.Attributes.Queries.GetAttributes
 
             var results = await context.Attributes
                 .AsNoTracking()
-                .Where(x => x.Deleted == 0)
                 .Select(x => new AttributeModel
                 {
                     Id = x.Id,
                     Name = x.Name,
+                    Deleted = x.Deleted,
                     Type = x.Type,
+                    ObjectType = x.Object,
                     Values = x.Values.Select(v => new AttributeValueModel
                     {
                         Id = v.Id,
                         IsDefault = v.IsDefault,
                         AttributeId = x.Id,
+                        Deleted = v.Deleted,
                         Value = v.Value
                     })
                 })

@@ -31,7 +31,7 @@ namespace Lore.Application.Products.Queries.GetProducts
                     Name = x.Name,
                     Price = x.Price,
                     Description = x.Description,
-                    Deleted = x.Deleted == 0,
+                    Deleted = x.Deleted,
                     Group = new ProductGroupModel
                     {
                         Id = x.ProductGroup.Id,

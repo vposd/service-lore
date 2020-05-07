@@ -12,7 +12,6 @@ namespace Lore.Domain.Entities
     public enum AttributeObject
     {
         Device = 100,
-        OrderDevice = 101
     }
 
     public class Attribute : DeletableEntity

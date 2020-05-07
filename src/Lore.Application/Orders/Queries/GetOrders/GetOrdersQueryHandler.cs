@@ -1,15 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Lore.Application.Common.Extensions.Linq;
 using Lore.Application.Common.Interfaces;
 using Lore.Application.Common.Models;
 using Lore.Application.Orders.Models;
-using Lore.Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using static Lore.Application.Orders.Models.OrderReadModel;
 
 namespace Lore.Application.Orders.Queries.GetOrders
 {
@@ -29,7 +26,7 @@ namespace Lore.Application.Orders.Queries.GetOrders
 
             var results = await context.Orders
                 .AsNoTracking()
-                .Where(x => x.Deleted == 0)
+                .Where(x => !x.Deleted)
                 .Select(x => new OrderReadModel
                 {
                     Id = x.Id,
@@ -37,24 +34,38 @@ namespace Lore.Application.Orders.Queries.GetOrders
                         .OrderBy(s => s.Created)
                         .LastOrDefault()
                         .OrderStatusId,
+                    DateIn = x.DateIn,
+                    DateOut = x.DateOut,
                     Customer = new CustomerModel
                     {
                         Id = x.CustomerId,
                         Name = x.Customer.Name,
                         Phone = x.Customer.Phone
                     },
-                    OrderDevice = new OrderDeviceModel
+                    Device = new DeviceReadModel
                     {
-                        Id = x.OrderDevice.Id,
-                        Device = new DeviceModel
+                        Id = x.Device.Id,
+                        SerialNumber = x.Device.SerialNumber,
+                        Name = x.Device.Name,
+                        Attributes = x.Device.Attributes
+                            .Select(v => new AttributeReadModel
+                            {
+                                Id = v.AttributeId,
+                                Type = v.Attribute.Type,
+                                Name = v.Attribute.Name,
+                                Value = new AttributeValueReadModel
+                                {
+                                    Id = v.AttributeValue.Id,
+                                    Value = v.AttributeValue.Value
+                                }
+                            })
+                    },
+                    Failures = x.DeviceFailures
+                        .Select(v => new SimpleEntityReadModel
                         {
-                            Id = x.OrderDevice.DeviceId,
-                            SerialNumber = x.OrderDevice.Device.SerialNumber,
-                            Name = x.OrderDevice.Device.Name,
-                            Attributes = GetAttributes(x.OrderDevice.Device.Attributes)
-                        },
-                        Attributes = GetAttributes(x.OrderDevice.OrderDeviceAttributes)
-                    }
+                            Id = v.Id,
+                            Name = v.Failure.Name
+                        })
                 })
                 .ApplyQuery(request, out var count)
                 .ToListAsync(cancellationToken);
@@ -65,21 +76,5 @@ namespace Lore.Application.Orders.Queries.GetOrders
                 Count = count
             };
         }
-
-        private static IEnumerable<AttributeModel> GetAttributes(ICollection<ObjectAttributeValue> attributeValues)
-            => attributeValues
-                .GroupBy(g => g.Id)
-                .Select(v => new AttributeModel
-                {
-                    Id = v.Key,
-                    Type = v.FirstOrDefault().Attribute.Type,
-                    Values = v
-                        .Select(a => new AttributeValueModel
-                        {
-                            Id = a.AttributeValue.Id,
-                            Value = a.AttributeValue.Value
-                        })
-                        .ToList()
-                });
     }
 }

@@ -6,5 +6,6 @@
         public long AttributeId { get; set; }
         public string Value { get; set; }
         public bool IsDefault { get; set; }
+        public bool Deleted { get; set; }
     }
 }

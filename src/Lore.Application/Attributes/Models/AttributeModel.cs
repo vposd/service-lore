@@ -9,6 +9,7 @@ namespace Lore.Application.Attributes.Models
         public string Name { get; set; }
         public bool Deleted { get; set; }
         public AttributeValueType Type { get; set; }
+        public AttributeObject ObjectType { get; set; }
         public IEnumerable<AttributeValueModel> Values { get; set; }
     }
 }

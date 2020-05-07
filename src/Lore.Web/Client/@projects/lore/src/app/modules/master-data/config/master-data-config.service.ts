@@ -1,4 +1,5 @@
 import { Entity } from '@contracts/common';
+import { ObjectPropertyMetadata } from '@contracts/master-data/common/metadata.class';
 
 export class MasterDataSource<T extends Entity> {
   href: string;
@@ -7,8 +8,8 @@ export class MasterDataSource<T extends Entity> {
     single: string;
   };
   endpoint: string;
-  entity: T;
   entityName: string;
+  metadata: ObjectPropertyMetadata<T>[];
 
   constructor(config: Partial<MasterDataSource<T>>) {
     Object.assign(this, config);

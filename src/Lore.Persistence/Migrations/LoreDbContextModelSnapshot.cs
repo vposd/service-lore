@@ -27,8 +27,8 @@ namespace Lore.Persistence.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<int>("Deleted")
-                        .HasColumnType("integer");
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -56,8 +56,8 @@ namespace Lore.Persistence.Migrations
                     b.Property<long>("AttributeId")
                         .HasColumnType("bigint");
 
-                    b.Property<int>("Deleted")
-                        .HasColumnType("integer");
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("boolean");
 
                     b.Property<bool>("IsDefault")
                         .HasColumnType("boolean");
@@ -81,8 +81,8 @@ namespace Lore.Persistence.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<int>("Deleted")
-                        .HasColumnType("integer");
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -104,9 +104,6 @@ namespace Lore.Persistence.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<int>("Deleted")
-                        .HasColumnType("integer");
-
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
@@ -118,6 +115,28 @@ namespace Lore.Persistence.Migrations
                     b.ToTable("Devices");
                 });
 
+            modelBuilder.Entity("Lore.Domain.Entities.DeviceFailure", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<long>("FailureId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("OrderId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FailureId");
+
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("DeviceFailure");
+                });
+
             modelBuilder.Entity("Lore.Domain.Entities.Employee", b =>
                 {
                     b.Property<long>("Id")
@@ -125,8 +144,8 @@ namespace Lore.Persistence.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<int>("Deleted")
-                        .HasColumnType("integer");
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -158,15 +177,17 @@ namespace Lore.Persistence.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<int>("Deleted")
-                        .HasColumnType("integer");
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Name")
-                        .HasColumnType("text");
+                        .IsRequired()
+                        .HasColumnType("character varying(50)")
+                        .HasMaxLength(50);
 
                     b.HasKey("Id");
 
-                    b.ToTable("Failure");
+                    b.ToTable("Failures");
                 });
 
             modelBuilder.Entity("Lore.Domain.Entities.ObjectAttributeValue", b =>
@@ -176,19 +197,16 @@ namespace Lore.Persistence.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<long?>("AttributeId")
+                    b.Property<long>("AttributeId")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("AttributeValueId")
+                    b.Property<long>("AttributeValueId")
                         .HasColumnType("bigint");
 
-                    b.Property<int>("Deleted")
-                        .HasColumnType("integer");
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("boolean");
 
                     b.Property<long?>("DeviceId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("OrderDeviceId")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
@@ -198,8 +216,6 @@ namespace Lore.Persistence.Migrations
                     b.HasIndex("AttributeValueId");
 
                     b.HasIndex("DeviceId");
-
-                    b.HasIndex("OrderDeviceId");
 
                     b.ToTable("ObjectAttributeValue");
                 });
@@ -226,11 +242,14 @@ namespace Lore.Persistence.Migrations
                     b.Property<DateTime>("DateOut")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<int>("Deleted")
-                        .HasColumnType("integer");
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Description")
                         .HasColumnType("text");
+
+                    b.Property<long>("DeviceId")
+                        .HasColumnType("bigint");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("timestamp without time zone");
@@ -238,60 +257,13 @@ namespace Lore.Persistence.Migrations
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("text");
 
-                    b.Property<long>("OrderDeviceId")
-                        .HasColumnType("bigint");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CustomerId");
 
-                    b.HasIndex("OrderDeviceId");
-
-                    b.ToTable("Orders");
-                });
-
-            modelBuilder.Entity("Lore.Domain.Entities.OrderDevice", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<long>("DeviceId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
                     b.HasIndex("DeviceId");
 
-                    b.ToTable("OrderDevices");
-                });
-
-            modelBuilder.Entity("Lore.Domain.Entities.OrderDeviceFailure", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<long?>("FailureId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("OrderDeviceId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("OrderId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("FailureId");
-
-                    b.HasIndex("OrderDeviceId");
-
-                    b.HasIndex("OrderId");
-
-                    b.ToTable("OrderDeviceFailure");
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("Lore.Domain.Entities.OrderItem", b =>
@@ -334,8 +306,8 @@ namespace Lore.Persistence.Migrations
                         .HasColumnType("character varying(7)")
                         .HasMaxLength(7);
 
-                    b.Property<int>("Deleted")
-                        .HasColumnType("integer");
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("boolean");
 
                     b.Property<int>("IsDefault")
                         .HasColumnType("integer");
@@ -360,7 +332,7 @@ namespace Lore.Persistence.Migrations
                         {
                             Id = 1L,
                             Color = "#ffffff",
-                            Deleted = 0,
+                            Deleted = false,
                             IsDefault = 1,
                             Name = "Default",
                             SortOrder = 0,
@@ -370,7 +342,7 @@ namespace Lore.Persistence.Migrations
                         {
                             Id = 2L,
                             Color = "#ffffff",
-                            Deleted = 0,
+                            Deleted = false,
                             IsDefault = 0,
                             Name = "Ready",
                             SortOrder = 999,
@@ -391,8 +363,8 @@ namespace Lore.Persistence.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("text");
 
-                    b.Property<int>("Deleted")
-                        .HasColumnType("integer");
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("boolean");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("timestamp without time zone");
@@ -422,8 +394,8 @@ namespace Lore.Persistence.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<int>("Deleted")
-                        .HasColumnType("integer");
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Name")
                         .HasColumnType("text");
@@ -443,8 +415,8 @@ namespace Lore.Persistence.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<int>("Deleted")
-                        .HasColumnType("integer");
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -476,8 +448,8 @@ namespace Lore.Persistence.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<int>("Deleted")
-                        .HasColumnType("integer");
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -501,6 +473,19 @@ namespace Lore.Persistence.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Lore.Domain.Entities.DeviceFailure", b =>
+                {
+                    b.HasOne("Lore.Domain.Entities.Failure", "Failure")
+                        .WithMany()
+                        .HasForeignKey("FailureId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Lore.Domain.Entities.Order", "Order")
+                        .WithMany("DeviceFailures")
+                        .HasForeignKey("OrderId");
+                });
+
             modelBuilder.Entity("Lore.Domain.Entities.Employee", b =>
                 {
                     b.HasOne("Lore.Domain.Entities.Position", "Position")
@@ -514,19 +499,19 @@ namespace Lore.Persistence.Migrations
                 {
                     b.HasOne("Lore.Domain.Entities.Attribute", "Attribute")
                         .WithMany()
-                        .HasForeignKey("AttributeId");
+                        .HasForeignKey("AttributeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Lore.Domain.Entities.AttributeValue", "AttributeValue")
                         .WithMany()
-                        .HasForeignKey("AttributeValueId");
+                        .HasForeignKey("AttributeValueId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Lore.Domain.Entities.Device", "Device")
                         .WithMany("Attributes")
                         .HasForeignKey("DeviceId");
-
-                    b.HasOne("Lore.Domain.Entities.OrderDevice", "OrderDevice")
-                        .WithMany("OrderDeviceAttributes")
-                        .HasForeignKey("OrderDeviceId");
                 });
 
             modelBuilder.Entity("Lore.Domain.Entities.Order", b =>
@@ -537,35 +522,11 @@ namespace Lore.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Lore.Domain.Entities.OrderDevice", "OrderDevice")
-                        .WithMany()
-                        .HasForeignKey("OrderDeviceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Lore.Domain.Entities.OrderDevice", b =>
-                {
                     b.HasOne("Lore.Domain.Entities.Device", "Device")
                         .WithMany()
                         .HasForeignKey("DeviceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Lore.Domain.Entities.OrderDeviceFailure", b =>
-                {
-                    b.HasOne("Lore.Domain.Entities.Failure", "Failure")
-                        .WithMany()
-                        .HasForeignKey("FailureId");
-
-                    b.HasOne("Lore.Domain.Entities.OrderDevice", null)
-                        .WithMany("OrderDeviceFailures")
-                        .HasForeignKey("OrderDeviceId");
-
-                    b.HasOne("Lore.Domain.Entities.Order", "Order")
-                        .WithMany()
-                        .HasForeignKey("OrderId");
                 });
 
             modelBuilder.Entity("Lore.Domain.Entities.OrderItem", b =>

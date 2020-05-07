@@ -16,6 +16,9 @@ export interface Endpoints {
     root: string;
     single: string;
   };
+  failures: {
+    root: string;
+  };
 }
 
 export abstract class Environment {

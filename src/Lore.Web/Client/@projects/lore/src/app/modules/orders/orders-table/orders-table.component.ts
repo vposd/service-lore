@@ -8,35 +8,39 @@ import {
 } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { SelectionModel } from '@angular/cdk/collections';
-import {
-  map,
-  tap,
-  startWith,
-  switchMap,
-  takeUntil,
-  take,
-} from 'rxjs/operators';
+import { map, tap, startWith, switchMap, takeUntil } from 'rxjs/operators';
+import { chain, first, uniq } from 'lodash';
 import { merge, Subject, of } from 'rxjs';
 
 import { RequestProgress } from '@common/utils/request-progress/request-progress.class';
+import { Attribute } from '@contracts/orders';
+import { OrderStateUpdatedEvent } from '@contracts/events/order-state-updated.class';
+import {
+  NotificationHub,
+  listenEvent,
+} from '@common/utils/notifications/notification-bus.service';
+
 import {
   QueryRequestBuilder,
   SortDirection,
 } from '../../master-data/master-data-service/query-request-builder.class';
 import { MasterDataService } from '../../master-data/master-data-service/master-data.service';
-import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { RowsAnimation } from '../../master-data/data-table/data-table-animations';
 import { OrdersService } from '../orders.service';
-import { OrderTableRow } from '../models/order-table-row';
-import {
-  NotificationHub,
-  listenEvent,
-} from '@common/utils/notifications/notification-bus.service';
-import { OrderStateUpdatedEvent } from '@contracts/events/order-state-updated.class';
-import { OrderState } from '@contracts/order-states';
-import { endpoints } from '@projects/lore/src/environments/endpoints';
-import { HttpParams } from '@angular/common/http';
+import { OrderTableRow, AttributeModel } from '../models/order-table-row';
+
+const groupAttributes = (attrs: Attribute[][]): AttributeModel[] =>
+  chain(attrs)
+    .flatten()
+    .groupBy((x) => x.id)
+    .map((x) => ({
+      id: first(x).id,
+      name: first(x).name,
+      values: x.map((v) => v.value),
+    }))
+    .value();
 
 @Component({
   selector: 'app-orders-table',
@@ -46,14 +50,9 @@ import { HttpParams } from '@angular/common/http';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OrdersTableComponent implements OnInit, OnDestroy {
-  columns = [
-    'id',
-    'statusId',
-    'customerName',
-    'customerPhone',
-    'deviceName',
-    'actions',
-  ];
+  columns = ['id', 'statusId', 'customerName', 'deviceName', 'actions'];
+  deviceAttrs: AttributeModel[];
+  orderDeviceAttrs: AttributeModel[];
   displayedColumns = this.columns;
   dataSource: MatTableDataSource<OrderTableRow>;
   selectionModel: SelectionModel<string>;
@@ -78,7 +77,7 @@ export class OrdersTableComponent implements OnInit, OnDestroy {
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   constructor(
-    cdr: ChangeDetectorRef,
+    private readonly cdr: ChangeDetectorRef,
     private readonly masterData: MasterDataService,
     private readonly notifications: NotificationHub,
     private readonly orders: OrdersService
@@ -159,7 +158,28 @@ export class OrdersTableComponent implements OnInit, OnDestroy {
         ({ results, count }) => {
           this.initialized = true;
           this.paginator.length = count;
-          this.dataSource.data = results;
+
+          this.deviceAttrs = groupAttributes(
+            results.map((x) => x.device.attributes)
+          );
+          const deviceAttrsColumns = this.deviceAttrs.map((x) => x.name);
+          this.displayedColumns = uniq([
+            ...this.displayedColumns.filter((x) => x !== 'actions'),
+            ...deviceAttrsColumns,
+            'actions',
+          ]);
+
+          this.dataSource.data = results.map((x) => ({
+            ...x,
+            attributes: x.device.attributes.reduce(
+              (acc, i) => (
+                (acc[i.name] = [...(acc[i.name] || []), i.value]), acc
+              ),
+              {}
+            ),
+          }));
+
+          console.log(this.dataSource.data);
           this.requestProgress.stop(!count);
         },
         () => {

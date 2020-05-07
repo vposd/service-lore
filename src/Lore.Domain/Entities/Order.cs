@@ -14,13 +14,14 @@ namespace Lore.Domain.Entities
 
         public string Description { get; set; }
         public long CustomerId { get; set; }
-        public long OrderDeviceId { get; set; }
+        public long DeviceId { get; set; }
         public Customer Customer { get; set; }
-        public OrderDevice OrderDevice { get; set; }
-        public DateTime DateIn { get; set; }
-        public DateTime DateOut { get; set; }
+        public Device Device { get; set; }
+        public ICollection<DeviceFailure> DeviceFailures { get; set; }
         public ICollection<OrderItem> Items { get; set; }
         public ICollection<OrderStatusHistory> StateHistory { get; set; }
+        public DateTime DateIn { get; set; }
+        public DateTime DateOut { get; set; }
 
         public void AddItems(ICollection<OrderItem> items)
         {

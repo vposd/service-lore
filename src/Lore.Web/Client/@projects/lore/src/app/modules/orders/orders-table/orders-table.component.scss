@@ -15,7 +15,21 @@
 
   .mat-row {
     margin-top: 0.25rem;
+    background: #ffffff;
     border-radius: 0.2rem;
+  }
+
+  .mat-cell-text {
+    display: flex;
+    flex-direction: column;
+
+    .mat-cell-text__primary {
+      margin-bottom: 0.4rem;
+    }
+
+    .mat-cell-text__secondary {
+      margin-bottom: 0.4rem;
+    }
   }
 }
 
@@ -26,6 +40,7 @@
 .table-link {
   color: mat-color($mat-light-blue, 700);
   text-decoration: none;
+  font-weight: 700;
 }
 
 .mat-column-actions {
@@ -42,4 +57,10 @@
 .mat-column-statusId {
   width: 10rem;
   max-width: 10rem;
+}
+
+.table-chip {
+  border-radius: 16px;
+  padding: 0.4rem;
+  background: mat-color($mat-grey, 200);
 }

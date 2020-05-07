@@ -25,6 +25,7 @@ namespace Lore.Application.Attributes.Commands.CreateAttribute
             {
                 Name = request.Name,
                 Type = request.Type,
+                Object = request.ObjectType
             });
 
             await context.SaveChangesAsync(cancellationToken);

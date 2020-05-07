@@ -5,12 +5,45 @@ $table-cell-selected: mat-color($grey-palette, 100);
 :host {
   display: flex;
   flex-direction: column;
+  padding: $offset-lg;
 }
 
 .data-table {
   width: 100%;
-  transition: 280ms opacity;
-  table-layout: fixed;
+}
+
+.table__row {
+  transition: 180ms;
+}
+
+.mat-table {
+  background: transparent;
+
+  .mat-header-row {
+    border: 1px solid mat-color($mat-grey, 200);
+    border-radius: 0.2rem;
+    background: #ffffff;
+  }
+
+  .mat-row {
+    margin-top: 0.25rem;
+    border-radius: 0.2rem;
+    background: #ffffff;
+    border: 0;
+  }
+
+  .mat-cell-text {
+    display: flex;
+    flex-direction: column;
+
+    .mat-cell-text__primary {
+      margin-bottom: 0.4rem;
+    }
+
+    .mat-cell-text__secondary {
+      margin-bottom: 0.4rem;
+    }
+  }
 }
 
 .table--hover {
@@ -25,21 +58,26 @@ $table-cell-selected: mat-color($grey-palette, 100);
   }
 }
 
-.table-content {
-  display: flex;
-  position: absolute;
-  top: 56px;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  border-top: 1px solid mat-color($grey-palette, 400);
-  flex-direction: column;
-  overflow: auto;
-}
+// .table-content {
+//   display: flex;
+//   position: absolute;
+//   top: 56px;
+//   right: 0;
+//   bottom: 0;
+//   left: 0;
+//   border-top: 1px solid mat-color($grey-palette, 400);
+//   flex-direction: column;
+//   overflow: auto;
+// }
 
 .mat-column-actions {
   width: 4rem !important;
   min-width: 4rem !important;
+}
+
+.mat-column-row-actions {
+  width: 2rem;
+  max-width: 2rem;
 }
 
 .row {
@@ -51,7 +89,7 @@ $table-cell-selected: mat-color($grey-palette, 100);
   position: sticky;
   z-index: 10;
   border-top: 1px solid mat-color($grey-palette, 300);
-  background: mat-color($grey-palette, 100);
+  // background: mat-color($grey-palette, 100);
 }
 
 .offset--left-sm {

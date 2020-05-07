@@ -8,6 +8,8 @@ namespace Lore.Application.OrderStatuses.Commands.UpsertOrderState
         public CreateAttributeCommandValidator()
         {
             RuleFor(x => x.Name).MaximumLength(50).NotEmpty();
+            RuleFor(x => x.ObjectType).NotEmpty();
+            RuleFor(x => x.Type).NotEmpty();
         }
     }
 }

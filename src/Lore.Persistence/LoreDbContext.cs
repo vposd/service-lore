@@ -31,7 +31,7 @@ namespace Lore.Persistence
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
-        public DbSet<OrderDevice> OrderDevices { get; set; }
+        public DbSet<Failure> Failures { get; set; }
         public DbSet<Device> Devices { get; set; }
         public DbSet<OrderStatus> OrderStates { get; set; }
         public DbSet<Employee> Employees { get; set; }

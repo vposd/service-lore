@@ -1,11 +1,10 @@
-import { Pipe, PipeTransform, Type } from '@angular/core';
+import { Pipe, PipeTransform } from '@angular/core';
 import { DatePipe } from '@angular/common';
-
+import { SimpleEntity, Entity } from '@contracts/common';
 import {
-  DataType,
-  getDataType,
-} from '@common/utils/decorators/data-type.decorator';
-import { SimpleEntity } from '@contracts/common';
+  ObjectPropertyMetadata,
+  ObjectPropertyType,
+} from '@contracts/master-data/common/metadata.class';
 
 @Pipe({
   name: 'formatByType',
@@ -13,18 +12,32 @@ import { SimpleEntity } from '@contracts/common';
 export class FormatByTypePile implements PipeTransform {
   private readonly datePipe = new DatePipe('ru');
 
-  transform(value: any, classRef: Type<any>, propertyName: string): string {
-    const { type } = getDataType(classRef, propertyName) || {
-      type: DataType.String,
-    };
+  transform(
+    value: any,
+    objectMetadata: ObjectPropertyMetadata<Entity>[],
+    propertyName: string
+  ): string {
+    const propertyMetadata = (objectMetadata || []).find(
+      (x) => x.property === propertyName
+    );
+
+    if (!propertyMetadata) {
+      return value;
+    }
+
+    const { type } = propertyMetadata;
+
     switch (type) {
-      case DataType.Date:
+      case ObjectPropertyType.Boolean:
+        return this.formatBoolean(value);
+
+      case ObjectPropertyType.Date:
         return this.formatDate(value);
 
-      case DataType.DateTime:
+      case ObjectPropertyType.DateTime:
         return this.formatDateTime(value);
 
-      case DataType.Entity:
+      case ObjectPropertyType.Entity:
         return this.formatEntity(value);
 
       default:
@@ -38,6 +51,10 @@ export class FormatByTypePile implements PipeTransform {
     } catch (e) {
       return '';
     }
+  }
+
+  private formatBoolean(input: boolean) {
+    return input ? 'Yes' : 'No';
   }
 
   private formatDateTime(input: string) {

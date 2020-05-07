@@ -31,7 +31,7 @@ namespace Lore.Application.Orders.Queries.GetOrderStatus
                     Id = x.Id,
                     Name = x.Name,
                     Color = x.Color,
-                    Deleted = x.Deleted == 0,
+                    Deleted = x.Deleted,
                     IsDefault = x.IsDefault
                 })
                 .FirstOrDefaultAsync(cancellationToken);

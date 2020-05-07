@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Lore.Application.Attributes.Commands.CreateAttributeValue;
 using Lore.Application.Common.Interfaces;
@@ -22,6 +23,11 @@ namespace Lore.Application.Attributes.Commands.CreateAttribute
         {
             using var context = contextFactory.Create();
 
+            if (request.IsDefault)
+            {
+                ResetDefaultAttributeValue(context);
+            }
+
             context.AttributesValues.Add(new AttributeValue
             {
                 AttributeId = request.AttributeId,
@@ -32,6 +38,15 @@ namespace Lore.Application.Attributes.Commands.CreateAttribute
             await context.SaveChangesAsync(cancellationToken);
 
             return OperationResult.Success();
+        }
+
+        private void ResetDefaultAttributeValue(ILoreDbContext context)
+        {
+            var defaultValue = context.AttributesValues.Where(x => x.IsDefault).FirstOrDefault();
+            if (defaultValue != null)
+            {
+                defaultValue.IsDefault = false;
+            }
         }
     }
 }

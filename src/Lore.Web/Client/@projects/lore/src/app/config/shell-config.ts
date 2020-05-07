@@ -22,6 +22,16 @@ config.menu = {
       iconClass: 'mdi mdi-settings',
       href: '/settings',
     }),
+    new MenuItem({
+      title: 'Order states',
+      iconClass: 'mdi mdi-settings',
+      href: 'references/order-states',
+    }),
+    new MenuItem({
+      title: 'Device failures',
+      iconClass: 'mdi mdi-settings',
+      href: 'references/failures',
+    }),
   ],
 };
 

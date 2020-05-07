@@ -39,16 +39,12 @@
       Customer
     </mat-header-cell>
     <mat-cell *matCellDef="let row">
-      <a href="#" class="table-link">{{ row.customerName }}</a>
-    </mat-cell>
-  </ng-container>
-
-  <ng-container matColumnDef="customerPhone">
-    <mat-header-cell *matHeaderCellDef mat-sort-header>
-      Customer phone
-    </mat-header-cell>
-    <mat-cell *matCellDef="let row">
-      {{ row.customerPhone }}
+      <div class="mat-cell-text">
+        <a href="#" class="table-link mat-cell-text__primary">{{
+          row.customer.name
+        }}</a>
+        <span class="mat-cell-text__secondary">{{ row.customer.phone }}</span>
+      </div>
     </mat-cell>
   </ng-container>
 
@@ -57,7 +53,29 @@
       Device
     </mat-header-cell>
     <mat-cell *matCellDef="let row">
-      {{ row.orderDeviceName }}
+      <div class="mat-cell-text">
+        <span class="mat-cell-text__primary">{{ row.device.name }}</span>
+        <span class="mat-cell-text__secondary"
+          >S/N: {{ row.device.serialNumber }}</span
+        >
+      </div>
+    </mat-cell>
+  </ng-container>
+
+  <ng-container
+    [matColumnDef]="deviceAttribute.name"
+    *ngFor="let deviceAttribute of deviceAttrs"
+  >
+    <mat-header-cell *matHeaderCellDef mat-sort-header>
+      {{ deviceAttribute.name }}
+    </mat-header-cell>
+    <mat-cell *matCellDef="let row">
+      <div
+        class="table-chip"
+        *ngFor="let attr of row.attributes[deviceAttribute.name]"
+      >
+        {{ attr.value }}
+      </div>
     </mat-cell>
   </ng-container>
 

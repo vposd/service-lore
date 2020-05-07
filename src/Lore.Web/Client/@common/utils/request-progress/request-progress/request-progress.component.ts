@@ -22,11 +22,11 @@ export class RequestProgressComponent {
   }
 
   @Input() requestProgress = new RequestProgress();
-  @Input() fetchingTitle = 'Подождите, идет загрузка';
+  @Input() fetchingTitle = 'Loading...';
   @Input() fetchingMessage: string;
-  @Input() errorTitle = 'Ошибка';
+  @Input() errorTitle = 'Error';
   @Input() errorMessage: string;
-  @Input() emptyTitle = 'Нет данных';
+  @Input() emptyTitle = 'Empty';
   @Input() emptyMessage: string;
 
   @HostBinding('style.display') get display() {
