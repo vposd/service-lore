@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 
 import { ENABLED_CACHE_OPTIONS } from '@common/utils/http-cache/http-cache-constant';
-import { Entity, QueryResult } from '@contracts/common';
+import { Entity, QueryResult, OperationResult } from '@contracts/common';
 
 @Injectable({
   providedIn: 'root',
@@ -19,5 +19,13 @@ export class MasterDataService {
       ...(cache ? ENABLED_CACHE_OPTIONS : {}),
       params: queryParams,
     });
+  }
+
+  update<T extends Entity>(endpoint: string, item: T) {
+    return this.http.patch<OperationResult>(endpoint, item);
+  }
+
+  create<T extends Entity>(endpoint: string, item: T) {
+    return this.http.post<OperationResult>(endpoint, item);
   }
 }

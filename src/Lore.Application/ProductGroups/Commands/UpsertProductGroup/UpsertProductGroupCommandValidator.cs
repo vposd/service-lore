@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using Lore.Application.ProductGroups.Commands.UpsertProductGroup;
 
-namespace Lore.Application.OrderStatuses.Commands.UpsertOrderState
+namespace Lore.Application.OrderStatuses.Commands.UpsertOrderStatus
 {
     public class UpsertProductGroupCommandValidator : AbstractValidator<UpsertProductGroupCommand>
     {

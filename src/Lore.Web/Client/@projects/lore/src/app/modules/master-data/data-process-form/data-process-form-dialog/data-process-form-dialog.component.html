@@ -1,0 +1,31 @@
+<h1 mat-dialog-title>
+  <span *ngIf="params.processAction === processActionEnum.Clone"
+    >Clone {{ params.sourceParams.label.single }}</span
+  >
+  <span *ngIf="params.processAction === processActionEnum.Create"
+    >Create {{ params.sourceParams.label.single }}</span
+  >
+  <span *ngIf="params.processAction === processActionEnum.Edit"
+    >Edit {{ params.sourceParams.label.single }}</span
+  >
+</h1>
+<div mat-dialog-content>
+  <app-data-process-form
+    [sourceParams]="params.sourceParams"
+    [process]="params.processAction"
+    [item]="params.item"
+    (formChange)="onFormChange($event)"
+  ></app-data-process-form>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="dialogRef.close()">Cancel</button>
+  <button
+    mat-flat-button
+    color="primary"
+    (click)="save()"
+    cdkFocusInitial
+    [disabled]="requestProgress.state.progress || !formState?.valid"
+  >
+    {{ requestProgress.state.progress ? 'Saving...' : 'Save' }}
+  </button>
+</div>

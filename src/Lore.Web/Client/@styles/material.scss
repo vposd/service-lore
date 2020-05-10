@@ -108,12 +108,12 @@ $application-typography: mat-typography-config(
   $display-2: mat-typography-level(1.25rem, 1.25rem, 400),
   $display-1: mat-typography-level(1.2rem, 1.125rem, 400),
   $headline: mat-typography-level(1.125rem, normal, 400),
-  $title: mat-typography-level(1rem, normal, 400),
+  $title: mat-typography-level(1rem, normal, 700, $letter-spacing: 0.07rem),
   $subheading-1: mat-typography-level(0.8rem, normal, 400),
   $subheading-2: mat-typography-level(0.875rem, normal, 700),
   $body-1: mat-typography-level(0.75rem, normal, 400),
   $body-2: mat-typography-level(0.75rem, normal, 700),
-  $button: mat-typography-level(0.75rem, 1rem, 400, $letter-spacing: 0.1rem),
+  $button: mat-typography-level(0.75rem, 1rem, 400, $letter-spacing: 0.07rem),
   $caption: mat-typography-level(0.75rem, 1rem, 400),
 );
 

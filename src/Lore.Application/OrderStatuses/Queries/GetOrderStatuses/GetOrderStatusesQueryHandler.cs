@@ -34,7 +34,9 @@ namespace Lore.Application.Orders.Queries.GetOrderStatuses
                     Name = x.Name,
                     Color = x.Color,
                     Deleted = x.Deleted,
-                    IsDefault = x.IsDefault
+                    SortOrder = x.SortOrder,
+                    IsDefault = x.IsDefault,
+                    IsFinal = x.isFinal
                 })
                 .ApplyQuery(query, out var count)
                 .ToListAsync(cancellationToken);

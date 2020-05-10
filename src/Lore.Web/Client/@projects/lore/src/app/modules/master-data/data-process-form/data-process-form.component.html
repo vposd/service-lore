@@ -1,0 +1,70 @@
+<ng-container [formGroup]="form">
+  <div *ngFor="let metadata of sourceParams.metadata">
+    <ng-container *ngIf="metadata.type === dataType.Boolean">
+      <mat-checkbox
+        [formControlName]="metadata.property"
+        class="checkbox-control"
+        >{{ metadata.label }}</mat-checkbox
+      >
+    </ng-container>
+
+    <ng-container *ngIf="metadata.type === dataType.Color">
+      <mat-form-field appearance="fill">
+        <mat-label>{{ metadata.label }}</mat-label>
+        <input
+          matInput
+          [formControlName]="metadata.property"
+          [value]="form.value[metadata.property]"
+          maxlength="7"
+        />
+        <i
+          class="mdi mdi-checkbox-blank"
+          matSuffix
+          mat-button-icon
+          (click)="colorPicker.click()"
+          [style.color]="form.value[metadata.property]"
+        ></i>
+      </mat-form-field>
+      <input
+        [hidden]="true"
+        type="color"
+        #colorPicker
+        [formControlName]="metadata.property"
+      />
+    </ng-container>
+
+    <ng-container
+      *ngIf="
+        metadata.type === dataType.Date || metadata.type === dataType.DateTime
+      "
+    >
+      <mat-form-field>
+        <mat-label>{{ metadata.label }}</mat-label>
+        <input matInput [matDatepicker]="picker" />
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker
+          #picker
+          [formControlName]="metadata.property"
+        ></mat-datepicker>
+      </mat-form-field>
+    </ng-container>
+
+    <ng-container *ngIf="metadata.type === dataType.Entity">
+      Entity, {{ metadata.label }}
+    </ng-container>
+
+    <ng-container *ngIf="metadata.type === dataType.Number">
+      <mat-form-field appearance="fill">
+        <mat-label>{{ metadata.label }}</mat-label>
+        <input matInput type="number" [formControlName]="metadata.property" />
+      </mat-form-field>
+    </ng-container>
+
+    <ng-container *ngIf="metadata.type === dataType.String">
+      <mat-form-field appearance="fill">
+        <mat-label>{{ metadata.label }}</mat-label>
+        <input matInput [formControlName]="metadata.property" />
+      </mat-form-field>
+    </ng-container>
+  </div>
+</ng-container>

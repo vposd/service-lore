@@ -12,21 +12,40 @@ export class OrderState extends DeletableEntity {
   name: string;
   color: string;
   deleted: boolean;
+  sortOrder: boolean;
   isDefault: boolean;
+  isFinal: boolean;
 }
 
 export const orderStateMetadata: ObjectPropertyMetadata<OrderState>[] = [
   {
     property: 'color',
     type: ObjectPropertyType.Color,
-    formValidators: [Validators.required],
+    formValidators: [
+      Validators.required,
+      Validators.pattern(/^#(?:[0-9a-f]{3}){1,2}$/i),
+    ],
     label: 'Color',
   },
   {
     property: 'isDefault',
     type: ObjectPropertyType.Boolean,
     formValidators: [],
-    label: 'Default',
+    label: 'Default state',
+    readonly: true,
+  },
+  {
+    property: 'isFinal',
+    type: ObjectPropertyType.Boolean,
+    formValidators: [],
+    label: 'Final state',
+    readonly: true,
+  },
+  {
+    property: 'sortOrder',
+    type: ObjectPropertyType.Number,
+    formValidators: [Validators.min(1), Validators.required],
+    label: 'Sort order',
   },
   {
     property: 'name',

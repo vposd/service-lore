@@ -32,7 +32,9 @@ namespace Lore.Application.Orders.Queries.GetOrderStatus
                     Name = x.Name,
                     Color = x.Color,
                     Deleted = x.Deleted,
-                    IsDefault = x.IsDefault
+                    SortOrder = x.SortOrder,
+                    IsDefault = x.IsDefault,
+                    IsFinal = x.isFinal
                 })
                 .FirstOrDefaultAsync(cancellationToken);
 

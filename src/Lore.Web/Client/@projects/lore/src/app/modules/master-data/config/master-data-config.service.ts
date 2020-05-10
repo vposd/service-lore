@@ -19,7 +19,11 @@ export class MasterDataSource<T extends Entity> {
 export class MasterDataConfig {
   sources: MasterDataSource<any>[];
 
-  getSource(source: string) {
-    return this.sources.find((s) => s.href.includes(source));
+  getSource(entityName: string) {
+    return this.sources.find((s) => s.entityName === entityName);
+  }
+
+  getSourceByHref(href: string) {
+    return this.sources.find((s) => s.href.includes(href));
   }
 }

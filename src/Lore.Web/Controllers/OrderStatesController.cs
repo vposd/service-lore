@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Lore.Api.Controllers;
 using Lore.Application.Common.Models;
-using Lore.Application.OrderStatuses.Commands.UpsertOrderState;
+using Lore.Application.OrderStatuses.Commands.UpsertOrderStatus;
 using Lore.Application.OrderStatuses.Queries.GetOrderStatus;
 using Lore.Application.OrderStatuses.Queries.GetOrderStatuses;
 using Lore.Web.Models;
@@ -31,7 +31,7 @@ namespace Lore.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] UpsertOrderStateCommand command)
+        public async Task<IActionResult> Create([FromBody] UpsertOrderStatusCommand command)
         {
             var result = await Mediator.Send(command);
             return Ok(result);
@@ -39,14 +39,10 @@ namespace Lore.Web.Controllers
 
         [HttpPatch]
         [Route("{id}")]
-        public async Task<IActionResult> Update(long id, [FromBody] UpsertOrderStateCommand command)
+        public async Task<IActionResult> Update(long id, [FromBody] UpsertOrderStatusCommand command)
         {
-            var result = await Mediator.Send(new UpsertOrderStateCommand
-            {
-                Id = id,
-                Name = command.Name,
-                Color = command.Color
-            });
+            command.Id = id;
+            var result = await Mediator.Send(command);
 
             return Ok(result);
         }

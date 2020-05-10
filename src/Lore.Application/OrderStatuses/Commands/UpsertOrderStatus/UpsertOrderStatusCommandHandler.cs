@@ -5,19 +5,19 @@ using Lore.Application.Common.Models;
 using Lore.Domain.Entities;
 using MediatR;
 
-namespace Lore.Application.OrderStatuses.Commands.UpsertOrderState
+namespace Lore.Application.OrderStatuses.Commands.UpsertOrderStatus
 {
-    public class UpsertOrderStateCommandHandler : IRequestHandler<UpsertOrderStateCommand, OperationResult>
+    public class UpsertOrderStatusCommandHandler : IRequestHandler<UpsertOrderStatusCommand, OperationResult>
     {
         private readonly ILoreDbContextFactory contextFactory;
 
-        public UpsertOrderStateCommandHandler(
+        public UpsertOrderStatusCommandHandler(
             ILoreDbContextFactory contextFactory)
         {
             this.contextFactory = contextFactory;
         }
 
-        public async Task<OperationResult> Handle(UpsertOrderStateCommand command, CancellationToken cancellationToken)
+        public async Task<OperationResult> Handle(UpsertOrderStatusCommand command, CancellationToken cancellationToken)
         {
             using var context = contextFactory.Create();
 

@@ -20,9 +20,13 @@ import { MatSort } from '@angular/material/sort';
 
 import { InformationService } from '@common/information/information.service';
 import { RequestProgress } from '@common/utils/request-progress/request-progress.class';
-import { Entity } from '@contracts/common';
+import { Entity, OperationResult } from '@contracts/common';
+import { ObjectPropertyType } from '@contracts/master-data/common/metadata.class';
 
-import { MasterDataSource } from '../config/master-data-config.service';
+import {
+  MasterDataSource,
+  MasterDataConfig,
+} from '../config/master-data-config.service';
 import { RowsAnimation, DetailExpanded } from './data-table-animations';
 import { MasterDataService } from '../master-data-service/master-data.service';
 import {
@@ -30,6 +34,7 @@ import {
   SortDirection,
 } from '../master-data-service/query-request-builder.class';
 import { ExpandableRowDirective } from './expandable-row/expandable-row.directive';
+import { ProcessAction } from '../models/process-action.enum';
 
 class TableColumn {
   key: string;
@@ -78,13 +83,16 @@ export class DataTableComponent<T extends Entity> implements OnInit, OnDestroy {
   @Input() expandable = false;
   @Input() multipleSelection = true;
 
-  requestProgress = new RequestProgress();
   displayedColumns: string[];
   columns: TableColumn[];
   dataSource: MatTableDataSource<T>;
   selectionModel: SelectionModel<string>;
   initialized = false;
   expandedRowId: string;
+
+  readonly processType = ProcessAction;
+  readonly dataType = ObjectPropertyType;
+  readonly requestProgress = new RequestProgress();
 
   get isAllSelected() {
     return this.selectionModel.selected.length === this.dataSource.data.length;
@@ -105,8 +113,10 @@ export class DataTableComponent<T extends Entity> implements OnInit, OnDestroy {
   private _sourceParams: MasterDataSource<T>;
   private _selected: string[];
   private readonly destroy$ = new Subject();
+  private readonly operationSuccess$ = new Subject();
 
   constructor(
+    private readonly masterDataConfig: MasterDataConfig,
     private readonly masterData: MasterDataService,
     private readonly information: InformationService
   ) {}
@@ -146,6 +156,12 @@ export class DataTableComponent<T extends Entity> implements OnInit, OnDestroy {
         );
   }
 
+  onOperationSuccess(event: OperationResult) {
+    if (event?.succeeded) {
+      this.operationSuccess$.next();
+    }
+  }
+
   private listenTableInteraction() {
     this.requestProgress.start();
 
@@ -165,7 +181,11 @@ export class DataTableComponent<T extends Entity> implements OnInit, OnDestroy {
       )
     );
 
-    merge(pagination, sort)
+    const operationSuccess = this.operationSuccess$
+      .asObservable()
+      .pipe(map((x) => query.setPage(this.paginator.pageIndex).request));
+
+    merge(pagination, sort, operationSuccess)
       .pipe(
         tap(() => this.requestProgress.start()),
         startWith(query.request),

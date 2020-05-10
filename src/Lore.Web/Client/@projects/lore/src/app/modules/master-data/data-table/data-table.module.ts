@@ -15,6 +15,7 @@ import { DataTableComponent } from './data-table.component';
 import { FormatByTypePile } from './format-by-type/format-by-type.pipe';
 import { ExpandableRowDirective } from './expandable-row/expandable-row.directive';
 import { ExpandableRowHostDirective } from './expandable-row/expandable-row-host.directive';
+import { DataProcessFormModule } from '../data-process-form/data-process-form.module';
 
 @NgModule({
   declarations: [
@@ -30,10 +31,11 @@ import { ExpandableRowHostDirective } from './expandable-row/expandable-row-host
   ],
   imports: [
     CommonModule,
+    DataProcessFormModule,
     FormsModule,
+    MatButtonModule,
     MatCheckboxModule,
     MatMenuModule,
-    MatButtonModule,
     MatPaginatorModule,
     MatProgressSpinnerModule,
     MatSortModule,

@@ -1,5 +1,5 @@
 import { Entity } from '@contracts/common';
-import { Validators } from '@angular/forms';
+import { ValidatorFn } from '@angular/forms';
 
 export enum ObjectPropertyType {
   String,
@@ -13,7 +13,8 @@ export enum ObjectPropertyType {
 
 export class ObjectPropertyMetadata<T extends Entity> {
   property: keyof T;
-  formValidators: Validators[];
+  formValidators: ValidatorFn[];
   type: ObjectPropertyType;
   label: string;
+  readonly?: boolean;
 }

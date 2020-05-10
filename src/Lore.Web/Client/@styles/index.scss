@@ -22,7 +22,26 @@ html {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
+// Buttons
 .mat-flat-button,
 .mat-button {
   letter-spacing: 0.1rem;
+}
+
+// Dialogs
+.mat-dialog-title {
+  text-transform: uppercase;
+}
+
+.mat-dialog-actions {
+  justify-content: flex-end;
+}
+
+.mat-dialog-content {
+  height: 100%;
+}
+
+// Form field
+.mat-form-field {
+  width: 100%;
 }
