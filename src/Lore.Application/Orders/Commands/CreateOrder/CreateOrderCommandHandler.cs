@@ -68,7 +68,7 @@ namespace Lore.Application.Orders.Commands.CreateOrder
 
         private async Task<OrderStatus> GetDefaultStateAsync(ILoreDbContext context, CancellationToken cancellationToken)
         {
-            var defaultState = await context.OrderStates
+            var defaultState = await context.OrderStatuses
                 .AsNoTracking()
                 .Where(x => x.IsDefault == 1)
                 .FirstOrDefaultAsync(cancellationToken);

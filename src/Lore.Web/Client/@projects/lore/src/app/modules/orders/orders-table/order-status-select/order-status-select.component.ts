@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 import { HttpParams } from '@angular/common/http';
 import { pluck, map } from 'rxjs/operators';
 
-import { OrderState } from '@contracts/order-states';
+import { OrderStatus } from '@contracts/master-data/order-state.class';
 
 import { MasterDataService } from '../../../master-data/master-data-service/master-data.service';
 import { endpoints } from '../../../../../environments/endpoints';
@@ -24,10 +24,10 @@ export class OrderStatusSelectComponent implements OnInit {
   @Input() orderId: string;
   @Input() statusId: string;
 
-  orderStates$: Observable<OrderState[]>;
+  orderStatuses$: Observable<OrderStatus[]>;
 
   get state$() {
-    return this.orderStates$.pipe(
+    return this.orderStatuses$.pipe(
       map((x) => x.filter((v) => v.id === this.statusId)),
       map(([x]) => x)
     );
@@ -39,8 +39,8 @@ export class OrderStatusSelectComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.orderStates$ = this.masterData
-      .query<OrderState>(endpoints.orderStates.root, new HttpParams(), true)
+    this.orderStatuses$ = this.masterData
+      .query<OrderStatus>(endpoints.orderStatuses.root, new HttpParams(), true)
       .pipe(pluck('results'));
   }
 

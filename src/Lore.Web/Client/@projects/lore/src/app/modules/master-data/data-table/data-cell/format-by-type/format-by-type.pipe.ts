@@ -9,39 +9,34 @@ import {
 @Pipe({
   name: 'formatByType',
 })
-export class FormatByTypePile implements PipeTransform {
+export class FormatByTypePipe implements PipeTransform {
   private readonly datePipe = new DatePipe('ru');
 
   transform(
-    value: any,
-    objectMetadata: ObjectPropertyMetadata<Entity>[],
-    propertyName: string
+    value: string | number | boolean | SimpleEntity,
+    propertyMetadata: ObjectPropertyMetadata<Entity>
   ): string {
-    const propertyMetadata = (objectMetadata || []).find(
-      (x) => x.property === propertyName
-    );
-
     if (!propertyMetadata) {
-      return value;
+      return '';
     }
 
     const { type } = propertyMetadata;
 
     switch (type) {
       case ObjectPropertyType.Boolean:
-        return this.formatBoolean(value);
+        return this.formatBoolean(value as boolean);
 
       case ObjectPropertyType.Date:
-        return this.formatDate(value);
+        return this.formatDate(value as string);
 
       case ObjectPropertyType.DateTime:
-        return this.formatDateTime(value);
+        return this.formatDateTime(value as string);
 
       case ObjectPropertyType.Entity:
-        return this.formatEntity(value);
+        return this.formatEntity(value as SimpleEntity);
 
       default:
-        return value;
+        return value as string;
     }
   }
 

@@ -3,36 +3,31 @@ import {
   OnInit,
   Inject,
   ChangeDetectionStrategy,
-  forwardRef
+  forwardRef,
 } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import {
   FormBuilder,
   FormGroup,
   FormControl,
-  NG_VALUE_ACCESSOR
+  NG_VALUE_ACCESSOR,
 } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { pluck, take, tap } from 'rxjs/operators';
 import { isEmpty, merge, flatMap, first } from 'lodash';
+import { isArray } from 'util';
 
-import { Entity } from '@contracts/master-data/entity.class';
-import {
-  getDataTypes,
-  DataType
-} from '@common/utils/decorators/data-type.decorator';
-import { Classifier } from '@contracts/master-data/entities/classifier.class';
 import { RequestProgress } from '@common/utils/request-progress/request-progress.class';
 import { CustomInput } from '@common/form-controls/custom-input/custom-input.class';
+import { Entity } from '@contracts/common';
 
 import {
   MasterDataSource,
-  MasterDataConfig
+  MasterDataConfig,
 } from '../../config/master-data-config.service';
 import { MasterDataService } from '../../master-data-service/master-data.service';
 import { QueryRequestBuilder } from '../../master-data-service/query-request-builder.class';
 import { FilterExpression } from '../../master-data-service/filter-expression';
-import { isArray } from 'util';
 
 export class SelectionParams<T extends Entity> {
   sourceParams: MasterDataSource<T>;
@@ -58,9 +53,9 @@ export class ClassifierSelection {
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => ElasticSelectionFilterComponent),
-      multi: true
-    }
-  ]
+      multi: true,
+    },
+  ],
 })
 export class ElasticSelectionFilterComponent<T extends Entity>
   extends CustomInput<ClassifierSelection>
@@ -82,7 +77,7 @@ export class ElasticSelectionFilterComponent<T extends Entity>
     private formBuilder: FormBuilder
   ) {
     super();
-    this.innerModelChanged.subscribe(model => {
+    this.innerModelChanged.subscribe((model) => {
       this.onChange(model);
       this.onTouched();
     });
@@ -95,24 +90,24 @@ export class ElasticSelectionFilterComponent<T extends Entity>
       .getClassifiers(this.params.sourceParams.entityName)
       .pipe(
         pluck('results'),
-        tap(values => this.createForm(values)),
+        tap((values) => this.createForm(values)),
         tap(() => this.requestProgress.stop())
       );
 
     this.refProps = Array.from(getDataTypes<T>(this.params.sourceParams.entity))
       .map(([prop, params]) => ({ prop, params }))
-      .filter(v => v.params.type === DataType.Entity)
-      .map(v => ({
+      .filter((v) => v.params.type === DataType.Entity)
+      .map((v) => ({
         prop: v.prop,
-        params: this.masterDataConfig.getSource(v.prop.toString())
+        params: this.masterDataConfig.getSource(v.prop.toString()),
       }))
-      .filter(v => v.params);
+      .filter((v) => v.params);
 
-    this.form.valueChanges.subscribe(value => {
+    this.form.valueChanges.subscribe((value) => {
       this.value = Object.keys(value)
-        .filter(key => !isEmpty(value[key]))
-        .map(key => {
-          const classifier = this.classifiers.find(c => c.id === key);
+        .filter((key) => !isEmpty(value[key]))
+        .map((key) => {
+          const classifier = this.classifiers.find((c) => c.id === key);
           if (!classifier) {
             return;
           }
@@ -120,8 +115,8 @@ export class ElasticSelectionFilterComponent<T extends Entity>
           return {
             [key]: {
               ...classifier,
-              values: isArray(value[key]) ? value[key] : [value[key]]
-            }
+              values: isArray(value[key]) ? value[key] : [value[key]],
+            },
           };
         })
         .reduce(merge, {});
@@ -131,8 +126,8 @@ export class ElasticSelectionFilterComponent<T extends Entity>
   select() {
     this.selectProgress.start();
     const selectedIds = flatMap(
-      Object.values(this.value).map(x => x.values),
-      x => x.map(v => v.id)
+      Object.values(this.value).map((x) => x.values),
+      (x) => x.map((v) => v.id)
     );
 
     this.masterData
@@ -144,7 +139,7 @@ export class ElasticSelectionFilterComponent<T extends Entity>
           .setPageSize(Infinity).request
       )
       .pipe(take(1))
-      .subscribe(data => {
+      .subscribe((data) => {
         this.selectProgress.stop();
         this.dialogRef.close({ model: this.value, results: data.results });
       });
@@ -157,7 +152,7 @@ export class ElasticSelectionFilterComponent<T extends Entity>
   private createForm(classifiers: Classifier[]) {
     this.classifiers = classifiers;
 
-    classifiers.forEach(classifier => {
+    classifiers.forEach((classifier) => {
       const values = this.params.model[classifier.id]
         ? this.params.model[classifier.id].values
         : [];

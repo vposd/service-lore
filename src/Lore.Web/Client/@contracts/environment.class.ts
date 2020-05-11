@@ -12,7 +12,7 @@ export interface Endpoints {
     root: string;
     updateState: string;
   };
-  orderStates: {
+  orderStatuses: {
     root: string;
     single: string;
   };

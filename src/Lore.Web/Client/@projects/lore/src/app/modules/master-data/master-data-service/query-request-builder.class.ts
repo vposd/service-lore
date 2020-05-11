@@ -1,9 +1,10 @@
 import { HttpParams } from '@angular/common/http';
 import { isArray } from 'lodash/fp';
+import { isUndefined } from 'lodash';
 
 export enum SortDirection {
   Asc = 'asc',
-  Desc = 'desc'
+  Desc = 'desc',
 }
 
 /**
@@ -52,7 +53,7 @@ export class QueryRequestBuilder {
   }
 
   setParam(key: string, value: string | string[]) {
-    if (!value) {
+    if (isUndefined(value)) {
       return this;
     }
     const paramValue = isArray(value) ? value.join(',') : value;

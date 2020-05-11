@@ -14,7 +14,7 @@
         <input
           matInput
           [formControlName]="metadata.property"
-          [value]="form.value[metadata.property]"
+          [value]="form.value[metadata.property] || ''"
           maxlength="7"
         />
         <i

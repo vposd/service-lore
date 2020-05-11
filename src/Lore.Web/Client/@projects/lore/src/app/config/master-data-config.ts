@@ -1,5 +1,7 @@
-import { OrderState } from '@contracts/order-states';
-import { orderStateMetadata } from '@contracts/master-data/order-state.class';
+import {
+  orderStatusMetadata,
+  OrderStatus,
+} from '@contracts/master-data/order-state.class';
 import { Failure, failureMetadata } from '@contracts/master-data/failure.class';
 
 import {
@@ -7,19 +9,21 @@ import {
   MasterDataSource,
 } from '../modules/master-data/config/master-data-config.service';
 import { environment } from '../../environments/environment';
+import { displayDeletedFilter } from '../modules/master-data/data-table/data-filters/common-filters';
 
 const config = new MasterDataConfig();
 
 config.sources = [
-  new MasterDataSource<OrderState>({
+  new MasterDataSource<OrderStatus>({
     href: 'order-states',
-    endpoint: environment.endpoints.orderStates.root,
+    endpoint: environment.endpoints.orderStatuses.root,
     label: {
-      plural: 'Order states',
-      single: 'Order state',
+      plural: 'Order statuses',
+      single: 'Order status',
     },
-    entityName: 'OrderState',
-    metadata: orderStateMetadata,
+    entityName: 'OrderStatus',
+    metadata: orderStatusMetadata,
+    filters: [displayDeletedFilter],
   }),
   new MasterDataSource<Failure>({
     href: 'failures',
@@ -30,6 +34,7 @@ config.sources = [
     },
     entityName: 'Failure',
     metadata: failureMetadata,
+    filters: [displayDeletedFilter],
   }),
 ];
 

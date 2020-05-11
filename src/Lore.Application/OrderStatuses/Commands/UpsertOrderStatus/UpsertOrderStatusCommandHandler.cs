@@ -25,11 +25,11 @@ namespace Lore.Application.OrderStatuses.Commands.UpsertOrderStatus
 
             if (command.Id != 0L)
             {
-                orderState = await context.OrderStates.FindAsync(command.Id);
+                orderState = await context.OrderStatuses.FindAsync(command.Id);
             }
             else
             {
-                context.OrderStates.Add(orderState);
+                context.OrderStatuses.Add(orderState);
             }
 
             orderState.Name = command.Name;

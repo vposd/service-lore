@@ -1,0 +1,5 @@
+<ng-container *ngIf="metadata.type === dataType.Color">
+  <i class="mdi mdi-checkbox-blank" [style.color]="value"></i>&nbsp;&nbsp;
+</ng-container>
+
+{{ value | formatByType: metadata }}

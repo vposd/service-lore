@@ -16,7 +16,7 @@ import { merge, Subject, of } from 'rxjs';
 
 import { RequestProgress } from '@common/utils/request-progress/request-progress.class';
 import { Attribute } from '@contracts/orders';
-import { OrderStateUpdatedEvent } from '@contracts/events/order-state-updated.class';
+import { OrderStatusUpdatedEvent } from '@contracts/events/order-state-updated.class';
 import {
   NotificationHub,
   listenEvent,
@@ -92,13 +92,13 @@ export class OrdersTableComponent implements OnInit, OnDestroy {
 
     this.notifications.events$
       .pipe(
-        listenEvent<OrderStateUpdatedEvent>('OrderStateUpdatedEvent'),
+        listenEvent<OrderStatusUpdatedEvent>('OrderStatusUpdatedEvent'),
         switchMap((x) => {
           const order = this.dataSource.data.find((e) => x.payload.orderId);
           if (!order) {
             return of();
           }
-          return this.orders.getOrderState(x.payload.stateId).pipe(
+          return this.orders.getOrderStatus(x.payload.stateId).pipe(
             tap(
               (status) =>
                 (this.dataSource.data = this.dataSource.data.map((v) =>

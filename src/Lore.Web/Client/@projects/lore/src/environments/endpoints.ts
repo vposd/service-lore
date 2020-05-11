@@ -14,9 +14,9 @@ export const endpoints: Endpoints = {
     root: '/api/orders',
     updateState: '/api/orders/{orderId}/state/{stateId}',
   },
-  orderStates: {
-    root: '/api/orderStates',
-    single: '/api/orderStates/{id}',
+  orderStatuses: {
+    root: '/api/orderStatuses',
+    single: '/api/orderStatuses/{id}',
   },
   failures: {
     root: '/api/failures',

@@ -1,9 +1,11 @@
 ﻿using System.Threading.Tasks;
 using Lore.Api.Controllers;
+using Lore.Application.Common.Common;
 using Lore.Application.Common.Models;
 using Lore.Application.OrderStatuses.Commands.UpsertOrderStatus;
 using Lore.Application.OrderStatuses.Queries.GetOrderStatus;
 using Lore.Application.OrderStatuses.Queries.GetOrderStatuses;
+using Lore.Domain.Entities;
 using Lore.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,9 +13,9 @@ using Microsoft.AspNetCore.Mvc;
 namespace Lore.Web.Controllers
 {
     [Authorize]
-    [Route("api/orderStates")]
+    [Route("api/orderStatuses")]
     [ApiController]
-    public class OrderStatesController : BaseController
+    public class OrderStatusesController : BaseController
     {
         [HttpGet]
         public async Task<IActionResult> Query(DataQuery query)
@@ -34,6 +36,30 @@ namespace Lore.Web.Controllers
         public async Task<IActionResult> Create([FromBody] UpsertOrderStatusCommand command)
         {
             var result = await Mediator.Send(command);
+            return Ok(result);
+        }
+
+        [HttpDelete]
+        [Route("{id}")]
+        public async Task<IActionResult> MarkAsDelete(long id)
+        {
+            var result = await Mediator.Send(new ChangeDeletedStatusCommand<OrderStatus>
+            {
+                Id = id,
+                Deleted = true
+            });
+            return Ok(result);
+        }
+
+        [HttpPatch]
+        [Route("{id}/restore")]
+        public async Task<IActionResult> Restore(long id)
+        {
+            var result = await Mediator.Send(new ChangeDeletedStatusCommand<OrderStatus>
+            {
+                Id = id,
+                Deleted = false
+            });
             return Ok(result);
         }
 

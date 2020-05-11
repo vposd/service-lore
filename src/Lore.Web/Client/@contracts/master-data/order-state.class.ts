@@ -7,17 +7,17 @@ import {
   ObjectPropertyType,
 } from './common/metadata.class';
 
-export class OrderState extends DeletableEntity {
+export class OrderStatus extends DeletableEntity {
   id: string;
   name: string;
   color: string;
   deleted: boolean;
-  sortOrder: boolean;
+  sortOrder: number;
   isDefault: boolean;
   isFinal: boolean;
 }
 
-export const orderStateMetadata: ObjectPropertyMetadata<OrderState>[] = [
+export const orderStatusMetadata: ObjectPropertyMetadata<OrderStatus>[] = [
   {
     property: 'color',
     type: ObjectPropertyType.Color,

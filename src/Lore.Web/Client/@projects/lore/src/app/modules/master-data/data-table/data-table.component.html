@@ -1,7 +1,26 @@
 <div class="table-container-header row">
   <div class="row__section mat-headline">{{ sourceParams.label.plural }}</div>
   <div class="row__spacer"></div>
-  <div class="row__section"></div>
+  <ng-container>
+    <div class="row__section">
+      <app-data-filters
+        [filters]="sourceParams.filters"
+        (expressionsChange)="onExpressionsChanged($event)"
+      ></app-data-filters>
+    </div>
+  </ng-container>
+  <div class="row__section">
+    <button
+      mat-flat-button
+      color="accent"
+      appOpenDataProcessDialog
+      [source]="sourceParams.entityName"
+      [process]="processType.Create"
+      (operationResult)="onOperationSuccess($event)"
+    >
+      + Create
+    </button>
+  </div>
 </div>
 
 <div class="table-content">
@@ -56,10 +75,12 @@
           {{ column.name }}
         </mat-header-cell>
         <mat-cell *matCellDef="let row">
-          {{
-            row[column.key] | formatByType: sourceParams.metadata:column.key
-          }}</mat-cell
-        >
+          <app-data-cell
+            [sourceParams]="sourceParams"
+            [value]="row[column.key]"
+            [property]="column.key"
+          ></app-data-cell
+        ></mat-cell>
       </ng-container>
     </ng-container>
 
@@ -80,8 +101,12 @@
           >
             Clone
           </button>
-          <button mat-menu-item *ngIf="!row.deleted">Mark as delete</button>
-          <button mat-menu-item *ngIf="row.deleted">Restore</button>
+          <button mat-menu-item *ngIf="!row.deleted" (click)="delete(row.id)">
+            Mark as delete
+          </button>
+          <button mat-menu-item *ngIf="row.deleted" (click)="restore(row.id)">
+            Restore
+          </button>
         </mat-menu>
       </mat-cell>
     </ng-container>
@@ -113,6 +138,7 @@
     <mat-row
       class="table__row"
       [class.table__row--selected]="selectionModel.isSelected(row.id)"
+      [class.table__row--muted]="row.deleted"
       [class.table__row--expanded]="expandedRowId == row.id"
       appOpenDataProcessDialog
       [source]="sourceParams.entityName"

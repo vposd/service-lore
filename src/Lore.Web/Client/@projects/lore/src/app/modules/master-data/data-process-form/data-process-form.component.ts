@@ -32,7 +32,7 @@ export class DataProcessFormComponent<T extends Entity> implements OnInit {
   readonly dataType = ObjectPropertyType;
   readonly form: FormGroup;
 
-  constructor(fb: FormBuilder, private readonly cdr: ChangeDetectorRef) {
+  constructor(fb: FormBuilder) {
     this.form = fb.group({});
   }
 
@@ -41,7 +41,10 @@ export class DataProcessFormComponent<T extends Entity> implements OnInit {
       this.form.addControl(
         x.property as string,
         new FormControl(
-          { value: this.item[x.property], disabled: x.readonly },
+          {
+            value: this.item ? this.item[x.property] : null,
+            disabled: x.readonly,
+          },
           x.formValidators
         )
       )

@@ -9,7 +9,7 @@
 <mat-menu #menu="matMenu">
   <button
     mat-menu-item
-    *ngFor="let state of orderStates$ | async"
+    *ngFor="let state of orderStatuses$ | async"
     (click)="setState(state.id)"
   >
     <div class="option-item">

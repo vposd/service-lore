@@ -25,7 +25,7 @@ namespace Lore.Application.Orders.Queries.GetOrderStatuses
         {
             using var context = contextFactory.Create();
 
-            var results = await context.OrderStates
+            var results = await context.OrderStatuses
                 .AsNoTracking()
                 .OrderBy(x => x.SortOrder)
                 .Select(x => new OrderStatusModel

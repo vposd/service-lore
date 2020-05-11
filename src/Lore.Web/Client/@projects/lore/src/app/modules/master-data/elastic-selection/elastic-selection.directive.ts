@@ -3,23 +3,26 @@ import {
   Input,
   HostListener,
   Output,
-  EventEmitter
+  EventEmitter,
 } from '@angular/core';
 import { take, filter } from 'rxjs/operators';
 
-import { Entity } from '@contracts/master-data/entity.class';
 import { DialogsService } from '@common/dialogs/components/dialogs.service';
+import { Entity } from '@contracts/common';
 
 import {
   MasterDataSource,
-  MasterDataConfig
+  MasterDataConfig,
 } from '../config/master-data-config.service';
 import {
   ElasticSelectionFilterComponent,
   SelectionParams,
-  ClassifierSelection
+  ClassifierSelection,
 } from './elastic-selection-filter/elastic-selection-filter.component';
-import { FilterExpression } from '../master-data-service/filter-expression';
+import {
+  FilterExpression,
+  dataFilter,
+} from '../master-data-service/filter-expression';
 
 export class ElasticSelectionModel<T> {
   model: ClassifierSelection;
@@ -27,7 +30,7 @@ export class ElasticSelectionModel<T> {
 }
 
 @Directive({
-  selector: '[appElasticSelection]'
+  selector: '[appElasticSelection]',
 })
 export class ElasticSelectionDirective<T extends Entity> {
   @Input() set source(source: string) {
@@ -56,9 +59,9 @@ export class ElasticSelectionDirective<T extends Entity> {
         size: 'md',
         data: {
           sourceParams: this.sourceParams,
-          filterExpression: this.filterExpression || new FilterExpression(),
-          model: this.model
-        }
+          filterExpression: this.filterExpression || dataFilter(),
+          model: this.model,
+        },
       })
       .afterClosed()
       .pipe(take(1), filter(Boolean))

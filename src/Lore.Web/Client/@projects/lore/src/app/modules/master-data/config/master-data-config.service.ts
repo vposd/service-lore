@@ -1,5 +1,6 @@
 import { Entity } from '@contracts/common';
 import { ObjectPropertyMetadata } from '@contracts/master-data/common/metadata.class';
+import { DataFilter } from '../models/filter-metadata.class';
 
 export class MasterDataSource<T extends Entity> {
   href: string;
@@ -10,6 +11,7 @@ export class MasterDataSource<T extends Entity> {
   endpoint: string;
   entityName: string;
   metadata: ObjectPropertyMetadata<T>[];
+  filters: DataFilter<any>[];
 
   constructor(config: Partial<MasterDataSource<T>>) {
     Object.assign(this, config);

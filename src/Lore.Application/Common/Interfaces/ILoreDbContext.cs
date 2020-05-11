@@ -16,7 +16,7 @@ namespace Lore.Application.Common.Interfaces
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<Failure> Failures { get; set; }
         public DbSet<Device> Devices { get; set; }
-        public DbSet<OrderStatus> OrderStates { get; set; }
+        public DbSet<OrderStatus> OrderStatuses { get; set; }
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Attribute> Attributes { get; set; }
         public DbSet<AttributeValue> AttributesValues { get; set; }

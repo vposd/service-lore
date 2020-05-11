@@ -3,6 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 
 import { ENABLED_CACHE_OPTIONS } from '@common/utils/http-cache/http-cache-constant';
 import { Entity, QueryResult, OperationResult } from '@contracts/common';
+import { format } from '@projects/lore/src/environments/endpoints';
 
 @Injectable({
   providedIn: 'root',
@@ -27,5 +28,13 @@ export class MasterDataService {
 
   create<T extends Entity>(endpoint: string, item: T) {
     return this.http.post<OperationResult>(endpoint, item);
+  }
+
+  delete(endpoint: string, id: string) {
+    return this.http.delete<OperationResult>(`${endpoint}/${id}`);
+  }
+
+  restore(endpoint: string, id: string) {
+    return this.http.patch<OperationResult>(`${endpoint}/${id}/restore`, null);
   }
 }

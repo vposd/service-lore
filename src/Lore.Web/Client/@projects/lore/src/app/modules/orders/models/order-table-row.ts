@@ -1,8 +1,8 @@
 import { Order, AttributeValue } from '@contracts/orders';
-import { OrderState } from '@contracts/order-states';
+import { OrderStatus } from '@contracts/master-data/order-state.class';
 
 export class OrderTableRow extends Order {
-  status: OrderState;
+  status: OrderStatus;
 }
 
 export class AttributeModel {

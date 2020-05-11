@@ -23,7 +23,7 @@ namespace Lore.Application.Orders.Queries.GetOrderStatus
         {
             using var context = contextFactory.Create();
 
-            var vm = await context.OrderStates
+            var vm = await context.OrderStatuses
                 .AsNoTracking()
                 .Where(x => x.Id == query.Id)
                 .Select(x => new OrderStatusModel

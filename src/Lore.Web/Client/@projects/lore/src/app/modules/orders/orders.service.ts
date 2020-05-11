@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { forkJoin, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { ENABLED_CACHE_OPTIONS } from '@common/utils/http-cache/http-cache-constant';
-import { OrderState } from '@contracts/order-states';
-import { QueryResult, QueryRequest } from '@contracts/common';
-import { map } from 'rxjs/operators';
+import { QueryResult } from '@contracts/common';
 import { Order } from '@contracts/orders';
+import { OrderStatus } from '@contracts/master-data/order-state.class';
 
 import { endpoints, format } from '../../../environments/endpoints';
 import { MasterDataService } from '../master-data/master-data-service/master-data.service';
@@ -24,25 +24,25 @@ export class OrdersService {
   getOrders(request: HttpParams): Observable<QueryResult<OrderTableRow>> {
     return forkJoin([
       this.masterData.query<Order>(endpoints.orders.root, request),
-      this.masterData.query<OrderState>(
-        endpoints.orderStates.root,
+      this.masterData.query<OrderStatus>(
+        endpoints.orderStatuses.root,
         new HttpParams(),
         true
       ),
     ]).pipe(
-      map(([orders, orderStates]) => ({
+      map(([orders, orderStatuses]) => ({
         ...orders,
         results: orders.results.map((x) => ({
           ...x,
-          status: orderStates.results.find((s) => s.id === x.statusId),
+          status: orderStatuses.results.find((s) => s.id === x.statusId),
         })),
       }))
     );
   }
 
-  getOrderState(id: string) {
-    return this.http.get<OrderState>(
-      format(endpoints.orderStates.single, { id }),
+  getOrderStatus(id: string) {
+    return this.http.get<OrderStatus>(
+      format(endpoints.orderStatuses.single, { id }),
       ENABLED_CACHE_OPTIONS
     );
   }

@@ -1,17 +1,17 @@
 import { isNil } from 'lodash';
 
-enum Operator {
+export enum Operator {
   And = 'and',
-  Or = 'or'
+  Or = 'or',
 }
 
 enum PropertyOperator {
   Equals = 'eq',
   NotEquals = 'ne',
-  GreaterThan = 'ne',
+  GreaterThan = 'gt',
   GreaterThanOrEqual = 'ge',
   LessThan = 'lt',
-  LessThanOrEqual = 'le'
+  LessThanOrEqual = 'le',
 }
 
 export class PropertyExpression {
@@ -19,9 +19,7 @@ export class PropertyExpression {
     return this.path.replace('.', '/');
   }
 
-  operator: Operator;
   expression: string;
-  next: PropertyExpression;
 
   constructor(private readonly path: string) {}
 
@@ -29,14 +27,8 @@ export class PropertyExpression {
     return this.expression ? `${this.propertyPath} ${this.expression}` : '';
   }
 
-  toExpressionString() {
-    return this.operator
-      ? `${this.propertyPath} ${this.expression} ${this.operator}`
-      : `${this.propertyPath} ${this.expression}`;
-  }
-
-  equals(value: string | number) {
-    return this.makeExpression(PropertyOperator.Equals, value);
+  equals(value: string | number | boolean) {
+    return this.makeExpression(PropertyOperator.Equals, value as string);
   }
 
   notEquals(value: string | number) {
@@ -66,39 +58,45 @@ export class PropertyExpression {
 }
 
 export class FilterExpression {
-  private head: PropertyExpression;
-  private tail: PropertyExpression;
+  private _operator: Operator;
+  private _params: (FilterExpression | PropertyExpression)[] = [];
 
-  isEmpty = () => !this.head;
+  constructor(
+    operator?: Operator,
+    params?: (FilterExpression | PropertyExpression)[]
+  ) {
+    if (operator) {
+      this._operator = operator;
+    }
+    if (params) {
+      this._params = params;
+    }
+  }
 
-  and(property: PropertyExpression) {
-    this.concat(Operator.And, property);
+  addParam(p: FilterExpression | PropertyExpression) {
+    this._params.push(p);
     return this;
   }
 
-  or(property: PropertyExpression) {
-    this.concat(Operator.Or, property);
+  setParams(p: (FilterExpression | PropertyExpression)[]) {
+    this._params = p;
+    return this;
+  }
+
+  setOperator(o: Operator) {
+    this._operator = o;
     return this;
   }
 
   toString() {
-    let output = '';
-    let head = this.head;
-    while (head) {
-      output += ` ${head.toExpressionString()}`;
-      head = head.next;
-    }
-    return output;
-  }
-
-  private concat(operator: Operator, property: PropertyExpression) {
-    if (this.isEmpty()) {
-      this.head = property;
-      this.tail = property;
-      return this;
-    }
-    this.tail.operator = operator;
-    this.tail.next = property;
-    this.tail = property;
+    return this._params
+      .map((x) => x.toString())
+      .join(' ' + this._operator + ' ');
   }
 }
+
+export const property = (path: string) => new PropertyExpression(path);
+export const dataFilter = (
+  o?: Operator,
+  p?: (FilterExpression | PropertyExpression)[]
+) => new FilterExpression(o, p);

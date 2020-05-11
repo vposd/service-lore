@@ -5,28 +5,30 @@ import {
   Input,
   OnDestroy,
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   ContentChild,
-  QueryList,
-  ViewChildren,
 } from '@angular/core';
 import { SelectionModel } from '@angular/cdk/collections';
 import { Subject, merge } from 'rxjs';
 import { isEmpty } from 'lodash/fp';
-import { map, tap, startWith, switchMap, takeUntil } from 'rxjs/operators';
+import {
+  map,
+  tap,
+  startWith,
+  switchMap,
+  takeUntil,
+  take,
+} from 'rxjs/operators';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
+import { FormControl } from '@angular/forms';
 
 import { InformationService } from '@common/information/information.service';
 import { RequestProgress } from '@common/utils/request-progress/request-progress.class';
 import { Entity, OperationResult } from '@contracts/common';
 import { ObjectPropertyType } from '@contracts/master-data/common/metadata.class';
 
-import {
-  MasterDataSource,
-  MasterDataConfig,
-} from '../config/master-data-config.service';
+import { MasterDataSource } from '../config/master-data-config.service';
 import { RowsAnimation, DetailExpanded } from './data-table-animations';
 import { MasterDataService } from '../master-data-service/master-data.service';
 import {
@@ -35,6 +37,13 @@ import {
 } from '../master-data-service/query-request-builder.class';
 import { ExpandableRowDirective } from './expandable-row/expandable-row.directive';
 import { ProcessAction } from '../models/process-action.enum';
+import {
+  dataFilter,
+  property,
+  FilterExpression,
+  PropertyExpression,
+  Operator,
+} from '../master-data-service/filter-expression';
 
 class TableColumn {
   key: string;
@@ -59,8 +68,8 @@ export class DataTableComponent<T extends Entity> implements OnInit, OnDestroy {
     this._sourceParams = params;
     this.dataSource = new MatTableDataSource([]);
     this.displayedColumns = params.metadata.map((x) => x.property as string);
-    this.columns = params.metadata.map(({ property, label }) => ({
-      key: property as string,
+    this.columns = params.metadata.map(({ property: p, label }) => ({
+      key: p as string,
       name: label,
     }));
 
@@ -114,9 +123,9 @@ export class DataTableComponent<T extends Entity> implements OnInit, OnDestroy {
   private _selected: string[];
   private readonly destroy$ = new Subject();
   private readonly operationSuccess$ = new Subject();
+  private readonly filtersChange$ = new Subject<FilterExpression[]>();
 
   constructor(
-    private readonly masterDataConfig: MasterDataConfig,
     private readonly masterData: MasterDataService,
     private readonly information: InformationService
   ) {}
@@ -146,6 +155,24 @@ export class DataTableComponent<T extends Entity> implements OnInit, OnDestroy {
     if (this.selectable) {
       this.selectionModel.toggle(row.id);
     }
+  }
+
+  onExpressionsChanged(exps: FilterExpression[]) {
+    this.filtersChange$.next(exps);
+  }
+
+  delete(id: string) {
+    return this.masterData
+      .delete(this.sourceParams.endpoint, id)
+      .pipe(take(1))
+      .subscribe(() => this.operationSuccess$.next());
+  }
+
+  restore(id: string) {
+    return this.masterData
+      .restore(this.sourceParams.endpoint, id)
+      .pipe(take(1))
+      .subscribe(() => this.operationSuccess$.next());
   }
 
   masterToggle() {
@@ -185,7 +212,14 @@ export class DataTableComponent<T extends Entity> implements OnInit, OnDestroy {
       .asObservable()
       .pipe(map((x) => query.setPage(this.paginator.pageIndex).request));
 
-    merge(pagination, sort, operationSuccess)
+    const filters = this.filtersChange$.asObservable().pipe(
+      map((filtersArray) => {
+        query.setFilter(dataFilter(Operator.And, filtersArray).toString());
+        return query.request;
+      })
+    );
+
+    merge(pagination, sort, filters, operationSuccess)
       .pipe(
         tap(() => this.requestProgress.start()),
         startWith(query.request),

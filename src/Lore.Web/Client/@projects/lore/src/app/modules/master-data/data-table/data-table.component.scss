@@ -16,6 +16,10 @@ $table-cell-selected: mat-color($grey-palette, 100);
   transition: 180ms;
 }
 
+.table-container-header {
+  margin-bottom: $offset-md;
+}
+
 .mat-table {
   background: transparent;
 
@@ -58,17 +62,14 @@ $table-cell-selected: mat-color($grey-palette, 100);
   }
 }
 
-// .table-content {
-//   display: flex;
-//   position: absolute;
-//   top: 56px;
-//   right: 0;
-//   bottom: 0;
-//   left: 0;
-//   border-top: 1px solid mat-color($grey-palette, 400);
-//   flex-direction: column;
-//   overflow: auto;
-// }
+.table__row--muted {
+  .mat-cell {
+    color: mat-color($mat-red, 200);
+  }
+
+  color: mat-color($mat-red, 200);
+  text-decoration: line-through;
+}
 
 .mat-column-actions {
   width: 4rem !important;

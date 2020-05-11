@@ -8,7 +8,7 @@ import {
   ChangeDetectionStrategy,
   Input,
   EventEmitter,
-  Output
+  Output,
 } from '@angular/core';
 import { FocusMonitor } from '@angular/cdk/a11y';
 import { NgControl, ControlValueAccessor } from '@angular/forms';
@@ -18,20 +18,20 @@ import { pluck, tap } from 'rxjs/operators';
 
 import {
   SelectComponent,
-  SelectValue
+  SelectValue,
 } from '@common/form-controls/select/select.component';
-import { Entity } from '@contracts/master-data/entity.class';
 import { RequestProgress } from '@common/utils/request-progress/request-progress.class';
+import { Entity } from '@contracts/common';
 
 import {
   MasterDataConfig,
-  MasterDataSource
+  MasterDataSource,
 } from '../config/master-data-config.service';
 import { MasterDataService } from '../master-data-service/master-data.service';
 import { QueryRequestBuilder } from '../master-data-service/query-request-builder.class';
 import {
-  FilterExpression,
-  PropertyExpression
+  dataFilter,
+  PropertyExpression,
 } from '../master-data-service/filter-expression';
 
 @Component({
@@ -43,9 +43,9 @@ import {
   providers: [
     {
       provide: MatFormFieldControl,
-      useExisting: SimpleSelectionComponent
-    }
-  ]
+      useExisting: SimpleSelectionComponent,
+    },
+  ],
 })
 export class SimpleSelectionComponent<T extends Entity>
   extends SelectComponent<SelectValue<T>>
@@ -62,7 +62,7 @@ export class SimpleSelectionComponent<T extends Entity>
   @Input() ignorePagination = false;
 
   /** External additional params for query data request */
-  @Input() filterExpression = new FilterExpression();
+  @Input() filterExpression = dataFilter();
   @Output() propertyExpressionChange = new EventEmitter<PropertyExpression>();
 
   values$: Observable<T[]>;
@@ -106,12 +106,12 @@ export class SimpleSelectionComponent<T extends Entity>
       .pipe(
         pluck('results'),
         tap(
-          values => {
+          (values) => {
             this.requestProgress.stop(!!values.length);
             this.values = values;
             this.virtualScrollEnabled = values.length > 50;
           },
-          error => this.requestProgress.error(error)
+          (error) => this.requestProgress.error(error)
         )
       );
     super.openChange(event);
