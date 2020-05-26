@@ -8,7 +8,7 @@
       [removable]="true"
       (removed)="remove(selected)"
     >
-      {{ selected.name }} / {{ selected.values[0].name }}
+      {{ selected[viewValuePath] }}
       <i class="mdi mdi-close-circle mdi--sm" matChipRemove></i>
     </mat-chip>
     <input
@@ -22,18 +22,6 @@
       [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
     />
   </mat-chip-list>
-  <button
-    mat-button
-    matSuffix
-    color="primary"
-    [disabled]="disabled"
-    appClassifiersSelection
-    [source]="source"
-    [(selection)]="value"
-    (click)="$event.stopPropagation()"
-  >
-    + Добавить
-  </button>
   <mat-autocomplete
     #autoGroup="matAutocomplete"
     (optionSelected)="select($event)"
@@ -46,23 +34,15 @@
     >
       <ng-container
         *cdkVirtualFor="
-          let group of lookupValues$ | async;
+          let result of lookupValues$ | async;
           templateCacheSize: 0
         "
       >
-        <mat-optgroup
-          appHighlight
-          [highlightQuery]="query"
-          *ngIf="group.values.length"
-          [label]="group.name"
-        >
-          <mat-option
-            *ngFor="let value of group.values | slice: 0:20"
-            [value]="[group, value]"
-          >
-            <span highlightTarget>{{ value['name'] }}</span>
-          </mat-option>
-        </mat-optgroup>
+        <mat-option>
+          <span appHighlight [query]="query" [text]="result[viewValuePath]">{{
+            result[viewValuePath]
+          }}</span>
+        </mat-option>
       </ng-container>
     </cdk-virtual-scroll-viewport>
   </mat-autocomplete>

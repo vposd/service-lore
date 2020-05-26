@@ -1,7 +1,12 @@
 <div class="table-container-header row">
   <div class="row__spacer"></div>
   <div class="row__section">
-    <button mat-flat-button color="accent" (click)="addEntry()">
+    <button
+      mat-flat-button
+      color="accent"
+      appOpenOrderForm
+      [processAction]="processActionEnum.Create"
+    >
       Add entry
     </button>
   </div>
@@ -30,6 +35,7 @@
       ><app-order-status-select
         [orderId]="row.id"
         [statusId]="row.statusId"
+        (click)="$event.stopPropagation()"
       ></app-order-status-select
     ></mat-cell>
   </ng-container>
@@ -67,7 +73,7 @@
     *ngFor="let deviceAttribute of deviceAttrs"
   >
     <mat-header-cell *matHeaderCellDef mat-sort-header>
-      {{ deviceAttribute.name }}
+      <span class="text--capitalize">{{ deviceAttribute.name }}</span>
     </mat-header-cell>
     <mat-cell *matCellDef="let row">
       <div
@@ -79,29 +85,17 @@
     </mat-cell>
   </ng-container>
 
-  <!-- <ng-container matColumnDef="expandedDetail">
-    <mat-cell *matCellDef="let row">
-      <div class="expanded-detail">
-        <ng-container
-          *appExpandableRowHost="
-            let row;
-            expanded: row.id == expandedRowId;
-            template: expandableRow;
-            context: row
-          "
-        ></ng-container>
-      </div>
-    </mat-cell>
-  </ng-container> -->
-
   <ng-container matColumnDef="actions">
     <mat-header-cell *matHeaderCellDef> </mat-header-cell>
     <mat-cell *matCellDef="let row">
-      <button mat-icon-button [matMenuTriggerFor]="menu">
+      <button
+        mat-icon-button
+        [matMenuTriggerFor]="menu"
+        (click)="$event.stopPropagation()"
+      >
         <i class="mdi mdi-dots-vertical"></i>
       </button>
       <mat-menu #menu="matMenu">
-        <button mat-menu-item>Edit</button>
         <button mat-menu-item>Clone</button>
         <button mat-menu-item>Mark as delete</button>
       </mat-menu>
@@ -118,13 +112,10 @@
     class="table__row"
     [class.table__row--selected]="selectionModel.isSelected(row.id)"
     [style.background]="row.status.color"
-    (click)="selectRow(row)"
+    appOpenOrderForm
+    [order]="row"
+    [processAction]="processActionEnum.Edit"
     @rowsAnimation
     *matRowDef="let row; columns: displayedColumns"
   ></mat-row>
-  <!-- <mat-row
-    *matRowDef="let element; columns: ['expandedDetail']"
-    class="detail-row"
-  >
-  </mat-row> -->
 </mat-table>

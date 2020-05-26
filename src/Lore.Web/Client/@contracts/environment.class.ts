@@ -4,6 +4,10 @@ export interface Endpoints {
     signOut: string;
     refreshAccess: string;
   };
+  attributes: {
+    root: string;
+    attributeValues: string;
+  };
   users: {
     currentUser: string;
   };

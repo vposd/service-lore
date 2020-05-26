@@ -5,10 +5,10 @@ import {
   ViewChild,
   ElementRef,
   forwardRef,
-  Input
+  Input,
 } from '@angular/core';
 import { FormControl, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { map, switchMap, pluck, startWith } from 'rxjs/operators';
+import { map, switchMap, pluck, startWith, debounceTime } from 'rxjs/operators';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { reject } from 'lodash';
 import { Observable, fromEvent, merge, Subject } from 'rxjs';
@@ -16,34 +16,32 @@ import { MatChipInput } from '@angular/material/chips';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 
 import { FadeIn } from '@common/animations/fade-in-out.animation';
-import { Entity } from '@contracts/master-data/entity.class';
 import { CustomInput } from '@common/form-controls/custom-input/custom-input.class';
-import { Classifier } from '@contracts/master-data/entities/classifier.class';
+import { Entity } from '@contracts/common';
 
-import { ClassifiersSelectionDirective } from '../classifiers-selection/classifiers-selection.directive';
 import { MasterDataService } from '../master-data-service/master-data.service';
 import {
   MasterDataSource,
-  MasterDataConfig
+  MasterDataConfig,
 } from '../config/master-data-config.service';
-
-const includes = (left: string, right: string) =>
-  left.toLowerCase().includes(right.toLowerCase());
+import { QueryRequestBuilder } from '../master-data-service/query-request-builder.class';
+import { property } from '../master-data-service/filter-expression';
 
 @Component({
-  selector: 'app-classifiers-input',
-  templateUrl: './classifiers-input.component.html',
-  styleUrls: ['./classifiers-input.component.scss'],
+  selector: 'app-data-chips-selection',
+  templateUrl: './data-chips-selection.component.html',
+  styleUrls: ['./data-chips-selection.component.scss'],
   animations: [FadeIn],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => ClassifiersInputComponent),
-      multi: true
-    }
-  ]
+      useExisting: forwardRef(() => DataChipsSelectionComponent),
+      multi: true,
+    },
+  ],
 })
-export class ClassifiersInputComponent extends CustomInput<Classifier[]>
+export class DataChipsSelectionComponent<T extends Entity>
+  extends CustomInput<T[]>
   implements OnInit {
   @Input()
   set source(source: string) {
@@ -52,28 +50,28 @@ export class ClassifiersInputComponent extends CustomInput<Classifier[]>
     }
     this._source = source;
     this.sourceParams = this.masterDataConfig.getSource(source);
+    console.log(this);
   }
   get source() {
     return this._source;
   }
 
+  @Input() viewValuePath: string;
   @Input() placeholder: string;
 
   innerModel = [];
   separatorKeysCodes = [ENTER, COMMA];
   groupLookupControl = new FormControl();
-  lookupValues$: Observable<Classifier[]>;
+  lookupValues$: Observable<T[]>;
   query = '';
 
   @ViewChild('lookupInput', { static: true }) lookupInput: ElementRef<
     HTMLInputElement
   >;
-  @ViewChild(ClassifiersSelectionDirective, { static: true })
-  classifiersSelection: ClassifiersSelectionDirective;
   @ViewChild(MatChipInput, { static: true })
   chipInput: MatChipInput;
 
-  private sourceParams: MasterDataSource<Entity>;
+  private sourceParams: MasterDataSource<T>;
   private _source: string;
   private readonly clearInputValueBroadcast = new Subject<string>();
 
@@ -82,7 +80,7 @@ export class ClassifiersInputComponent extends CustomInput<Classifier[]>
     private readonly masterDataConfig: MasterDataConfig
   ) {
     super();
-    this.innerModelChanged.subscribe(model => {
+    this.innerModelChanged.subscribe((model) => {
       this.onChange(model);
       this.onTouched();
     });
@@ -91,54 +89,42 @@ export class ClassifiersInputComponent extends CustomInput<Classifier[]>
   ngOnInit() {
     this.lookupValues$ = merge(
       fromEvent(this.lookupInput.nativeElement, 'input').pipe(
-        map(event => (event.target as HTMLInputElement).value)
+        map((event) => (event.target as HTMLInputElement).value)
       ),
       this.clearInputValueBroadcast.asObservable()
     ).pipe(
       startWith(''),
-      switchMap(query => {
+      debounceTime(250),
+      switchMap((query) => {
         this.query = query;
-        return this.masterData
-          .getClassifiers(this.sourceParams.entityName)
-          .pipe(
-            pluck('results'),
-            map(classifiers =>
-              this.query
-                ? classifiers
-                    .filter(c =>
-                      c.values.some(v => includes(v.name, this.query))
-                    )
-                    .map(c => ({
-                      ...c,
-                      values: c.values.filter(v => includes(v.name, this.query))
-                    }))
-                : classifiers
+        const builder = query
+          ? new QueryRequestBuilder().setFilter(
+              property(this.viewValuePath).contains(query)
             )
-          );
+          : new QueryRequestBuilder();
+        const request = builder.setPageSize(20).request;
+        return this.masterData
+          .query<T>(this.sourceParams.endpoint, request)
+          .pipe(map(({ results }) => results));
       })
     );
   }
 
-  remove(value: Classifier) {
-    this.value = reject(this.value, x => x.id === value.id);
+  remove(value: T) {
+    this.value = reject(this.value, (x) => x.id === value.id);
     this.clearValue();
   }
 
   select(event: MatAutocompleteSelectedEvent) {
-    const [group, value] = event.option.value;
-    const selected = { ...group, values: [value] };
-
-    this.add(selected);
+    this.add(event.option.value as T);
   }
 
-  private add(item: Classifier) {
-    const index = this.value.findIndex(x => x.id === item.id);
+  private add(item: T) {
+    const index = this.value.findIndex((x) => x.id === item.id);
     this.value =
       index < 0
-        ? this.value.concat({ ...item, values: [item.values[0]] })
-        : this.value.map((x, i) =>
-            i === index ? { ...item, values: [item.values[0]] } : x
-          );
+        ? this.value.concat(item)
+        : this.value.map((x, i) => (i === index ? item : x));
 
     this.clearValue();
   }

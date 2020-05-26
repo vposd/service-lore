@@ -10,7 +10,7 @@
   <button
     mat-menu-item
     *ngFor="let state of orderStatuses$ | async"
-    (click)="setState(state.id)"
+    (click)="setState(state.id); $event.stopPropagation()"
   >
     <div class="option-item">
       <i class="mdi mdi-circle" [style.color]="state.color"></i>{{ state.name }}

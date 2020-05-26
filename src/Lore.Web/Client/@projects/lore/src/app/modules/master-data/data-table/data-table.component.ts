@@ -210,7 +210,7 @@ export class DataTableComponent<T extends Entity> implements OnInit, OnDestroy {
 
     const operationSuccess = this.operationSuccess$
       .asObservable()
-      .pipe(map((x) => query.setPage(this.paginator.pageIndex).request));
+      .pipe(map(() => query.request));
 
     const filters = this.filtersChange$.asObservable().pipe(
       map((filtersArray) => {

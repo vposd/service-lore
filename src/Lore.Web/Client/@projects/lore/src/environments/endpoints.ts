@@ -7,6 +7,10 @@ export const endpoints: Endpoints = {
     signOut: '/api/authentication/signOut',
     refreshAccess: '/api/authentication/refreshAccess',
   },
+  attributes: {
+    root: '/api/attributes',
+    attributeValues: '/api/attributes/{attributeId}/values',
+  },
   users: {
     currentUser: '/api/users/current',
   },

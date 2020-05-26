@@ -11,6 +11,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 
 import { OrdersTableComponent } from './orders-table.component';
 import { OrderStatusSelectModule } from './order-status-select/order-status-select.module';
+import { OrderFormModule } from '../order-form/order-form.module';
 
 @NgModule({
   declarations: [OrdersTableComponent],
@@ -20,6 +21,7 @@ import { OrderStatusSelectModule } from './order-status-select/order-status-sele
     FormsModule,
     MatButtonModule,
     MatCheckboxModule,
+    OrderFormModule,
     MatMenuModule,
     MatPaginatorModule,
     MatSortModule,

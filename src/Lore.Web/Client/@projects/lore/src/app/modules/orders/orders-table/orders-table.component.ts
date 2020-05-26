@@ -30,6 +30,7 @@ import { MasterDataService } from '../../master-data/master-data-service/master-
 import { RowsAnimation } from '../../master-data/data-table/data-table-animations';
 import { OrdersService } from '../orders.service';
 import { OrderTableRow, AttributeModel } from '../models/order-table-row';
+import { ProcessAction } from '../../master-data/models/process-action.enum';
 
 const groupAttributes = (attrs: Attribute[][]): AttributeModel[] =>
   chain(attrs)
@@ -61,6 +62,7 @@ export class OrdersTableComponent implements OnInit, OnDestroy {
 
   private initialized = false;
   private readonly destroy$ = new Subject();
+  readonly processActionEnum = ProcessAction;
 
   get isAllSelected() {
     return this.selectionModel.selected.length === this.dataSource.data.length;

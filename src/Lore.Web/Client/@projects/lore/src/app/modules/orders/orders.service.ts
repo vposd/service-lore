@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { forkJoin, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, pluck } from 'rxjs/operators';
 
 import { ENABLED_CACHE_OPTIONS } from '@common/utils/http-cache/http-cache-constant';
 import { QueryResult } from '@contracts/common';
@@ -11,6 +11,7 @@ import { OrderStatus } from '@contracts/master-data/order-state.class';
 import { endpoints, format } from '../../../environments/endpoints';
 import { MasterDataService } from '../master-data/master-data-service/master-data.service';
 import { OrderTableRow } from './models/order-table-row';
+import { Attribute } from '@contracts/master-data/attribute.class';
 
 @Injectable({
   providedIn: 'root',
@@ -52,5 +53,11 @@ export class OrdersService {
       format(endpoints.orders.updateState, { orderId, stateId }),
       null
     );
+  }
+
+  getAttributes() {
+    return this.http
+      .get<QueryResult<Attribute>>(endpoints.attributes.root)
+      .pipe(pluck('results'));
   }
 }

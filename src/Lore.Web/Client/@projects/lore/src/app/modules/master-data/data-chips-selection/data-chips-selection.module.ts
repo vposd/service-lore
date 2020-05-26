@@ -10,28 +10,24 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 
 import { HighlightModule } from '@common/utils/highlight/highlight.module';
-import { LimitPipeModule } from '@common/utils/limitPipe/limit-pipe.module';
 
-import { ClassifiersInputComponent } from './classifiers-input.component';
-import { ClassifiersSelectionModule } from '../classifiers-selection/classifiers-selection.module';
+import { DataChipsSelectionComponent } from './data-chips-selection.component';
 
 @NgModule({
   imports: [
     A11yModule,
-    ClassifiersSelectionModule,
     CommonModule,
     FormsModule,
     HighlightModule,
     MatChipsModule,
-    LimitPipeModule,
     MatAutocompleteModule,
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
     ReactiveFormsModule,
-    ScrollingModule
+    ScrollingModule,
   ],
-  exports: [ClassifiersInputComponent],
-  declarations: [ClassifiersInputComponent]
+  exports: [DataChipsSelectionComponent],
+  declarations: [DataChipsSelectionComponent],
 })
-export class ClassifiersInputModule {}
+export class DataChipsSelectionModule {}

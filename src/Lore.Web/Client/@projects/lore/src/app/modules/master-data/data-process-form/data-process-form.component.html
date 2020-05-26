@@ -50,7 +50,10 @@
     </ng-container>
 
     <ng-container *ngIf="metadata.type === dataType.Entity">
-      Entity, {{ metadata.label }}
+      <app-data-chips-selection
+        [source]="sourceParams.entityName"
+        viewValuePath="name"
+      ></app-data-chips-selection>
     </ng-container>
 
     <ng-container *ngIf="metadata.type === dataType.Number">

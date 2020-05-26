@@ -51,6 +51,10 @@ export class PropertyExpression {
     return this.makeExpression(PropertyOperator.LessThanOrEqual, value);
   }
 
+  contains(value: string) {
+    return `substringof('${value}', ${this.propertyPath}) eq true`;
+  }
+
   private makeExpression(operator: PropertyOperator, value: string | number) {
     this.expression = isNil(value) ? '' : `${operator} ${value}`;
     return this;

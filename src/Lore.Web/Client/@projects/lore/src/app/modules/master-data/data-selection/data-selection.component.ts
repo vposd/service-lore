@@ -4,23 +4,23 @@ import {
   ChangeDetectionStrategy,
   forwardRef,
   HostListener,
-  ChangeDetectorRef
+  ChangeDetectorRef,
 } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { filter, tap, take } from 'rxjs/operators';
 import { isEmpty } from 'lodash/fp';
 
 import { DialogsService } from '@common/dialogs/components/dialogs.service';
-import { Entity } from '@contracts/master-data/entity.class';
 import { CustomInput } from '@common/form-controls/custom-input/custom-input.class';
+import { Entity } from '@contracts/common';
 
 import {
   DataSelectionTableComponent,
-  DataSelection
+  DataSelection,
 } from './data-selection-table/data-selection-table.component';
 import {
   MasterDataConfig,
-  MasterDataSource
+  MasterDataSource,
 } from '../config/master-data-config.service';
 
 @Component({
@@ -32,9 +32,9 @@ import {
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => DataSelectionComponent),
-      multi: true
-    }
-  ]
+      multi: true,
+    },
+  ],
 })
 export class DataSelectionComponent<T extends Entity> extends CustomInput<
   string[]
@@ -72,7 +72,7 @@ export class DataSelectionComponent<T extends Entity> extends CustomInput<
     private readonly dialogs: DialogsService
   ) {
     super();
-    this.innerModelChanged.subscribe(model => {
+    this.innerModelChanged.subscribe((model) => {
       this.onChange(model);
       this.onTouched();
     });
@@ -93,8 +93,8 @@ export class DataSelectionComponent<T extends Entity> extends CustomInput<
         data: {
           sourceParams: this.sourceParams,
           multipleSelection: this.multipleSelection,
-          selected: this.value || []
-        }
+          selected: this.value || [],
+        },
       })
       .afterClosed()
       .pipe(
