@@ -2,6 +2,10 @@ import {
   orderStatusMetadata,
   OrderStatus,
 } from '@contracts/master-data/order-state.class';
+import {
+  Attribute,
+  attributeMetadata,
+} from '@contracts/master-data/attribute.class';
 import { Failure, failureMetadata } from '@contracts/master-data/failure.class';
 import {
   productMetadata,
@@ -62,6 +66,17 @@ config.sources = [
     },
     entityName: 'ProductGroup',
     metadata: productGroupMetadata,
+    filters: [displayDeletedFilter],
+  }),
+  new MasterDataSource<Attribute>({
+    href: 'attributes',
+    endpoint: environment.endpoints.attributes.root,
+    label: {
+      plural: 'Attributes',
+      single: 'Attribute',
+    },
+    entityName: 'Attribute',
+    metadata: attributeMetadata,
     filters: [displayDeletedFilter],
   }),
 ];

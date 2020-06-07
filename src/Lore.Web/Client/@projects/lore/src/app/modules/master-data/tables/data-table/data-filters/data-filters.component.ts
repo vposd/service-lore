@@ -1,9 +1,9 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
+import { startWith } from 'rxjs/operators';
 
 import { DataFilter } from '../../../models/filter-metadata.class';
 import { FilterExpression } from '../../../master-data-service/filter-expression';
-import { startWith } from 'rxjs/operators';
 
 @Component({
   selector: 'app-data-filters',

@@ -34,7 +34,7 @@ export const routes: Routes = [
     },
   },
   {
-    path: 'references',
+    path: 'master-data',
     loadChildren: () =>
       import('../modules/master-data/master-data.module').then(
         (x) => x.MasterDataModule

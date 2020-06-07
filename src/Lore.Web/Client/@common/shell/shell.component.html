@@ -18,15 +18,34 @@
         </button>
       </div>
       <mat-nav-list class="shell-menu">
-        <a
-          mat-list-item
-          [routerLink]="item.href"
-          [routerLinkActive]="'active'"
-          *ngFor="let item of shellConfig.menu.items"
-        >
-          <i [ngClass]="item.iconClass" mat-list-icon></i>
-          <p class="shell-menu__text" mat-line>{{ item.title }}</p>
-        </a>
+        <ng-container *ngFor="let item of shellConfig.menu.items">
+          <!-- Menu item with router link -->
+          <a
+            mat-list-item
+            [routerLink]="item.href"
+            [routerLinkActive]="'active'"
+            *ngIf="item.href"
+          >
+            <i [ngClass]="item.iconClass" mat-list-icon></i>
+            <p class="shell-menu__text" mat-line>{{ item.title }}</p>
+          </a>
+          <!-- Menu item with child menu items -->
+          <a mat-list-item [matMenuTriggerFor]="menu" *ngIf="item.menu">
+            <i [ngClass]="item.iconClass" mat-list-icon></i>
+            <p class="shell-menu__text" mat-line>{{ item.title }}</p>
+
+            <mat-menu #menu="matMenu" xPosition="after">
+              <button
+                mat-menu-item
+                *ngFor="let menuItem of item.menu"
+                [routerLink]="menuItem.href"
+                [routerLinkActive]="'active'"
+              >
+                {{ menuItem.title }}
+              </button>
+            </mat-menu>
+          </a>
+        </ng-container>
       </mat-nav-list>
     </mat-drawer>
 

@@ -1,16 +1,21 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { DatePipe } from '@angular/common';
+
 import { SimpleEntity, Entity } from '@contracts/common';
 import {
   ObjectPropertyMetadata,
   ObjectPropertyType,
 } from '@contracts/master-data/common/metadata.class';
 
+import { EnumsService } from '../../../../enums/enums.service';
+
 @Pipe({
   name: 'formatByType',
 })
 export class FormatByTypePipe implements PipeTransform {
   private readonly datePipe = new DatePipe('ru');
+
+  constructor(private readonly enums: EnumsService) {}
 
   transform(
     value: string | number | boolean | SimpleEntity,
@@ -19,12 +24,14 @@ export class FormatByTypePipe implements PipeTransform {
     if (!propertyMetadata) {
       return '';
     }
-
     const { type } = propertyMetadata;
 
     switch (type) {
       case ObjectPropertyType.Boolean:
         return this.formatBoolean(value as boolean);
+
+      case ObjectPropertyType.Enum:
+        return this.formatEnum(propertyMetadata.enumName, value as string);
 
       case ObjectPropertyType.Date:
         return this.formatDate(value as string);
@@ -38,6 +45,10 @@ export class FormatByTypePipe implements PipeTransform {
       default:
         return value as string;
     }
+  }
+
+  private formatEnum(entityName: string, input: string) {
+    return this.enums.getValues(entityName).find((x) => x.id === input).name;
   }
 
   private formatDate(input: string) {

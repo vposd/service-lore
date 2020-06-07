@@ -36,10 +36,10 @@ namespace Lore.Application.Attributes.Queries.GetAttributes
                     Values = x.Values.Select(v => new AttributeValueModel
                     {
                         Id = v.Id,
-                        IsDefault = v.IsDefault,
-                        AttributeId = x.Id,
+                        Attribute = new SimpleEntityModel { Id = x.Id, Name = x.Name },
                         Deleted = v.Deleted,
-                        Value = v.Value
+                        Value = v.Value,
+                        IsDefault = v.IsDefault
                     })
                 })
                 .ApplyQuery(request, out var count)

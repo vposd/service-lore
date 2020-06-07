@@ -2,8 +2,9 @@ import { Injectable } from '@angular/core';
 
 export class MenuItem {
   title: string;
-  iconClass: string;
-  href: string;
+  iconClass?: string;
+  href?: string;
+  menu?: MenuItem[];
 
   constructor(params: Partial<MenuItem>) {
     Object.assign(this, params);

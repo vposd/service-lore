@@ -18,6 +18,8 @@ import { environment } from '../environments/environment';
 import { masterDataConfig } from './config/master-data-config';
 import { shellConfig } from './config/shell-config';
 import { GlobalSearchModule } from './shared/global-search/global-search.module';
+import { EnumsValues } from './modules/master-data/enums/enums.service';
+import { enumsValues } from './config/enums-values';
 
 @NgModule({
   declarations: [AppComponent],
@@ -39,6 +41,7 @@ import { GlobalSearchModule } from './shared/global-search/global-search.module'
     { provide: MAT_DATE_LOCALE, useValue: 'ru-RU' },
     { provide: MasterDataConfig, useValue: masterDataConfig },
     { provide: ShellConfig, useValue: shellConfig },
+    { provide: EnumsValues, useValue: enumsValues },
   ],
   bootstrap: [AppComponent],
 })

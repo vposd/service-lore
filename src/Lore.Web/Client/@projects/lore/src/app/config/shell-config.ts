@@ -18,24 +18,26 @@ config.menu = {
       href: '/orders',
     }),
     new MenuItem({
-      title: 'Settings',
-      iconClass: 'mdi mdi-settings',
-      href: '/settings',
-    }),
-    new MenuItem({
-      title: 'Order states',
-      iconClass: 'mdi mdi-settings',
-      href: 'references/order-states',
-    }),
-    new MenuItem({
-      title: 'Device failures',
-      iconClass: 'mdi mdi-settings',
-      href: 'references/failures',
-    }),
-    new MenuItem({
-      title: 'Products',
-      iconClass: 'mdi mdi-settings',
-      href: 'references/products',
+      title: 'Master data',
+      iconClass: 'mdi mdi-database',
+      menu: [
+        new MenuItem({
+          title: 'Order states',
+          href: 'master-data/order-states',
+        }),
+        new MenuItem({
+          title: 'Device failures',
+          href: 'master-data/failures',
+        }),
+        new MenuItem({
+          title: 'Products',
+          href: 'master-data/products',
+        }),
+        new MenuItem({
+          title: 'Attributes',
+          href: 'master-data/attributes',
+        }),
+      ],
     }),
   ],
 };

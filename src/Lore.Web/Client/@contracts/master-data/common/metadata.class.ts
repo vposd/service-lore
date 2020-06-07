@@ -2,13 +2,14 @@ import { Entity } from '@contracts/common';
 import { ValidatorFn } from '@angular/forms';
 
 export enum ObjectPropertyType {
-  String,
   Boolean,
-  Number,
   Color,
   Date,
   DateTime,
   Entity,
+  Enum,
+  Number,
+  String,
 }
 
 export class ObjectPropertyMetadata<T extends Entity> {
@@ -16,6 +17,7 @@ export class ObjectPropertyMetadata<T extends Entity> {
   formValidators: ValidatorFn[];
   type: ObjectPropertyType;
   sourceEntityName?: string;
+  enumName?: string;
   label: string;
   readonly?: boolean;
 }
