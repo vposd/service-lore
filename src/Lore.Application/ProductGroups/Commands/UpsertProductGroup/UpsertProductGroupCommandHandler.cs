@@ -28,7 +28,7 @@ namespace Lore.Application.ProductGroups.Commands.UpsertProductGroup
             {
                 productGroup = new ProductGroup
                 {
-                    ParentId = command.Parent.Id,
+                    ParentId = command.ParentId,
                     Name = command.Name
                 };
                 context.ProductGroups.Add(productGroup);
@@ -39,7 +39,7 @@ namespace Lore.Application.ProductGroups.Commands.UpsertProductGroup
             }
 
             productGroup.Name = command.Name;
-            productGroup.ParentId = command.Parent.Id;
+            productGroup.ParentId = command.ParentId;
 
             await context.SaveChangesAsync(cancellationToken);
 

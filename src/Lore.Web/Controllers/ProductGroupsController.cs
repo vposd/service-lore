@@ -64,7 +64,7 @@ namespace Lore.Web.Controllers
                 Id = id,
                 Name = command.Name,
                 Deleted = command.Deleted,
-                Parent = command.Parent
+                ParentId = command.ParentId
             }, cancellationToken);
 
             return Ok(result);

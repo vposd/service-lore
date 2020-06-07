@@ -6,15 +6,19 @@ import {
   EventEmitter,
   ChangeDetectionStrategy,
 } from '@angular/core';
-import { tap } from 'rxjs/operators';
+import { tap, map } from 'rxjs/operators';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 
 import { Entity } from '@contracts/common';
-import { ObjectPropertyType } from '@contracts/master-data/common/metadata.class';
+import {
+  ObjectPropertyType,
+  ObjectPropertyMetadata,
+} from '@contracts/master-data/common/metadata.class';
 
 import { MasterDataSource } from '../config/master-data-config.service';
 import { ProcessAction } from '../models/process-action.enum';
 import { FormState } from '../models/form-state.class';
+import { EnumsService } from '../enums/enums.service';
 
 @Component({
   selector: 'app-data-process-form',
@@ -31,7 +35,7 @@ export class DataProcessFormComponent<T extends Entity> implements OnInit {
   readonly dataType = ObjectPropertyType;
   readonly form: FormGroup;
 
-  constructor(fb: FormBuilder) {
+  constructor(fb: FormBuilder, private readonly enums: EnumsService) {
     this.form = fb.group({});
   }
 
@@ -41,9 +45,7 @@ export class DataProcessFormComponent<T extends Entity> implements OnInit {
         x.property as string,
         new FormControl(
           {
-            value: this.item
-              ? this.item[x.property]
-              : this.getDefaultValue(x.type),
+            value: this.item ? this.getValue(x) : this.getDefaultValue(x.type),
             disabled: x.readonly,
           },
           x.formValidators
@@ -52,7 +54,22 @@ export class DataProcessFormComponent<T extends Entity> implements OnInit {
     );
 
     this.form.valueChanges
-      .pipe(tap(console.log))
+      .pipe(
+        map((x) =>
+          Object.keys(x).reduce((value, key) => {
+            const meta = this.sourceParams.metadata.find(
+              (m) => m.property === key
+            );
+            if (meta.type === ObjectPropertyType.Entity) {
+              value[`${key}Id`] = x[key].id;
+              return value;
+            }
+            value[key] =
+              meta.type === ObjectPropertyType.Enum ? x[key].id : x[key];
+            return value;
+          }, {} as T)
+        )
+      )
       .subscribe((x) =>
         this.formChange.emit(
           new FormState(
@@ -63,6 +80,18 @@ export class DataProcessFormComponent<T extends Entity> implements OnInit {
           )
         )
       );
+  }
+
+  getEnumValues(enumName: string) {
+    return this.enums.getValues(enumName);
+  }
+
+  private getValue(meta: ObjectPropertyMetadata<T>) {
+    return meta.type === ObjectPropertyType.Enum
+      ? this.getEnumValues(meta.enumName).find(
+          (x) => x.id === this.item[meta.property as string]
+        )
+      : this.item[meta.property];
   }
 
   private getDefaultValue(type: ObjectPropertyType) {

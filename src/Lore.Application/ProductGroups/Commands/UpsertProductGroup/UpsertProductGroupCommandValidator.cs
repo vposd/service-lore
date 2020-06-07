@@ -8,8 +8,8 @@ namespace Lore.Application.OrderStatuses.Commands.UpsertOrderStatus
         public UpsertProductGroupCommandValidator()
         {
             RuleFor(x => x.Name).MaximumLength(50).NotEmpty();
-            RuleFor(x => x.Parent).NotEmpty();
-            RuleFor(x => x).Must(x => x.Id.HasValue ? x.Id != x.Parent?.Id : true).WithMessage("Group cant be parent with itself");
+            RuleFor(x => x.ParentId).NotEmpty();
+            RuleFor(x => x).Must(x => x.Id.HasValue ? x.Id != x.ParentId : true).WithMessage("Group cant be parent with itself");
         }
 
     }

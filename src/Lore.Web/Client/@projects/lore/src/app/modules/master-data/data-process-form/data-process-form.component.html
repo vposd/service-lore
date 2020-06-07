@@ -60,6 +60,17 @@
       </mat-form-field>
     </ng-container>
 
+    <ng-container *ngIf="metadata.type === dataType.Enum">
+      <mat-form-field appearance="fill">
+        <mat-label>{{ metadata.label }}</mat-label>
+        <app-simple-selection
+          [values]="getEnumValues(metadata.enumName)"
+          viewValue="name"
+          [formControlName]="metadata.property"
+        ></app-simple-selection>
+      </mat-form-field>
+    </ng-container>
+
     <ng-container *ngIf="metadata.type === dataType.Number">
       <mat-form-field appearance="fill">
         <mat-label>{{ metadata.label }}</mat-label>

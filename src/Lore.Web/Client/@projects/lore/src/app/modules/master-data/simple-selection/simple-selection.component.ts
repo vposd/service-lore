@@ -143,7 +143,6 @@ export class SimpleSelectionComponent<T extends Entity>
     this.requestProgress.start();
     super.ngOnInit();
     this.openChange(false);
-    console.log(this);
   }
 
   openChange(event: boolean) {

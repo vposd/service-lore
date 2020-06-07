@@ -7,7 +7,7 @@ namespace Lore.Application.ProductGroups.Commands.UpsertProductGroup
     {
         public long? Id { get; set; }
         public string Name { get; set; }
-        public SimpleEntityModel Parent { get; set; }
+        public long ParentId { get; set; }
         public bool Deleted { get; set; }
     }
 }
