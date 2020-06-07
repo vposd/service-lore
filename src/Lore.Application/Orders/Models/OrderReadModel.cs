@@ -11,7 +11,7 @@ namespace Lore.Application.Orders.Models
         public long StatusId { get; set; }
         public CustomerModel Customer { get; set; }
         public DeviceReadModel Device { get; set; }
-        public IEnumerable<SimpleEntityReadModel> Failures { get; set; }
+        public IEnumerable<SimpleEntityModel> Failures { get; set; }
         public IEnumerable<OrderItemReadModel> Items { get; set; }
         public DateTime DateIn { get; set; }
         public DateTime DateOut { get; set; }
@@ -50,8 +50,9 @@ namespace Lore.Application.Orders.Models
     public class OrderItemReadModel
     {
         public long Id { get; set; }
-        public SimpleEntityReadModel Product { get; set; }
+        public SimpleEntityModel Product { get; set; }
         public int Quantity { get; set; }
+        public decimal Price { get; set; }
         public decimal Amount { get; set; }
     }
 }

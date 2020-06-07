@@ -3,13 +3,19 @@ import {
   OrderStatus,
 } from '@contracts/master-data/order-state.class';
 import { Failure, failureMetadata } from '@contracts/master-data/failure.class';
+import {
+  productMetadata,
+  Product,
+  ProductGroup,
+  productGroupMetadata,
+} from '@contracts/master-data/product.class';
 
 import {
   MasterDataConfig,
   MasterDataSource,
 } from '../modules/master-data/config/master-data-config.service';
 import { environment } from '../../environments/environment';
-import { displayDeletedFilter } from '../modules/master-data/data-table/data-filters/common-filters';
+import { displayDeletedFilter } from '../modules/master-data/tables/data-table/data-filters/common-filters';
 
 const config = new MasterDataConfig();
 
@@ -34,6 +40,28 @@ config.sources = [
     },
     entityName: 'Failure',
     metadata: failureMetadata,
+    filters: [displayDeletedFilter],
+  }),
+  new MasterDataSource<Product>({
+    href: 'products',
+    endpoint: environment.endpoints.products.root,
+    label: {
+      plural: 'Products',
+      single: 'Product',
+    },
+    entityName: 'Product',
+    metadata: productMetadata,
+    filters: [displayDeletedFilter],
+  }),
+  new MasterDataSource<ProductGroup>({
+    href: 'products',
+    endpoint: environment.endpoints.productGroups.root,
+    label: {
+      plural: 'Product groups',
+      single: 'Product group',
+    },
+    entityName: 'ProductGroup',
+    metadata: productGroupMetadata,
     filters: [displayDeletedFilter],
   }),
 ];

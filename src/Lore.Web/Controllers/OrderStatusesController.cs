@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Lore.Api.Controllers;
-using Lore.Application.Common.Common;
+using Lore.Application.Common.Commands.ChangeDeletedStatus;
 using Lore.Application.Common.Models;
 using Lore.Application.OrderStatuses.Commands.UpsertOrderStatus;
 using Lore.Application.OrderStatuses.Queries.GetOrderStatus;

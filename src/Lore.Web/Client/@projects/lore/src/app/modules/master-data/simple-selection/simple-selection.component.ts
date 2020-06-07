@@ -13,7 +13,7 @@ import {
 import { FocusMonitor } from '@angular/cdk/a11y';
 import { NgControl, ControlValueAccessor } from '@angular/forms';
 import { MatFormFieldControl } from '@angular/material/form-field';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { pluck, tap } from 'rxjs/operators';
 
 import {
@@ -33,6 +33,48 @@ import {
   dataFilter,
   PropertyExpression,
 } from '../master-data-service/filter-expression';
+
+interface RetrieveDataStrategy<T> {
+  getData(): Observable<T[]>;
+}
+
+class QueryRequestDataStrategy<T extends Entity>
+  implements RetrieveDataStrategy<T> {
+  constructor(
+    private readonly masterData: MasterDataService,
+    private filterExpression = dataFilter(),
+    private ignorePagination: boolean,
+    private sourceParams: MasterDataSource<T>,
+    private requestProgress: RequestProgress
+  ) {}
+
+  getData() {
+    if (!this.sourceParams) {
+      this.requestProgress.stop(true);
+      return of([]);
+    }
+
+    const query = new QueryRequestBuilder().setFilter(
+      this.filterExpression.toString()
+    );
+
+    if (this.ignorePagination) {
+      query.setPageSize(Infinity);
+    }
+    return this.masterData
+      .query<T>(this.sourceParams.endpoint, query.request, true)
+      .pipe(pluck('results'));
+  }
+}
+
+class DefinedValuesDataStrategy<T extends Entity>
+  implements RetrieveDataStrategy<T> {
+  constructor(private readonly values: T[]) {}
+
+  getData() {
+    return of(this.values);
+  }
+}
 
 @Component({
   selector: 'app-simple-selection',
@@ -56,19 +98,32 @@ export class SimpleSelectionComponent<T extends Entity>
       throw new Error('[DataSelection]: Missing source');
     }
     this.sourceParams = this.masterDataConfig.getSource(source);
+    this.retrieveDataStrategy = new QueryRequestDataStrategy(
+      this.masterData,
+      this.filterExpression,
+      this.ignorePagination,
+      this.sourceParams,
+      this.requestProgress
+    );
+  }
+
+  @Input() set values(values: T[]) {
+    this.retrieveDataStrategy = new DefinedValuesDataStrategy<T>(values);
   }
 
   @Input() required = false;
   @Input() ignorePagination = false;
+  @Input() viewValue = 'name';
 
   /** External additional params for query data request */
   @Input() filterExpression = dataFilter();
   @Output() propertyExpressionChange = new EventEmitter<PropertyExpression>();
 
   values$: Observable<T[]>;
-  values = [];
+  retrievedValues = [];
   requestProgress = new RequestProgress();
 
+  private retrieveDataStrategy: RetrieveDataStrategy<T>;
   private sourceParams: MasterDataSource<T>;
 
   constructor(
@@ -87,33 +142,21 @@ export class SimpleSelectionComponent<T extends Entity>
   ngOnInit() {
     this.requestProgress.start();
     super.ngOnInit();
+    this.openChange(false);
+    console.log(this);
   }
 
   openChange(event: boolean) {
-    const query = new QueryRequestBuilder().setFilter(
-      this.filterExpression.toString()
+    this.values$ = this.retrieveDataStrategy.getData().pipe(
+      tap(
+        (values) => {
+          this.requestProgress.stop(!!values.length);
+          this.retrievedValues = values;
+          this.virtualScrollEnabled = values.length > 50;
+        },
+        (error) => this.requestProgress.error(error)
+      )
     );
-
-    if (this.ignorePagination) {
-      query.setPageSize(Infinity);
-    }
-    if (!this.sourceParams) {
-      this.requestProgress.stop(true);
-      return;
-    }
-    this.values$ = this.masterData
-      .query<T>(this.sourceParams.endpoint, query.request, true)
-      .pipe(
-        pluck('results'),
-        tap(
-          (values) => {
-            this.requestProgress.stop(!!values.length);
-            this.values = values;
-            this.virtualScrollEnabled = values.length > 50;
-          },
-          (error) => this.requestProgress.error(error)
-        )
-      );
     super.openChange(event);
   }
 

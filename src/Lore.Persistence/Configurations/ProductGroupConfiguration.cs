@@ -8,6 +8,13 @@ namespace Lore.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<ProductGroup> builder)
         {
+            builder.HasData(new ProductGroup
+            {
+                Id = -1,
+                Name = "Root",
+                ParentId = -1
+            });
+
             builder.Property(e => e.Name)
                 .IsRequired()
                 .HasMaxLength(50);

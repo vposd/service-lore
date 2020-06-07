@@ -12,6 +12,7 @@ import { DataProcessFormComponent } from './data-process-form.component';
 import { DataProcessFormDialogComponent } from './data-process-form-dialog/data-process-form-dialog.component';
 import { OpenDataProcessDialogDirective } from './open-data-process-dialog.directive';
 import { DataChipsSelectionModule } from '../data-chips-selection/data-chips-selection.module';
+import { SimpleSelectionModule } from '../simple-selection/simple-selection.module';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { DataChipsSelectionModule } from '../data-chips-selection/data-chips-sel
     MatButtonModule,
     MatCheckboxModule,
     MatDatepickerModule,
+    SimpleSelectionModule,
     DataChipsSelectionModule,
     MatDialogModule,
     MatFormFieldModule,

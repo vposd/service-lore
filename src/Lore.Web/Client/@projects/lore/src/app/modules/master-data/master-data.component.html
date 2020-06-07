@@ -1,1 +1,9 @@
-<app-data-table [sourceParams]="dataSource$ | async"></app-data-table>
+<ng-container *ngIf="dataSource$ | async as dataSource">
+  <app-products-data-table
+    *ngIf="dataSource.entityName === 'Product'; else genericTable"
+  ></app-products-data-table>
+
+  <ng-template #genericTable>
+    <app-data-table [sourceParams]="dataSource"></app-data-table>
+  </ng-template>
+</ng-container>

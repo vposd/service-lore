@@ -4,9 +4,9 @@ import {
   Input,
   Output,
   EventEmitter,
-  ChangeDetectorRef,
   ChangeDetectionStrategy,
 } from '@angular/core';
+import { tap } from 'rxjs/operators';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 
 import { Entity } from '@contracts/common';
@@ -15,7 +15,6 @@ import { ObjectPropertyType } from '@contracts/master-data/common/metadata.class
 import { MasterDataSource } from '../config/master-data-config.service';
 import { ProcessAction } from '../models/process-action.enum';
 import { FormState } from '../models/form-state.class';
-import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-data-process-form',
@@ -42,7 +41,9 @@ export class DataProcessFormComponent<T extends Entity> implements OnInit {
         x.property as string,
         new FormControl(
           {
-            value: this.item ? this.item[x.property] : null,
+            value: this.item
+              ? this.item[x.property]
+              : this.getDefaultValue(x.type),
             disabled: x.readonly,
           },
           x.formValidators
@@ -62,5 +63,17 @@ export class DataProcessFormComponent<T extends Entity> implements OnInit {
           )
         )
       );
+  }
+
+  private getDefaultValue(type: ObjectPropertyType) {
+    switch (type) {
+      case ObjectPropertyType.String:
+        return '';
+      case ObjectPropertyType.Boolean:
+        return false;
+
+      default:
+        return null;
+    }
   }
 }

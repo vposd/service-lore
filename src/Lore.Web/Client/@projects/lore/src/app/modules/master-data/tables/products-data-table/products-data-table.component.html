@@ -1,0 +1,248 @@
+<div class="table-container-header row">
+  <div class="row__section mat-headline">{{ productSource.label.plural }}</div>
+  <div class="row__spacer"></div>
+  <ng-container>
+    <div class="row__section">
+      <app-data-filters
+        [filters]="productSource.filters"
+        (expressionsChange)="onExpressionsChanged($event)"
+      ></app-data-filters>
+    </div>
+  </ng-container>
+  <div class="row__section">
+    <button mat-flat-button color="accent" [matMenuTriggerFor]="createMenu">
+      + Create
+    </button>
+    <mat-menu #createMenu="matMenu">
+      <button
+        mat-menu-item
+        appOpenDataProcessDialog
+        [source]="productGroupSource.entityName"
+        [process]="processType.Create"
+        (operationResult)="onOperationSuccess($event)"
+      >
+        New group
+      </button>
+      <button
+        mat-menu-item
+        appOpenDataProcessDialog
+        [source]="productSource.entityName"
+        [process]="processType.Create"
+        (operationResult)="onOperationSuccess($event)"
+      >
+        New product
+      </button>
+    </mat-menu>
+  </div>
+</div>
+
+<div class="table-content">
+  <div
+    class="progress-container offset--md"
+    *ngIf="!initialized && !tableHidden"
+  >
+    <p class="progress-container__header">Loading...</p>
+    <div class="progress-container__progress progress progress--info">
+      <div class="progress-indeterminate"></div>
+    </div>
+  </div>
+
+  <request-progress-spinner
+    [requestProgress]="requestProgress"
+    *ngIf="tableHidden && requestProgress.state.progress"
+  ></request-progress-spinner>
+  <cdk-virtual-scroll-viewport
+    class="gkz-viewport"
+    [hidden]="!skuFetchProgress.success"
+  >
+    <mat-table
+      [hidden]="tableHidden"
+      class="data-table table--hover"
+      [class.table--hover]="selectable"
+      [dataSource]="dataSource"
+      multiTemplateDataRows
+      matSort
+      [style.opacity]="requestProgress.state.progress ? 0.5 : 1"
+    >
+      <ng-container matColumnDef="actions">
+        <mat-header-cell *matHeaderCellDef>
+          <mat-checkbox
+            *ngIf="multipleSelection"
+            (change)="$event ? masterToggle() : null"
+            [checked]="selectionModel.hasValue() && isAllSelected"
+            [indeterminate]="selectionModel.hasValue() && !isAllSelected"
+          ></mat-checkbox>
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row">
+          <mat-checkbox
+            [checked]="selectionModel.isSelected(row.id)"
+            (click)="$event.stopPropagation()"
+            (change)="$event ? selectRow(row) : null"
+          ></mat-checkbox>
+        </mat-cell>
+      </ng-container>
+
+      <ng-container *ngFor="let column of columns; let i = index">
+        <ng-container
+          [matColumnDef]="column.key"
+          *ngIf="column.name !== 'actions'"
+        >
+          <mat-header-cell *matHeaderCellDef mat-sort-header>
+            {{ column.name }}
+          </mat-header-cell>
+          <mat-cell *matCellDef="let row">
+            <div *ngIf="i === 0" [style.paddingLeft.px]="row.level * 52">
+              <button
+                *ngIf="row.hasChildren"
+                mat-icon-button
+                [style.marginRight.px]="8"
+                (click)="treeControl.toggle(row); $event.stopPropagation()"
+              >
+                <i
+                  class="mdi"
+                  [ngClass]="
+                    treeControl.isExpanded(row)
+                      ? 'mdi-menu-up'
+                      : 'mdi-menu-down'
+                  "
+                ></i>
+              </button>
+            </div>
+            <app-data-cell
+              *ngIf="row.product"
+              [sourceParams]="productSource"
+              [value]="row.product[column.key]"
+              [property]="column.key"
+            ></app-data-cell>
+            <app-data-cell
+              *ngIf="row.group && i === 0"
+              class="mat-body-2 text--underline"
+              [sourceParams]="productGroupSource"
+              [value]="row.group.name"
+              [property]="'name'"
+            ></app-data-cell>
+          </mat-cell>
+        </ng-container>
+      </ng-container>
+
+      <ng-container matColumnDef="row-actions">
+        <mat-header-cell *matHeaderCellDef> </mat-header-cell>
+        <mat-cell *matCellDef="let row" (click)="$event.stopPropagation()">
+          <button mat-icon-button [matMenuTriggerFor]="menu">
+            <i class="mdi mdi-dots-vertical"></i>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button
+              mat-menu-item
+              appOpenDataProcessDialog
+              [source]="
+                row.type === nodeType.Group
+                  ? productGroupSource.entityName
+                  : productSource.entityName
+              "
+              [process]="processType.Clone"
+              [item]="row.type === nodeType.Group ? row.group : row.product"
+              (operationResult)="onOperationSuccess($event)"
+            >
+              Clone
+            </button>
+            <button
+              mat-menu-item
+              *ngIf="
+                row.type === nodeType.Group
+                  ? !row.group.deleted
+                  : !row.product.deleted
+              "
+              (click)="delete(row)"
+            >
+              Mark as delete
+            </button>
+            <button
+              mat-menu-item
+              *ngIf="
+                row.type === nodeType.Group
+                  ? row.group.deleted
+                  : row.product.deleted
+              "
+              (click)="restore(row)"
+            >
+              Restore
+            </button>
+          </mat-menu>
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="expandedDetail">
+        <mat-cell *matCellDef="let row">
+          <div
+            class="expanded-detail"
+            [@detailExpand]="row.id == expandedRowId ? 'expanded' : 'collapsed'"
+          >
+            <ng-container
+              *appExpandableRowHost="
+                let row;
+                expanded: row.id == expandedRowId;
+                template: expandableRow;
+                context: row
+              "
+            ></ng-container>
+          </div>
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true">
+        <div class="mat-header-row header-group-row">
+          <div class="mat-header-cell" role="columnheader"></div>
+        </div>
+      </mat-header-row>
+
+      <!-- cdkVirtualScrollViewport uses transform: translateY to correct for all elements that are removed.
+      We will use a plcaholder row in the table instead because the translate causes problems with the sticky header -->
+      <mat-row
+        [style.height.px]="dataSource.offset$ | async"
+        *matRowDef="
+          let row;
+          let index = index;
+          columns: [];
+          when: placeholderWhen
+        "
+      ></mat-row>
+
+      <mat-row
+        class="table__row"
+        [class.table__row--selected]="selectionModel.isSelected(row.id)"
+        [class.table__row--muted]="
+          row.type === nodeType.Group ? row.group.deleted : row.product.deleted
+        "
+        [class.table__row--expanded]="expandedRowId == row.id"
+        appOpenDataProcessDialog
+        [source]="
+          row.type === nodeType.Group
+            ? productGroupSource.entityName
+            : productSource.entityName
+        "
+        [process]="processType.Edit"
+        [item]="row.type === nodeType.Group ? row.group : row.product"
+        (operationResult)="onOperationSuccess($event)"
+        @rowsAnimation
+        *matRowDef="let row; columns: displayedColumns"
+      ></mat-row>
+      <mat-row
+        *matRowDef="let element; columns: ['expandedDetail']"
+        class="detail-row"
+      >
+      </mat-row>
+    </mat-table>
+  </cdk-virtual-scroll-viewport>
+
+  <div class="row flex-full row--sticky" [hidden]="tableHidden">
+    <section
+      class="row__section row__section--align-start text--secondary offset--left-sm mat-caption text--truncate hidden-xs-down"
+    >
+      <ng-container *ngIf="selectable && multipleSelection">
+        Выбрано: {{ selectionModel.selected.length }}
+      </ng-container>
+    </section>
+    <span class="row__spacer"></span>
+  </div>
+</div>

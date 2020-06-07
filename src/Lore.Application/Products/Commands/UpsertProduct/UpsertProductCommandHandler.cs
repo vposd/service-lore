@@ -5,7 +5,7 @@ using Lore.Application.Common.Models;
 using Lore.Domain.Entities;
 using MediatR;
 
-namespace Lore.Application.ProductGroups.Commands.UpsertProduct
+namespace Lore.Application.Products.Commands.UpsertProduct
 {
     public class UpsertProductCommandHandler : IRequestHandler<UpsertProductCommand, OperationResult>
     {
@@ -34,7 +34,7 @@ namespace Lore.Application.ProductGroups.Commands.UpsertProduct
             }
 
             product.Name = request.Name;
-            product.ProductGroupId = request.GroupId;
+            product.ProductGroupId = request.Group.Id;
             product.Description = request.Description;
             product.Price = request.Price;
 

@@ -61,7 +61,7 @@ namespace Lore.Application.Orders.Queries.GetOrders
                             })
                     },
                     Failures = x.DeviceFailures
-                        .Select(v => new SimpleEntityReadModel
+                        .Select(v => new SimpleEntityModel
                         {
                             Id = v.Id,
                             Name = v.Failure.Name

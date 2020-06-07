@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Lore.Api.Controllers;
-using Lore.Application.Common.Common;
+using Lore.Application.Common.Commands.ChangeDeletedStatus;
 using Lore.Application.Common.Models;
 using Lore.Application.Failures.Commands.UpsertFailure;
 using Lore.Application.Failures.Queries.GetFailures;

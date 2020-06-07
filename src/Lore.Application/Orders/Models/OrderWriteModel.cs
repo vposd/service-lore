@@ -9,7 +9,7 @@ namespace Lore.Application.Orders.Models
         public long? Id { get; set; }
         public CustomerModel Customer { get; set; }
         public DeviceWriteModel Device { get; set; }
-        public IEnumerable<SimpleEntityReadModel> Failures { get; set; }
+        public IEnumerable<SimpleEntityModel> Failures { get; set; }
         public IEnumerable<OrderItemWriteModel> Items { get; set; }
         public DateTime DateIn { get; set; }
         public DateTime DateOut { get; set; }

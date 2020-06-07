@@ -57,7 +57,10 @@ export class OrdersService {
 
   getAttributes() {
     return this.http
-      .get<QueryResult<Attribute>>(endpoints.attributes.root)
+      .get<QueryResult<Attribute>>(
+        endpoints.attributes.root,
+        ENABLED_CACHE_OPTIONS
+      )
       .pipe(pluck('results'));
   }
 }

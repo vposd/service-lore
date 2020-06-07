@@ -125,7 +125,7 @@ namespace Lore.Application.Common.Extensions.Linq
             {
                 var anyMethod = typeof(Enumerable).GetMethods().Single(m => m.Name == "Any" && m.GetParameters().Length == 2);
                 var innerParameter = Expression.Parameter(elementType, "z");
-                var innerExpression = typeof(SimpleEntityReadModel).IsAssignableFrom(elementType) ?
+                var innerExpression = typeof(SimpleEntityModel).IsAssignableFrom(elementType) ?
                     containsExpression(Expression.Property(innerParameter, "Name")) :
                     containsExpression(innerParameter);
                 var innerLambda = Expression.Lambda(innerExpression, innerParameter);
@@ -154,7 +154,7 @@ namespace Lore.Application.Common.Extensions.Linq
                     continue;
                 }
 
-                if (typeof(SimpleEntityReadModel).IsAssignableFrom(propertyInfo.PropertyType))
+                if (typeof(SimpleEntityModel).IsAssignableFrom(propertyInfo.PropertyType))
                 {
                     property = Expression.Property(property, "Name");
                 }

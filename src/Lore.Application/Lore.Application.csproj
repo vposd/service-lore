@@ -23,8 +23,4 @@
     <ProjectReference Include="..\Lore.Domain\Lore.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="ProductGroups\Models\" />
-  </ItemGroup>
-
 </Project>

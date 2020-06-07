@@ -50,10 +50,14 @@
     </ng-container>
 
     <ng-container *ngIf="metadata.type === dataType.Entity">
-      <app-data-chips-selection
-        [source]="sourceParams.entityName"
-        viewValuePath="name"
-      ></app-data-chips-selection>
+      <mat-form-field appearance="fill">
+        <mat-label>{{ metadata.label }}</mat-label>
+        <app-simple-selection
+          [source]="metadata.sourceEntityName"
+          viewValue="name"
+          [formControlName]="metadata.property"
+        ></app-simple-selection>
+      </mat-form-field>
     </ng-container>
 
     <ng-container *ngIf="metadata.type === dataType.Number">

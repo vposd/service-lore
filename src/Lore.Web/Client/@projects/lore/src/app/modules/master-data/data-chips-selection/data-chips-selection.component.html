@@ -1,4 +1,5 @@
-<mat-form-field [style.opacity]="disabled ? '0.6' : ''">
+<mat-form-field [style.opacity]="disabled ? '0.6' : ''" appearance="fill">
+  <mat-label class="text--capitalize">{{ label }}</mat-label>
   <mat-chip-list #chipList>
     <mat-chip
       class="text--truncate"
@@ -8,7 +9,7 @@
       [removable]="true"
       (removed)="remove(selected)"
     >
-      {{ selected[viewValuePath] }}
+      {{ selected[viewValue] }}
       <i class="mdi mdi-close-circle mdi--sm" matChipRemove></i>
     </mat-chip>
     <input
@@ -38,9 +39,9 @@
           templateCacheSize: 0
         "
       >
-        <mat-option>
-          <span appHighlight [query]="query" [text]="result[viewValuePath]">{{
-            result[viewValuePath]
+        <mat-option [value]="result">
+          <span appHighlight [query]="query" [text]="result[viewValue]">{{
+            result[viewValue]
           }}</span>
         </mat-option>
       </ng-container>

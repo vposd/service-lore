@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Lore.Infrastructure.Identity;
+﻿using Lore.Infrastructure.Identity;
+using Microsoft.AspNetCore.Identity;
 
 namespace Lore.Infrastructure
 {
@@ -19,10 +19,10 @@ namespace Lore.Infrastructure
             {
                 var user = new ApplicationUser
                 {
-                UserName = "sa",
-                Email = "sa@localhost",
-                FirstName = "John",
-                LastName = "Doe"
+                    UserName = "sa",
+                    Email = "sa@localhost",
+                    FirstName = "John",
+                    LastName = "Doe"
                 };
 
                 var result = userManager.CreateAsync(user, "1A4d7m9i6n3!").Result;
@@ -37,10 +37,10 @@ namespace Lore.Infrastructure
             {
                 var user = new ApplicationUser
                 {
-                UserName = "user",
-                Email = "user@localhost",
-                FirstName = "User",
-                LastName = "LastName"
+                    UserName = "user",
+                    Email = "user@localhost",
+                    FirstName = "User",
+                    LastName = "LastName"
                 };
 
                 var result = userManager.CreateAsync(user, "1A4d7m9i6n3!").Result;

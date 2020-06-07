@@ -20,6 +20,12 @@ export interface Endpoints {
     root: string;
     single: string;
   };
+  products: {
+    root: string;
+  };
+  productGroups: {
+    root: string;
+  };
   failures: {
     root: string;
   };

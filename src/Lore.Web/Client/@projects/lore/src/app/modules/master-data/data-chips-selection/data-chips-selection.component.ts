@@ -11,7 +11,7 @@ import { FormControl, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { map, switchMap, pluck, startWith, debounceTime } from 'rxjs/operators';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { reject } from 'lodash';
-import { Observable, fromEvent, merge, Subject } from 'rxjs';
+import { Observable, fromEvent, merge, Subject, of } from 'rxjs';
 import { MatChipInput } from '@angular/material/chips';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 
@@ -26,6 +26,40 @@ import {
 } from '../config/master-data-config.service';
 import { QueryRequestBuilder } from '../master-data-service/query-request-builder.class';
 import { property } from '../master-data-service/filter-expression';
+
+interface RetrieveDataStrategy<T> {
+  getData(query: string): Observable<T[]>;
+}
+
+class QueryRequestDataStrategy<T extends Entity>
+  implements RetrieveDataStrategy<T> {
+  constructor(
+    private readonly masterData: MasterDataService,
+    private sourceParams: MasterDataSource<T>,
+    private viewValue: string
+  ) {}
+
+  getData(query: string) {
+    const builder = query
+      ? new QueryRequestBuilder().setFilter(
+          property(this.viewValue).contains(query)
+        )
+      : new QueryRequestBuilder();
+    const request = builder.setPageSize(20).request;
+    return this.masterData
+      .query<T>(this.sourceParams.endpoint, request)
+      .pipe(map(({ results }) => results));
+  }
+}
+
+class DefinedValuesDataStrategy<T extends Entity>
+  implements RetrieveDataStrategy<T> {
+  constructor(private readonly values: T[]) {}
+
+  getData(query: string) {
+    return of(this.values);
+  }
+}
 
 @Component({
   selector: 'app-data-chips-selection',
@@ -50,14 +84,28 @@ export class DataChipsSelectionComponent<T extends Entity>
     }
     this._source = source;
     this.sourceParams = this.masterDataConfig.getSource(source);
-    console.log(this);
+    this.retrieveDataStrategy = new QueryRequestDataStrategy(
+      this.masterData,
+      this.sourceParams,
+      this.viewValue
+    );
   }
   get source() {
     return this._source;
   }
 
-  @Input() viewValuePath: string;
+  @Input()
+  set values(values: T[]) {
+    this._values = values;
+    this.retrieveDataStrategy = new DefinedValuesDataStrategy<T>(values);
+  }
+  get values() {
+    return this._values;
+  }
+
+  @Input() viewValue: string;
   @Input() placeholder: string;
+  @Input() label: string;
 
   innerModel = [];
   separatorKeysCodes = [ENTER, COMMA];
@@ -73,7 +121,9 @@ export class DataChipsSelectionComponent<T extends Entity>
 
   private sourceParams: MasterDataSource<T>;
   private _source: string;
+  private _values: T[];
   private readonly clearInputValueBroadcast = new Subject<string>();
+  private retrieveDataStrategy: RetrieveDataStrategy<T>;
 
   constructor(
     private readonly masterData: MasterDataService,
@@ -97,15 +147,7 @@ export class DataChipsSelectionComponent<T extends Entity>
       debounceTime(250),
       switchMap((query) => {
         this.query = query;
-        const builder = query
-          ? new QueryRequestBuilder().setFilter(
-              property(this.viewValuePath).contains(query)
-            )
-          : new QueryRequestBuilder();
-        const request = builder.setPageSize(20).request;
-        return this.masterData
-          .query<T>(this.sourceParams.endpoint, request)
-          .pipe(map(({ results }) => results));
+        return this.retrieveDataStrategy.getData(query);
       })
     );
   }
@@ -116,17 +158,8 @@ export class DataChipsSelectionComponent<T extends Entity>
   }
 
   select(event: MatAutocompleteSelectedEvent) {
+    console.log({ event });
     this.add(event.option.value as T);
-  }
-
-  private add(item: T) {
-    const index = this.value.findIndex((x) => x.id === item.id);
-    this.value =
-      index < 0
-        ? this.value.concat(item)
-        : this.value.map((x, i) => (i === index ? item : x));
-
-    this.clearValue();
   }
 
   setDisabledState(disabled: boolean) {
@@ -136,6 +169,15 @@ export class DataChipsSelectionComponent<T extends Entity>
       return this.groupLookupControl.disable();
     }
     return this.groupLookupControl.enable();
+  }
+
+  private add(item: T) {
+    const index = this.value.findIndex((x) => x.id === item.id);
+    this.value =
+      index < 0
+        ? this.value.concat(item)
+        : this.value.map((x, i) => (i === index ? item : x));
+    this.clearValue();
   }
 
   private clearValue() {

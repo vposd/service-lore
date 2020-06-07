@@ -28,18 +28,18 @@ namespace Lore.Application.ProductGroups.Commands.UpsertProductGroup
             {
                 productGroup = new ProductGroup
                 {
-                    ParentId = command.ParentId,
+                    ParentId = command.Parent.Id,
                     Name = command.Name
                 };
                 context.ProductGroups.Add(productGroup);
             }
             else
             {
-                productGroup = await context.ProductGroups.FindAsync(cancellationToken);
+                productGroup = await context.ProductGroups.FindAsync(command.Id);
             }
 
             productGroup.Name = command.Name;
-            productGroup.ParentId = command.ParentId;
+            productGroup.ParentId = command.Parent.Id;
 
             await context.SaveChangesAsync(cancellationToken);
 

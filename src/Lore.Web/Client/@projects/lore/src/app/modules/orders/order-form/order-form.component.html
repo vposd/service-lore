@@ -10,69 +10,70 @@
   >
 </h1>
 <div mat-dialog-content>
-  <ng-container [formGroup]="form">
-    <h2 class="mat-title">Customer</h2>
+  <mat-tab-group mat-stretch-tabs>
+    <mat-tab label="Common">
+      <ng-container [formGroup]="form">
+        <h2 class="mat-title">Customer</h2>
 
-    <mat-form-field appearance="fill">
-      <mat-label>Name</mat-label>
-      <input matInput />
-    </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Name</mat-label>
+          <input matInput />
+        </mat-form-field>
 
-    <mat-form-field appearance="fill">
-      <mat-label>Phone</mat-label>
-      <input matInput />
-    </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Phone</mat-label>
+          <input matInput />
+        </mat-form-field>
 
-    <h2 class="mat-title">Device</h2>
+        <h2 class="mat-title">Device</h2>
 
-    <mat-form-field appearance="fill">
-      <mat-label>Name</mat-label>
-      <input matInput />
-    </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Name</mat-label>
+          <input matInput />
+        </mat-form-field>
 
-    <mat-form-field appearance="fill">
-      <mat-label>SerialNumber</mat-label>
-      <input matInput />
-    </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>SerialNumber</mat-label>
+          <input matInput />
+        </mat-form-field>
 
-    <mat-form-field
-      appearance="fill"
-      *ngFor="let attribute of attributes$ | async"
-    >
-      <mat-label class="text--capitalize">{{ attribute.name }}</mat-label>
-      <input matInput />
-    </mat-form-field>
+        <app-attributes-input></app-attributes-input>
 
-    <mat-form-field appearance="fill">
-      <mat-label>Failures</mat-label>
-      <input matInput />
-    </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Failures</mat-label>
+          <input matInput />
+        </mat-form-field>
 
-    <div class="form-field-group">
-      <mat-form-field appearance="fill">
-        <mat-label>Date in</mat-label>
-        <input matInput [matDatepicker]="pickerDateIn" />
-        <mat-datepicker-toggle
-          matSuffix
-          [for]="pickerDateIn"
-        ></mat-datepicker-toggle>
-        <mat-datepicker #pickerDateIn color="primary"></mat-datepicker>
-      </mat-form-field>
+        <div class="form-field-group">
+          <mat-form-field appearance="fill">
+            <mat-label>Date in</mat-label>
+            <input matInput [matDatepicker]="pickerDateIn" />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="pickerDateIn"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #pickerDateIn color="primary"></mat-datepicker>
+          </mat-form-field>
 
-      <mat-form-field
-        appearance="fill"
-        [hidden]="params.processAction !== processActionEnum.Edit"
-      >
-        <mat-label>Date out</mat-label>
-        <input matInput [matDatepicker]="pickerDateOut" />
-        <mat-datepicker-toggle
-          matSuffix
-          [for]="pickerDateOut"
-        ></mat-datepicker-toggle>
-        <mat-datepicker #pickerDateOut color="primary"></mat-datepicker>
-      </mat-form-field>
-    </div>
-  </ng-container>
+          <mat-form-field
+            appearance="fill"
+            [hidden]="params.processAction !== processActionEnum.Edit"
+          >
+            <mat-label>Date out</mat-label>
+            <input matInput [matDatepicker]="pickerDateOut" />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="pickerDateOut"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #pickerDateOut color="primary"></mat-datepicker>
+          </mat-form-field>
+        </div>
+      </ng-container>
+    </mat-tab>
+    <mat-tab label="Items">
+      <app-order-items-input></app-order-items-input>
+    </mat-tab>
+  </mat-tab-group>
 </div>
 <div mat-dialog-actions>
   <button mat-button (click)="dialogRef.close()">Cancel</button>

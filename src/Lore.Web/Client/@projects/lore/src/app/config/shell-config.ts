@@ -32,6 +32,11 @@ config.menu = {
       iconClass: 'mdi mdi-settings',
       href: 'references/failures',
     }),
+    new MenuItem({
+      title: 'Products',
+      iconClass: 'mdi mdi-settings',
+      href: 'references/products',
+    }),
   ],
 };
 

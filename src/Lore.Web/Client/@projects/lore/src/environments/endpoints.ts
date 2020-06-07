@@ -22,6 +22,12 @@ export const endpoints: Endpoints = {
     root: '/api/orderStatuses',
     single: '/api/orderStatuses/{id}',
   },
+  products: {
+    root: '/api/products',
+  },
+  productGroups: {
+    root: '/api/productGroups',
+  },
   failures: {
     root: '/api/failures',
   },

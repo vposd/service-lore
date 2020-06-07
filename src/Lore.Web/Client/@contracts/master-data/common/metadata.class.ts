@@ -15,6 +15,7 @@ export class ObjectPropertyMetadata<T extends Entity> {
   property: keyof T;
   formValidators: ValidatorFn[];
   type: ObjectPropertyType;
+  sourceEntityName?: string;
   label: string;
   readonly?: boolean;
 }

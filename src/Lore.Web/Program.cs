@@ -1,5 +1,4 @@
 ﻿using System.Reflection;
-using Lore.Web.Config;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -37,7 +36,6 @@ namespace Lore
                     config.AddCommandLine(args);
                 }
             })
-            .UseSentryOnProduction()
             .UseStartup<Startup>();
     }
 }

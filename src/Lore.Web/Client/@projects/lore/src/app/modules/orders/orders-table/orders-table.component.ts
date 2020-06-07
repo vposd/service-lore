@@ -27,10 +27,10 @@ import {
   SortDirection,
 } from '../../master-data/master-data-service/query-request-builder.class';
 import { MasterDataService } from '../../master-data/master-data-service/master-data.service';
-import { RowsAnimation } from '../../master-data/data-table/data-table-animations';
 import { OrdersService } from '../orders.service';
 import { OrderTableRow, AttributeModel } from '../models/order-table-row';
 import { ProcessAction } from '../../master-data/models/process-action.enum';
+import { RowsAnimation } from '../../master-data/tables/data-table/data-table-animations';
 
 const groupAttributes = (attrs: Attribute[][]): AttributeModel[] =>
   chain(attrs)

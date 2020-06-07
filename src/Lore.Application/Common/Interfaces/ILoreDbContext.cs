@@ -11,20 +11,22 @@ namespace Lore.Application.Common.Interfaces
 {
     public interface ILoreDbContext : IDisposable
     {
-        public DbSet<Customer> Customers { get; set; }
-        public DbSet<Order> Orders { get; set; }
-        public DbSet<OrderItem> OrderItems { get; set; }
-        public DbSet<Failure> Failures { get; set; }
-        public DbSet<Device> Devices { get; set; }
-        public DbSet<OrderStatus> OrderStatuses { get; set; }
-        public DbSet<Employee> Employees { get; set; }
-        public DbSet<Attribute> Attributes { get; set; }
-        public DbSet<AttributeValue> AttributesValues { get; set; }
-        public DbSet<ProductGroup> ProductGroups { get; set; }
-        public DbSet<Product> Products { get; set; }
+        DbSet<Customer> Customers { get; set; }
+        DbSet<Order> Orders { get; set; }
+        DbSet<OrderItem> OrderItems { get; set; }
+        DbSet<Failure> Failures { get; set; }
+        DbSet<Device> Devices { get; set; }
+        DbSet<OrderStatus> OrderStatuses { get; set; }
+        DbSet<Employee> Employees { get; set; }
+        DbSet<Attribute> Attributes { get; set; }
+        DbSet<AttributeValue> AttributesValues { get; set; }
+        DbSet<ProductGroup> ProductGroups { get; set; }
+        DbSet<Product> Products { get; set; }
+        DbSet<TEntity> Set<TEntity>() where TEntity : class;
 
         DatabaseFacade Database { get; }
         ChangeTracker ChangeTracker { get; }
+
 
         void SaveChanges();
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);

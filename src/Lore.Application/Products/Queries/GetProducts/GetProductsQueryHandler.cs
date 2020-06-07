@@ -32,11 +32,10 @@ namespace Lore.Application.Products.Queries.GetProducts
                     Price = x.Price,
                     Description = x.Description,
                     Deleted = x.Deleted,
-                    Group = new ProductGroupModel
+                    Group = new SimpleEntityModel
                     {
                         Id = x.ProductGroup.Id,
                         Name = x.ProductGroup.Name,
-                        ParentId = x.ProductGroup.ParentId
                     }
                 })
                 .ApplyQuery(query, out var count)

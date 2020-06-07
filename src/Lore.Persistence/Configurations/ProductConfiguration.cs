@@ -13,7 +13,6 @@ namespace Lore.Persistence.Configurations
                 .HasMaxLength(50);
 
             builder.Property(e => e.Description)
-                .IsRequired()
                 .HasMaxLength(255);
         }
     }
