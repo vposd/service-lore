@@ -1,6 +1,11 @@
 import { HttpParams } from '@angular/common/http';
 import { isArray } from 'lodash/fp';
 import { isUndefined } from 'lodash';
+import {
+  ObjectPropertyMetadata,
+  ObjectPropertyType,
+} from '@contracts/master-data/common/metadata.class';
+import { Entity } from '@contracts/common';
 
 export enum SortDirection {
   Asc = 'asc',
@@ -77,6 +82,19 @@ export class QueryRequestBuilder {
   setPage(pageNo: number) {
     this._pageNo = pageNo;
     return this;
+  }
+
+  sortByProperty<T extends Entity>(
+    metadata: ObjectPropertyMetadata<T>[],
+    property: keyof T,
+    dir: SortDirection
+  ) {
+    const propertyMeta = metadata.find((x) => x.property === property);
+    const propertyPath =
+      propertyMeta.type === ObjectPropertyType.Entity
+        ? `${property}/id`
+        : (property as string);
+    return this.sort(propertyPath, dir);
   }
 
   sort(propertyPath: string, dir: SortDirection) {

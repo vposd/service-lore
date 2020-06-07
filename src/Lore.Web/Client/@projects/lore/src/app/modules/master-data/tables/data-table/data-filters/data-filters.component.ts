@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 
 import { DataFilter } from '../../../models/filter-metadata.class';
 import { FilterExpression } from '../../../master-data-service/filter-expression';
+import { startWith } from 'rxjs/operators';
 
 @Component({
   selector: 'app-data-filters',
@@ -21,10 +22,10 @@ export class DataFiltersComponent implements OnInit {
 
   ngOnInit(): void {
     this.filters.forEach(({ property }) =>
-      this.form.addControl(property, new FormControl(null))
+      this.form.addControl(property, new FormControl(false))
     );
 
-    this.form.valueChanges.subscribe((x) => {
+    this.form.valueChanges.pipe(startWith(this.form.value)).subscribe((x) => {
       const expressions = this.filters.map((f) =>
         f.expressionFactory(x[f.property])
       );

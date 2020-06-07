@@ -249,9 +249,21 @@ export class ProductsDataTableComponent implements OnInit, OnDestroy {
     query.setPageSize(Infinity);
 
     const sort = this.sort.sortChange.pipe(
+      tap(({ active }) => {
+        const meta = this.productSource.metadata.find(
+          (x) => x.property === active
+        );
+        console.log(meta);
+      }),
       map(
         ({ active, direction }) =>
-          query.setPage(0).sort(active, direction as SortDirection).request
+          query
+            .setPage(0)
+            .sortByProperty(
+              this.productSource.metadata,
+              active as keyof Product,
+              direction as SortDirection
+            ).request
       )
     );
 

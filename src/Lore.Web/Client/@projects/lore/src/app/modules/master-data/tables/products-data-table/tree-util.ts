@@ -56,7 +56,6 @@ export const makeNodes = (
             ...groupsMap.get(p.group.id).children,
             Object.assign(new ProductNode(), {
               id: p.id,
-              // parentId: p.group.id,
               type: ProductNodeType.Sku,
               product: p,
               name: p.name,
@@ -103,7 +102,7 @@ export const nodeTransformer = (
 ): ProductFlattenNode => ({
   ...node,
   level,
-  hasChildren: !isEmpty(node.children) || !isEmpty(node.products),
+  hasChildren: !isEmpty(node.children),
 });
 
 /** Function that gets a flat node's level */

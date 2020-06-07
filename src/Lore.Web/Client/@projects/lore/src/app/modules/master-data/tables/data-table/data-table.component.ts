@@ -21,7 +21,6 @@ import {
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
-import { FormControl } from '@angular/forms';
 
 import { InformationService } from '@common/information/information.service';
 import { RequestProgress } from '@common/utils/request-progress/request-progress.class';
@@ -39,9 +38,7 @@ import { ExpandableRowDirective } from './expandable-row/expandable-row.directiv
 import { ProcessAction } from '../../models/process-action.enum';
 import {
   dataFilter,
-  property,
   FilterExpression,
-  PropertyExpression,
   Operator,
 } from '../../master-data-service/filter-expression';
 
@@ -204,7 +201,13 @@ export class DataTableComponent<T extends Entity> implements OnInit, OnDestroy {
       tap(() => (this.paginator.pageIndex = 0)),
       map(
         ({ active, direction }) =>
-          query.setPage(0).sort(active, direction as SortDirection).request
+          query
+            .setPage(0)
+            .sortByProperty(
+              this.sourceParams.metadata,
+              active as keyof T,
+              direction as SortDirection
+            ).request
       )
     );
 
