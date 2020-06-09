@@ -5,7 +5,6 @@ import {
   ObjectPropertyMetadata,
   ObjectPropertyType,
 } from './common/metadata.class';
-import { deleted } from './common/common-properties';
 
 export class ProductGroup extends DeletableEntity {
   name: string;
@@ -33,7 +32,6 @@ export const productGroupMetadata: ObjectPropertyMetadata<ProductGroup>[] = [
     sourceEntityName: 'ProductGroup',
     label: 'Parent',
   },
-  deleted,
 ];
 
 export const productMetadata: ObjectPropertyMetadata<Product>[] = [
@@ -62,5 +60,4 @@ export const productMetadata: ObjectPropertyMetadata<Product>[] = [
     sourceEntityName: 'ProductGroup',
     label: 'Group',
   },
-  deleted,
 ];

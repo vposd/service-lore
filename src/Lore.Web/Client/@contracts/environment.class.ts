@@ -6,7 +6,8 @@ export interface Endpoints {
   };
   attributes: {
     root: string;
-    attributeValues: string;
+    values: string;
+    value: string;
   };
   users: {
     currentUser: string;

@@ -22,24 +22,19 @@ namespace Lore.Application.ProductGroups.Commands.UpsertProductGroup
         {
             using var context = contextFactory.Create();
 
-            ProductGroup productGroup;
+            var entity = new ProductGroup();
 
             if (!command.Id.HasValue)
             {
-                productGroup = new ProductGroup
-                {
-                    ParentId = command.ParentId,
-                    Name = command.Name
-                };
-                context.ProductGroups.Add(productGroup);
+                context.ProductGroups.Add(entity);
             }
             else
             {
-                productGroup = await context.ProductGroups.FindAsync(command.Id);
+                entity = await context.ProductGroups.FindAsync(command.Id);
             }
 
-            productGroup.Name = command.Name;
-            productGroup.ParentId = command.ParentId;
+            entity.Name = command.Name;
+            entity.ParentId = command.ParentId;
 
             await context.SaveChangesAsync(cancellationToken);
 

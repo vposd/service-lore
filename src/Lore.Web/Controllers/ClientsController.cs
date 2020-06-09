@@ -17,9 +17,9 @@ namespace Lore.Web.Controllers
     public class ClientsController : BaseController
     {
         [HttpGet]
-        public async Task<IActionResult> Query(DataQuery query)
+        public async Task<IActionResult> Query(DataQuery query, CancellationToken cancellationToken)
         {
-            var vm = await Mediator.Send(query.ToRequest<GetClientsQuery>());
+            var vm = await Mediator.Send(query.ToRequest<GetClientsQuery>(), cancellationToken);
             return Ok(vm);
         }
 

@@ -3,7 +3,6 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 
 import { ENABLED_CACHE_OPTIONS } from '@common/utils/http-cache/http-cache-constant';
 import { Entity, QueryResult, OperationResult } from '@contracts/common';
-import { format } from '@projects/lore/src/environments/endpoints';
 
 @Injectable({
   providedIn: 'root',

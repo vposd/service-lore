@@ -5,7 +5,6 @@ import {
   ObjectPropertyMetadata,
   ObjectPropertyType,
 } from './common/metadata.class';
-import { deleted } from './common/common-properties';
 
 export class Failure extends DeletableEntity {
   name: string;
@@ -18,5 +17,4 @@ export const failureMetadata: ObjectPropertyMetadata<Failure>[] = [
     formValidators: [Validators.max(50)],
     label: 'Name',
   },
-  deleted,
 ];

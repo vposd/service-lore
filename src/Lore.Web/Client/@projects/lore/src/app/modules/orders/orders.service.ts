@@ -7,11 +7,11 @@ import { ENABLED_CACHE_OPTIONS } from '@common/utils/http-cache/http-cache-const
 import { QueryResult } from '@contracts/common';
 import { Order } from '@contracts/orders';
 import { OrderStatus } from '@contracts/master-data/order-state.class';
+import { Attribute } from '@contracts/master-data/attribute.class';
 
-import { endpoints, format } from '../../../environments/endpoints';
+import { endpoints, makeHref } from '../../../environments/endpoints';
 import { MasterDataService } from '../master-data/master-data-service/master-data.service';
 import { OrderTableRow } from './models/order-table-row';
-import { Attribute } from '@contracts/master-data/attribute.class';
 
 @Injectable({
   providedIn: 'root',
@@ -43,14 +43,14 @@ export class OrdersService {
 
   getOrderStatus(id: string) {
     return this.http.get<OrderStatus>(
-      format(endpoints.orderStatuses.single, { id }),
+      makeHref(endpoints.orderStatuses.single, { id }),
       ENABLED_CACHE_OPTIONS
     );
   }
 
   updateState(orderId: string, stateId: string) {
     return this.http.post(
-      format(endpoints.orders.updateState, { orderId, stateId }),
+      makeHref(endpoints.orders.updateState, { orderId, stateId }),
       null
     );
   }

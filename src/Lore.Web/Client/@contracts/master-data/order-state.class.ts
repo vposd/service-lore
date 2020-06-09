@@ -1,7 +1,6 @@
 import { DeletableEntity } from '@contracts/common';
 import { Validators } from '@angular/forms';
 
-import { deleted } from './common/common-properties';
 import {
   ObjectPropertyMetadata,
   ObjectPropertyType,
@@ -53,5 +52,4 @@ export const orderStatusMetadata: ObjectPropertyMetadata<OrderStatus>[] = [
     formValidators: [Validators.max(50)],
     label: 'Name',
   },
-  deleted,
 ];

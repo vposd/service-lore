@@ -18,7 +18,7 @@ export class MasterDataComponent implements OnInit {
 
   constructor(
     private masterDataConfig: MasterDataConfig,
-    private route: ActivatedRoute
+    readonly route: ActivatedRoute
   ) {}
 
   ngOnInit() {

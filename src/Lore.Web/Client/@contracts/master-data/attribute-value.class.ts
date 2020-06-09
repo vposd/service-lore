@@ -5,10 +5,8 @@ import {
   ObjectPropertyMetadata,
   ObjectPropertyType,
 } from './common/metadata.class';
-import { deleted } from './common/common-properties';
 
 export class AttributeValue extends DeletableEntity {
-  name: string;
   attribute: SimpleEntity;
   value: string;
   isDefault: boolean;
@@ -18,14 +16,9 @@ export const attributeValueMetadata: ObjectPropertyMetadata<
   AttributeValue
 >[] = [
   {
-    property: 'name',
-    type: ObjectPropertyType.String,
-    formValidators: [Validators.max(50)],
-    label: 'Name',
-  },
-  {
     property: 'attribute',
     type: ObjectPropertyType.Entity,
+    sourceEntityName: 'Attribute',
     formValidators: [Validators.required],
     label: 'Attribute',
   },
@@ -41,5 +34,4 @@ export const attributeValueMetadata: ObjectPropertyMetadata<
     formValidators: [],
     label: 'Default value',
   },
-  deleted,
 ];

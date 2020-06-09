@@ -1,25 +1,24 @@
 ﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Lore.Application.Attributes.Commands.CreateAttributeValue;
 using Lore.Application.Common.Interfaces;
 using Lore.Application.Common.Models;
 using Lore.Domain.Entities;
 using MediatR;
 
-namespace Lore.Application.Attributes.Commands.CreateAttribute
+namespace Lore.Application.Attributes.Commands.UpsertAttributeValue
 {
-    public class CreateAttributeValueCommandHandler : IRequestHandler<CreateAttributeValueCommand, OperationResult>
+    public class UpsertAttributeValueCommandHandler : IRequestHandler<UpsertAttributeValueCommand, OperationResult>
     {
         private readonly ILoreDbContextFactory contextFactory;
 
-        public CreateAttributeValueCommandHandler(
+        public UpsertAttributeValueCommandHandler(
             ILoreDbContextFactory contextFactory)
         {
             this.contextFactory = contextFactory;
         }
 
-        public async Task<OperationResult> Handle(CreateAttributeValueCommand request, CancellationToken cancellationToken)
+        public async Task<OperationResult> Handle(UpsertAttributeValueCommand request, CancellationToken cancellationToken)
         {
             using var context = contextFactory.Create();
 
@@ -28,12 +27,20 @@ namespace Lore.Application.Attributes.Commands.CreateAttribute
                 ResetDefaultAttributeValue(context);
             }
 
-            context.AttributesValues.Add(new AttributeValue
+            var entity = new AttributeValue();
+
+            if (request.Id.HasValue)
             {
-                AttributeId = request.AttributeId,
-                Value = request.Value,
-                IsDefault = request.IsDefault
-            });
+                entity = await context.AttributesValues.FindAsync(request.Id);
+            }
+            else
+            {
+                context.AttributesValues.Add(entity);
+            }
+
+            entity.AttributeId = request.AttributeId;
+            entity.IsDefault = request.IsDefault;
+            entity.Value = request.Value;
 
             await context.SaveChangesAsync(cancellationToken);
 

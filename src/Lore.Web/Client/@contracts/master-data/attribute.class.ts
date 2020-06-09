@@ -7,7 +7,6 @@ import {
   ObjectPropertyMetadata,
   ObjectPropertyType,
 } from './common/metadata.class';
-import { deleted } from './common/common-properties';
 
 export class Attribute extends DeletableEntity {
   name: string;
@@ -36,5 +35,4 @@ export const attributeMetadata: ObjectPropertyMetadata<Attribute>[] = [
     formValidators: [],
     label: 'Object type',
   },
-  deleted,
 ];

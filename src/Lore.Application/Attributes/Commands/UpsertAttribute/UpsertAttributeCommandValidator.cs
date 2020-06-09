@@ -1,11 +1,11 @@
 ﻿using FluentValidation;
-using Lore.Application.Attributes.Commands.CreateAttribute;
+using Lore.Application.Attributes.Commands.UpsertAttribute;
 
 namespace Lore.Application.OrderStatuses.Commands.UpsertOrderStatus
 {
-    public class CreateAttributeCommandValidator : AbstractValidator<CreateAttributeCommand>
+    public class UpsertAttributeCommandValidator : AbstractValidator<UpsertAttributeCommand>
     {
-        public CreateAttributeCommandValidator()
+        public UpsertAttributeCommandValidator()
         {
             RuleFor(x => x.Name).MaximumLength(50).NotEmpty();
             RuleFor(x => x.ObjectType).NotEmpty();

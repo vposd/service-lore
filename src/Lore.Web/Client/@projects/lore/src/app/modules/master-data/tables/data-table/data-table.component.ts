@@ -13,10 +13,10 @@ import { isEmpty } from 'lodash/fp';
 import {
   map,
   tap,
-  startWith,
   switchMap,
   takeUntil,
   take,
+  startWith,
 } from 'rxjs/operators';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
@@ -227,7 +227,7 @@ export class DataTableComponent<T extends Entity> implements OnInit, OnDestroy {
         tap(() => this.requestProgress.start()),
         startWith(query.request),
         switchMap((request) =>
-          this.masterData.query<T>(this._sourceParams.endpoint, request)
+          this.masterData.query<T>(this._sourceParams.makeEndpoint(), request)
         ),
         takeUntil(this.destroy$)
       )

@@ -94,7 +94,7 @@ export class OrdersTableComponent implements OnInit, OnDestroy {
 
     this.notifications.events$
       .pipe(
-        listenEvent<OrderStatusUpdatedEvent>('OrderStatusUpdatedEvent'),
+        listenEvent<OrderStatusUpdatedEvent>('OrderStateUpdatedEvent'),
         switchMap((x) => {
           const order = this.dataSource.data.find((e) => x.payload.orderId);
           if (!order) {

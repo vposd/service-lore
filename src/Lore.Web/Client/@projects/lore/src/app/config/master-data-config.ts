@@ -13,6 +13,10 @@ import {
   ProductGroup,
   productGroupMetadata,
 } from '@contracts/master-data/product.class';
+import {
+  attributeValueMetadata,
+  AttributeValue,
+} from '@contracts/master-data/attribute-value.class';
 
 import {
   MasterDataConfig,
@@ -20,6 +24,16 @@ import {
 } from '../modules/master-data/config/master-data-config.service';
 import { environment } from '../../environments/environment';
 import { displayDeletedFilter } from '../modules/master-data/tables/data-table/data-filters/common-filters';
+import {
+  DataFilter,
+  FilterType,
+} from '../modules/master-data/models/filter-metadata.class';
+import {
+  dataFilter,
+  Operator,
+  property,
+} from '../modules/master-data/master-data-service/filter-expression';
+import { SimpleEntity } from '@contracts/common';
 
 const config = new MasterDataConfig();
 
@@ -78,6 +92,29 @@ config.sources = [
     entityName: 'Attribute',
     metadata: attributeMetadata,
     filters: [displayDeletedFilter],
+  }),
+  new MasterDataSource<AttributeValue>({
+    href: 'attributesValues',
+    endpoint: environment.endpoints.attributes.values,
+    label: {
+      plural: 'Attributes values',
+      single: 'Attributes value',
+    },
+    entityName: 'AttributeValue',
+    metadata: attributeValueMetadata,
+    filters: [
+      displayDeletedFilter,
+      new DataFilter<Attribute>({
+        label: 'Filter by attribute',
+        type: FilterType.EntitySelection,
+        sourceValuesContract: 'Attribute',
+        property: 'attribute',
+        expressionFactory: (value) =>
+          value
+            ? dataFilter().addParam(property('attribute/id').equals(value.id))
+            : null,
+      }),
+    ],
   }),
 ];
 

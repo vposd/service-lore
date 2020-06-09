@@ -65,3 +65,9 @@ html {
     transform: translateY(0) !important;
   }
 }
+
+.mat-form-field-no-padding {
+  .mat-form-field-wrapper {
+    padding: 0;
+  }
+}

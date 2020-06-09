@@ -2,7 +2,7 @@
 
 namespace Lore.Web.Contracts.Attributes
 {
-    public class CreateAttributeRequest
+    public class UpsertAttributeRequest
     {
         public string Name { get; set; }
         public AttributeValueType Type { get; set; }

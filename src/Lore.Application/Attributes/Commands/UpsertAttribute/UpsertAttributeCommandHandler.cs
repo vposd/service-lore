@@ -5,37 +5,36 @@ using Lore.Application.Common.Models;
 using Lore.Domain.Entities;
 using MediatR;
 
-namespace Lore.Application.Products.Commands.UpsertProduct
+namespace Lore.Application.Attributes.Commands.UpsertAttribute
 {
-    public class UpsertProductCommandHandler : IRequestHandler<UpsertProductCommand, OperationResult>
+    public class UpsertAttributeCommandHandler : IRequestHandler<UpsertAttributeCommand, OperationResult>
     {
         private readonly ILoreDbContextFactory contextFactory;
 
-        public UpsertProductCommandHandler(
+        public UpsertAttributeCommandHandler(
             ILoreDbContextFactory contextFactory)
         {
             this.contextFactory = contextFactory;
         }
 
-
-        public async Task<OperationResult> Handle(UpsertProductCommand request, CancellationToken cancellationToken)
+        public async Task<OperationResult> Handle(UpsertAttributeCommand request, CancellationToken cancellationToken)
         {
             using var context = contextFactory.Create();
 
-            var entity = new Product();
+            var entity = new Attribute();
+
             if (request.Id.HasValue)
             {
-                entity = await context.Products.FindAsync(request.Id);
+                entity = await context.Attributes.FindAsync(request.Id);
             }
             else
             {
-                context.Products.Add(entity);
+                context.Attributes.Add(entity);
             }
 
             entity.Name = request.Name;
-            entity.ProductGroupId = request.GroupId;
-            entity.Description = request.Description;
-            entity.Price = request.Price;
+            entity.Object = request.ObjectType;
+            entity.Type = request.Type;
 
             await context.SaveChangesAsync(cancellationToken);
 

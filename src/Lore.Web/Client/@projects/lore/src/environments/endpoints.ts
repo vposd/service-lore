@@ -9,7 +9,8 @@ export const endpoints: Endpoints = {
   },
   attributes: {
     root: '/api/attributes',
-    attributeValues: '/api/attributes/{attributeId}/values',
+    values: '/api/attributes/values',
+    value: '/api/attributes/values/${id}',
   },
   users: {
     currentUser: '/api/users/current',
@@ -34,7 +35,7 @@ export const endpoints: Endpoints = {
   data: {},
 };
 
-export const format = <T>(
+export const makeHref = <T>(
   urlTemplate: string,
   params: { [key: string]: string | number | boolean | T }
 ) => {

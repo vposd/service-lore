@@ -11,6 +11,7 @@ export class DataFilter<TValue> {
   label: string;
   property: string;
   type: FilterType;
+  sourceValuesContract?: string;
   expressionFactory: ExpressionFactory<TValue>;
 
   constructor(options?: DataFilter<TValue>) {

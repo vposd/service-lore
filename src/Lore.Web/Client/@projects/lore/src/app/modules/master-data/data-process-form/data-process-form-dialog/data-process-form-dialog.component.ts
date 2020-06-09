@@ -52,7 +52,7 @@ export class DataProcessFormDialogComponent<T extends Entity>
     let saving: Observable<OperationResult>;
     if (this.params.processAction === ProcessAction.Edit) {
       saving = this.masterData.update(
-        this.params.sourceParams.endpoint + `/${this.formState.value.id}`,
+        this.params.sourceParams.makeEndpoint() + `/${this.formState.value.id}`,
         this.formState.value
       );
     }
@@ -62,7 +62,7 @@ export class DataProcessFormDialogComponent<T extends Entity>
       this.params.processAction === ProcessAction.Clone
     ) {
       saving = this.masterData.create(
-        this.params.sourceParams.endpoint,
+        this.params.sourceParams.makeEndpoint(),
         this.formState.value
       );
     }

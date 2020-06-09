@@ -35,11 +35,7 @@ namespace Lore.Web.Controllers
         [Route("{id}")]
         public async Task<IActionResult> MarkAsDelete(long id, CancellationToken cancellationToken)
         {
-            var result = await Mediator.Send(new ChangeDeletedStatusCommand<Product>
-            {
-                Id = id,
-                Deleted = true
-            }, cancellationToken);
+            var result = await Mediator.Send(ChangeDeletedStatusCommand<Product>.Delete(id), cancellationToken);
             return Ok(result);
         }
 

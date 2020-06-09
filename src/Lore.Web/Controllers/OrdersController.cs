@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using Lore.Api.Controllers;
 using Lore.Application.Common.Models;
 using Lore.Application.Orders.Commands.CreateOrder;
@@ -17,32 +18,32 @@ namespace Lore.Web.Controllers
     public class OrdersController : BaseController
     {
         [HttpGet]
-        public async Task<IActionResult> Query(DataQuery query)
+        public async Task<IActionResult> Query(DataQuery query, CancellationToken cancellationToken)
         {
-            var vm = await Mediator.Send(query.ToRequest<GetOrdersQuery>());
+            var vm = await Mediator.Send(query.ToRequest<GetOrdersQuery>(), cancellationToken);
             return Ok(vm);
         }
 
         [HttpGet]
         [Route("{id}")]
-        public async Task<IActionResult> Get(long id)
+        public async Task<IActionResult> Get(long id, CancellationToken cancellationToken)
         {
-            await Mediator.Publish(new OrderCreatedEvent { OrderId = id });
+            await Mediator.Publish(new OrderCreatedEvent { OrderId = id }, cancellationToken);
             return Ok();
         }
 
         [HttpPost]
         [Route("{id}/state/{stateId}")]
-        public async Task<IActionResult> UpdateOrderState(long id, long stateId)
+        public async Task<IActionResult> UpdateOrderState(long id, long stateId, CancellationToken cancellationToken)
         {
-            var result = await Mediator.Send(new UpdateOrderStateCommand { OrderId = id, StateId = stateId });
+            var result = await Mediator.Send(new UpdateOrderStateCommand { OrderId = id, StateId = stateId }, cancellationToken);
             return Ok(result);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateOrderCommand command)
+        public async Task<IActionResult> Create([FromBody] CreateOrderCommand command, CancellationToken cancellationToken)
         {
-            var result = await Mediator.Send(command);
+            var result = await Mediator.Send(command, cancellationToken);
             return Ok(result);
         }
     }

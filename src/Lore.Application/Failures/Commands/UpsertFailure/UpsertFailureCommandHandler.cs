@@ -19,19 +19,18 @@ namespace Lore.Application.Failures.Commands.UpsertFailure
         {
             using var context = contextFactory.Create();
 
-            var failure = new Failure();
+            var entity = new Failure();
 
             if (request.Id.HasValue)
             {
-                failure = await context.Failures.FindAsync(request.Id);
+                entity = await context.Failures.FindAsync(request.Id);
             }
             else
             {
-                context.Failures.Add(failure);
+                context.Failures.Add(entity);
             }
 
-            failure.Name = request.Name;
-            failure.Deleted = request.Deleted;
+            entity.Name = request.Name;
 
             await context.SaveChangesAsync(cancellationToken);
 

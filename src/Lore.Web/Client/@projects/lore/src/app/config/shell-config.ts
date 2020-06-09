@@ -37,6 +37,10 @@ config.menu = {
           title: 'Attributes',
           href: 'master-data/attributes',
         }),
+        new MenuItem({
+          title: 'Attributes values',
+          href: 'master-data/attributesValues',
+        }),
       ],
     }),
   ],

@@ -35,11 +35,7 @@ namespace Lore.Web.Controllers
         [Route("{id}")]
         public async Task<IActionResult> MarkAsDelete(long id, CancellationToken cancellationToken)
         {
-            var result = await Mediator.Send(new ChangeDeletedStatusCommand<ProductGroup>
-            {
-                Id = id,
-                Deleted = true
-            }, cancellationToken);
+            var result = await Mediator.Send(ChangeDeletedStatusCommand<ProductGroup>.Delete(id), cancellationToken);
             return Ok(result);
         }
 
@@ -47,11 +43,7 @@ namespace Lore.Web.Controllers
         [Route("{id}/restore")]
         public async Task<IActionResult> Restore(long id, CancellationToken cancellationToken)
         {
-            var result = await Mediator.Send(new ChangeDeletedStatusCommand<ProductGroup>
-            {
-                Id = id,
-                Deleted = false
-            }, cancellationToken);
+            var result = await Mediator.Send(ChangeDeletedStatusCommand<ProductGroup>.Restore(id), cancellationToken);
             return Ok(result);
         }
 
