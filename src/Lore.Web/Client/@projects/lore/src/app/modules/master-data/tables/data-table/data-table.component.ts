@@ -6,9 +6,10 @@ import {
   OnDestroy,
   ChangeDetectionStrategy,
   ContentChild,
+  ChangeDetectorRef,
 } from '@angular/core';
 import { SelectionModel } from '@angular/cdk/collections';
-import { Subject, merge } from 'rxjs';
+import { Subject, merge, BehaviorSubject } from 'rxjs';
 import { isEmpty } from 'lodash/fp';
 import {
   map,
@@ -17,6 +18,7 @@ import {
   takeUntil,
   take,
   startWith,
+  filter,
 } from 'rxjs/operators';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
@@ -70,6 +72,15 @@ export class DataTableComponent<T extends Entity> implements OnInit, OnDestroy {
       name: label,
     }));
 
+    if (this.selectable && this.multipleSelection) {
+      this.displayedColumns.unshift('actions');
+    }
+    this.displayedColumns.push('row-actions');
+
+    if (this.filtersChange$.value?.length) {
+      this.filtersChange$.next(this.filtersChange$.value);
+    }
+
     this.destroy$.next();
     this.listenTableInteraction();
   }
@@ -120,7 +131,9 @@ export class DataTableComponent<T extends Entity> implements OnInit, OnDestroy {
   private _selected: string[];
   private readonly destroy$ = new Subject();
   private readonly operationSuccess$ = new Subject();
-  private readonly filtersChange$ = new Subject<FilterExpression[]>();
+  private readonly filtersChange$ = new BehaviorSubject<FilterExpression[]>(
+    null
+  );
 
   constructor(
     private readonly masterData: MasterDataService,
@@ -128,16 +141,12 @@ export class DataTableComponent<T extends Entity> implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    if (this.selectable && this.multipleSelection) {
-      this.displayedColumns.unshift('actions');
-    }
     this.selectionModel = new SelectionModel<string>(
       this.multipleSelection,
       this._selected
     );
     this.paginator.pageSize = QueryRequestBuilder.PageSizeDefault;
     this.paginator.pageSizeOptions = [30, 50, 100];
-    this.displayedColumns.push('row-actions');
   }
 
   ngOnDestroy() {
@@ -216,6 +225,7 @@ export class DataTableComponent<T extends Entity> implements OnInit, OnDestroy {
       .pipe(map(() => query.request));
 
     const filters = this.filtersChange$.asObservable().pipe(
+      filter((x) => !!x),
       map((filtersArray) => {
         query.setFilter(dataFilter(Operator.And, filtersArray).toString());
         return query.request;
@@ -225,7 +235,6 @@ export class DataTableComponent<T extends Entity> implements OnInit, OnDestroy {
     merge(pagination, sort, filters, operationSuccess)
       .pipe(
         tap(() => this.requestProgress.start()),
-        startWith(query.request),
         switchMap((request) =>
           this.masterData.query<T>(this._sourceParams.makeEndpoint(), request)
         ),
