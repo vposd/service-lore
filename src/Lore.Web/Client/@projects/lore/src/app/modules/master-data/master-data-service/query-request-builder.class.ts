@@ -57,6 +57,10 @@ export class QueryRequestBuilder {
     return this;
   }
 
+  getFilter() {
+    return this.params.get('filter');
+  }
+
   setParam(key: string, value: string | string[]) {
     if (isUndefined(value)) {
       return this;

@@ -33,11 +33,7 @@ namespace Lore.Application.Failures.Queries.GetFailures
                .ApplyQuery(query, out var count)
                .ToListAsync(cancellationToken);
 
-            return new QueryResult<FailureModel>
-            {
-                Results = results,
-                Count = count
-            };
+            return new QueryResult<FailureModel>(count, results);
         }
     }
 }

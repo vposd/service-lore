@@ -11,7 +11,7 @@ import { MatInputModule } from '@angular/material/input';
 
 import { HighlightModule } from '@common/utils/highlight/highlight.module';
 
-import { DataChipsSelectionComponent } from './data-chips-selection.component';
+import { AutocompleteSelectionComponent } from './autocomplete-selection.component';
 
 @NgModule({
   imports: [
@@ -27,7 +27,7 @@ import { DataChipsSelectionComponent } from './data-chips-selection.component';
     ReactiveFormsModule,
     ScrollingModule,
   ],
-  exports: [DataChipsSelectionComponent],
-  declarations: [DataChipsSelectionComponent],
+  exports: [AutocompleteSelectionComponent],
+  declarations: [AutocompleteSelectionComponent],
 })
-export class DataChipsSelectionModule {}
+export class AutocompleteSelectionModule {}

@@ -6,7 +6,7 @@ import {
   EventEmitter,
   ChangeDetectionStrategy,
 } from '@angular/core';
-import { tap, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 
 import { Entity } from '@contracts/common';
@@ -61,11 +61,11 @@ export class DataProcessFormComponent<T extends Entity> implements OnInit {
               (m) => m.property === key
             );
             if (meta.type === ObjectPropertyType.Entity) {
-              value[`${key}Id`] = x[key].id;
+              value[`${key}Id`] = x[key]?.id;
               return value;
             }
             value[key] =
-              meta.type === ObjectPropertyType.Enum ? x[key].id : x[key];
+              meta.type === ObjectPropertyType.Enum ? x[key]?.id : x[key];
             return value;
           }, {} as T)
         )

@@ -1,22 +1,25 @@
 import {
   Component,
   OnInit,
-  ChangeDetectionStrategy,
   ViewChild,
   ElementRef,
-  forwardRef,
   Input,
+  Optional,
+  Self,
 } from '@angular/core';
-import { FormControl, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { map, switchMap, pluck, startWith, debounceTime } from 'rxjs/operators';
+import { FormControl, ControlValueAccessor, NgControl } from '@angular/forms';
+import { map, switchMap, startWith, debounceTime } from 'rxjs/operators';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { reject } from 'lodash';
-import { Observable, fromEvent, merge, Subject, of } from 'rxjs';
-import { MatChipInput } from '@angular/material/chips';
+import { reject, uniqueId, isString } from 'lodash';
+import { Observable, fromEvent, merge, Subject, BehaviorSubject } from 'rxjs';
+import {
+  MatChipInput,
+  MatChipEvent,
+  MatChipInputEvent,
+} from '@angular/material/chips';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 
 import { FadeIn } from '@common/animations/fade-in-out.animation';
-import { CustomInput } from '@common/form-controls/custom-input/custom-input.class';
 import { Entity } from '@contracts/common';
 
 import { MasterDataService } from '../master-data-service/master-data.service';
@@ -24,63 +27,24 @@ import {
   MasterDataSource,
   MasterDataConfig,
 } from '../config/master-data-config.service';
-import { QueryRequestBuilder } from '../master-data-service/query-request-builder.class';
-import { property } from '../master-data-service/filter-expression';
+import { QueryRequestDataStrategy } from './query-request-data-strategy';
+import { DefinedValuesDataStrategy } from './defined-values-data-strategy';
+import { RetrieveDataStrategy } from './retrieve-data-strategy';
 
-interface RetrieveDataStrategy<T> {
-  getData(query: string): Observable<T[]>;
-}
-
-class QueryRequestDataStrategy<T extends Entity>
-  implements RetrieveDataStrategy<T> {
-  constructor(
-    private readonly masterData: MasterDataService,
-    private sourceParams: MasterDataSource<T>,
-    private viewValue: string
-  ) {}
-
-  getData(query: string) {
-    const builder = query
-      ? new QueryRequestBuilder().setFilter(
-          property(this.viewValue).contains(query)
-        )
-      : new QueryRequestBuilder();
-    const request = builder.setPageSize(20).request;
-    return this.masterData
-      .query<T>(this.sourceParams.endpoint, request)
-      .pipe(map(({ results }) => results));
-  }
-}
-
-class DefinedValuesDataStrategy<T extends Entity>
-  implements RetrieveDataStrategy<T> {
-  constructor(private readonly values: T[]) {}
-
-  getData(query: string) {
-    return of(this.values);
-  }
-}
+type SelectionItem<T extends Entity> = T & { adding?: boolean };
 
 @Component({
-  selector: 'app-data-chips-selection',
-  templateUrl: './data-chips-selection.component.html',
-  styleUrls: ['./data-chips-selection.component.scss'],
+  selector: 'app-autocomplete-selection',
+  templateUrl: './autocomplete-selection.component.html',
+  styleUrls: ['./autocomplete-selection.component.scss'],
   animations: [FadeIn],
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => DataChipsSelectionComponent),
-      multi: true,
-    },
-  ],
 })
-export class DataChipsSelectionComponent<T extends Entity>
-  extends CustomInput<T[]>
-  implements OnInit {
+export class AutocompleteSelectionComponent<T extends Entity>
+  implements OnInit, ControlValueAccessor {
   @Input()
   set source(source: string) {
     if (!source) {
-      throw new Error('[DataSelection]: Missing source');
+      throw new Error('[Data Selection]: Missing source');
     }
     this._source = source;
     this.sourceParams = this.masterDataConfig.getSource(source);
@@ -106,12 +70,15 @@ export class DataChipsSelectionComponent<T extends Entity>
   @Input() viewValue: string;
   @Input() placeholder: string;
   @Input() label: string;
+  @Input() multipleSelection = true;
 
   innerModel = [];
+  disabled: boolean;
   separatorKeysCodes = [ENTER, COMMA];
   groupLookupControl = new FormControl();
-  lookupValues$: Observable<T[]>;
+  lookupValues$: Observable<SelectionItem<T>[]>;
   query = '';
+  value: SelectionItem<T> | SelectionItem<T>[];
 
   @ViewChild('lookupInput', { static: true }) lookupInput: ElementRef<
     HTMLInputElement
@@ -121,22 +88,22 @@ export class DataChipsSelectionComponent<T extends Entity>
 
   private sourceParams: MasterDataSource<T>;
   private _source: string;
-  private _values: T[];
-  private readonly clearInputValueBroadcast = new Subject<string>();
+  private _values: SelectionItem<T>[];
   private retrieveDataStrategy: RetrieveDataStrategy<T>;
+  private readonly clearInputValueBroadcast = new Subject<string>();
 
   constructor(
+    @Optional() @Self() ngControl: NgControl,
     private readonly masterData: MasterDataService,
     private readonly masterDataConfig: MasterDataConfig
   ) {
-    super();
-    this.innerModelChanged.subscribe((model) => {
-      this.onChange(model);
-      this.onTouched();
-    });
+    if (ngControl != null) {
+      ngControl.valueAccessor = this;
+    }
   }
 
   ngOnInit() {
+    this.writeValue(this.multipleSelection ? [] : null);
     this.lookupValues$ = merge(
       fromEvent(this.lookupInput.nativeElement, 'input').pipe(
         map((event) => (event.target as HTMLInputElement).value)
@@ -152,31 +119,60 @@ export class DataChipsSelectionComponent<T extends Entity>
     );
   }
 
-  remove(value: T) {
-    this.value = reject(this.value, (x) => x.id === value.id);
+  remove(value: SelectionItem<T>) {
+    if (!this.multipleSelection) {
+      this.writeValue(null);
+    }
+    this.writeValue(reject(this.value as T[], (x) => x.id === value.id));
     this.clearValue();
   }
 
+  addItemToAdd(event: MatChipInputEvent) {
+    if (!event.value) {
+      return;
+    }
+    const value = ({
+      id: uniqueId('-'),
+      [this.viewValue]: event.value,
+      adding: true,
+    } as unknown) as SelectionItem<T>;
+    this.add(value);
+  }
+
   select(event: MatAutocompleteSelectedEvent) {
-    console.log({ event });
     this.add(event.option.value as T);
   }
 
   setDisabledState(disabled: boolean) {
-    super.setDisabledState(disabled);
     this.chipInput.disabled = disabled;
+    this.disabled = disabled;
     if (disabled) {
       return this.groupLookupControl.disable();
     }
     return this.groupLookupControl.enable();
   }
 
-  private add(item: T) {
+  writeValue(value: SelectionItem<T> | SelectionItem<T>[]) {
+    this.value = value;
+  }
+
+  registerOnChange(fn) {}
+
+  registerOnTouched(fn) {}
+
+  private add(item: SelectionItem<T>) {
+    if (!this.multipleSelection) {
+      this.writeValue([item]);
+      this.clearValue();
+      return;
+    }
+    this.value = this.value as SelectionItem<T>[];
     const index = this.value.findIndex((x) => x.id === item.id);
-    this.value =
+    this.writeValue(
       index < 0
         ? this.value.concat(item)
-        : this.value.map((x, i) => (i === index ? item : x));
+        : this.value.map((x, i) => (i === index ? item : x))
+    );
     this.clearValue();
   }
 

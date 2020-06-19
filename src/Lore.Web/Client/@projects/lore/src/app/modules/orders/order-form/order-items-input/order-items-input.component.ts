@@ -1,6 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormBuilder, FormArray, FormControl, FormGroup } from '@angular/forms';
 
+import { Product } from '@contracts/master-data/product.class';
+
 import { OrderItemModel } from '../../models/order-item';
 
 @Component({
@@ -13,6 +15,8 @@ export class OrderItemsInputComponent implements OnInit {
 
   readonly form: FormArray;
   total = 0;
+  productViewValueFormat = ({ group, name }: Product) =>
+    `${group.name} / ${name}`;
 
   constructor(private readonly fb: FormBuilder) {
     this.form = fb.array([]);
@@ -33,8 +37,9 @@ export class OrderItemsInputComponent implements OnInit {
     const updateRow = this.orderItemFormUpdate(row);
 
     const skuId = new FormControl(null);
-    skuId.valueChanges.subscribe((x) => {
-      item.skuId = x;
+    skuId.valueChanges.subscribe((x: Product) => {
+      item.skuId = x.id;
+      item.price = x.price;
       updateRow(item);
     });
     row.addControl('skuId', skuId);

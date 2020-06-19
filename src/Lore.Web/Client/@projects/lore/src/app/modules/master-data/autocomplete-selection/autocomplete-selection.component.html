@@ -1,8 +1,9 @@
 <mat-form-field [style.opacity]="disabled ? '0.6' : ''" appearance="fill">
   <mat-label class="text--capitalize">{{ label }}</mat-label>
-  <mat-chip-list #chipList>
+  <mat-chip-list #chipList [multiple]="multipleSelection">
     <mat-chip
       class="text--truncate"
+      [class.highlight]="selected.adding"
       *ngFor="let selected of value"
       [disabled]="disabled"
       [selectable]="false"
@@ -21,6 +22,7 @@
       [matAutocomplete]="autoGroup"
       [matChipInputFor]="chipList"
       [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+      (matChipInputTokenEnd)="addItemToAdd($event)"
     />
   </mat-chip-list>
   <mat-autocomplete

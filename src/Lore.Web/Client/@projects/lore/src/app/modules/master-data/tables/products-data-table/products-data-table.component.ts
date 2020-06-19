@@ -278,17 +278,20 @@ export class ProductsDataTableComponent implements OnInit, OnDestroy {
       })
     );
 
-    const productGroups = this.masterData.query<ProductGroup>(
-      this.productGroupSource.endpoint,
-      new QueryRequestBuilder().setPageSize(Infinity).request
-    );
+    const productGroups = (filterParam: string) =>
+      this.masterData.query<ProductGroup>(
+        this.productGroupSource.endpoint,
+        new QueryRequestBuilder()
+          .setParam('filter', filterParam)
+          .setPageSize(Infinity).request
+      );
 
     const products = merge(sort, filters, operationSuccess).pipe(
       startWith(query.request),
       switchMap((request) =>
         forkJoin([
           this.masterData.query<Product>(this.productSource.endpoint, request),
-          productGroups,
+          productGroups(query.getFilter()),
         ])
       )
     );

@@ -12,6 +12,7 @@ import { Attribute } from '@contracts/master-data/attribute.class';
 import { endpoints, makeHref } from '../../../environments/endpoints';
 import { MasterDataService } from '../master-data/master-data-service/master-data.service';
 import { OrderTableRow } from './models/order-table-row';
+import { environment } from '@projects/lore/src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -62,5 +63,13 @@ export class OrdersService {
         ENABLED_CACHE_OPTIONS
       )
       .pipe(pluck('results'));
+  }
+
+  createOrder(order: Order) {
+    return this.http.post(environment.endpoints.orders.root, order);
+  }
+
+  updateOrder(order: Order) {
+    return this.http.patch(environment.endpoints.orders.root, order);
   }
 }

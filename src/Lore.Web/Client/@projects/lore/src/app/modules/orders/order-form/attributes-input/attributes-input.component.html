@@ -1,21 +1,11 @@
 <ng-container [formGroup]="form">
-  <div class="" *ngFor="let attr of attributes$ | async">
-    <app-data-chips-selection
+  <div *ngFor="let attr of attributes$ | async">
+    <app-autocomplete-selection
       [label]="attr.name"
       [values]="attr.values"
+      [multipleSelection]="attr.type === objectTypeEnum.ListMultipleValue"
       [formControlName]="attr.id"
       [viewValue]="'value'"
-      *ngIf="attr.type === objectTypeEnum.ListMultipleValue"
-    ></app-data-chips-selection>
-
-    <mat-form-field appearance="fill">
-      <mat-label class="text--capitalize">{{ attr.name }}</mat-label>
-      <app-simple-selection
-        [values]="attr.values"
-        [viewValue]="'value'"
-        [formControlName]="attr.id"
-        *ngIf="attr.type === objectTypeEnum.ListSingleValue"
-      ></app-simple-selection>
-    </mat-form-field>
+    ></app-autocomplete-selection>
   </div>
 </ng-container>

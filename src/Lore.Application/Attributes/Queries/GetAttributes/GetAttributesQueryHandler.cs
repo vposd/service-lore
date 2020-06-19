@@ -45,11 +45,7 @@ namespace Lore.Application.Attributes.Queries.GetAttributes
                 .ApplyQuery(request, out var count)
                 .ToListAsync(cancellationToken);
 
-            return new QueryResult<AttributeModel>
-            {
-                Results = results,
-                Count = count
-            };
+            return new QueryResult<AttributeModel>(count, results);
         }
     }
 }

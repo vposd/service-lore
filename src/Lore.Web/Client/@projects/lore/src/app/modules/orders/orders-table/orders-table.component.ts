@@ -173,7 +173,7 @@ export class OrdersTableComponent implements OnInit, OnDestroy {
 
           this.dataSource.data = results.map((x) => ({
             ...x,
-            attributes: x.device.attributes.reduce(
+            attributesView: x.device.attributes.reduce(
               (acc, i) => (
                 (acc[i.name] = [...(acc[i.name] || []), i.value]), acc
               ),

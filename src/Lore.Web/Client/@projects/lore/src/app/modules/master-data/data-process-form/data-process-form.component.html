@@ -17,6 +17,12 @@
           [value]="form.value[metadata.property] || ''"
           maxlength="7"
         />
+        <input
+          class="input-color"
+          type="color"
+          #colorPicker
+          [formControlName]="metadata.property"
+        />
         <i
           class="mdi mdi-checkbox-blank"
           matSuffix
@@ -25,12 +31,6 @@
           [style.color]="form.value[metadata.property]"
         ></i>
       </mat-form-field>
-      <input
-        [hidden]="true"
-        type="color"
-        #colorPicker
-        [formControlName]="metadata.property"
-      />
     </ng-container>
 
     <ng-container

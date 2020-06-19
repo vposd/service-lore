@@ -12,6 +12,7 @@ namespace Lore.Persistence.Configurations
             {
                 Id = -1,
                 Name = "Root",
+                Deleted = false,
                 ParentId = -1
             });
 

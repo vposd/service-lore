@@ -1,5 +1,6 @@
-import { Entity, SimpleEntity } from '../common';
 import { AttributeValueType } from '@contracts/enums';
+
+import { Entity, SimpleEntity } from '../common';
 
 export class Customer {
   id: string;
@@ -41,6 +42,7 @@ export class Order extends Entity {
   dateIn: string;
   dateOut: string;
   description: string;
+  attributes: Attribute[];
   failures: SimpleEntity[];
   items: OrderItem[];
 }

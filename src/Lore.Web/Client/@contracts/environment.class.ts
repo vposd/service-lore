@@ -1,4 +1,7 @@
 export interface Endpoints {
+  customers: {
+    root: string;
+  };
   authentication: {
     signIn: string;
     signOut: string;

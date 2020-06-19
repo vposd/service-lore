@@ -8,6 +8,11 @@
   width: 100%;
 }
 
+.highlight {
+  background-color: mat-color($mat-red, 300) !important;
+  color: #fff !important;
+}
+
 .viewport-select {
   width: 100%;
   height: 15rem;

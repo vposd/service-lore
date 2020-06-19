@@ -23,7 +23,6 @@ namespace Lore.Application.ProductGroups.Queries.GetProductGroups
         public async Task<QueryResult<ProductGroupModel>> Handle(GetProductGroupsQuery query, CancellationToken cancellationToken)
         {
             using var context = contextFactory.Create();
-
             var results = await context.ProductGroups
                 .Select(x => new ProductGroupModel
                 {
@@ -38,11 +37,7 @@ namespace Lore.Application.ProductGroups.Queries.GetProductGroups
                 .ApplyQuery(query, out var count)
                 .ToListAsync(cancellationToken);
 
-            return new QueryResult<ProductGroupModel>
-            {
-                Results = results,
-                Count = count
-            };
+            return new QueryResult<ProductGroupModel>(count, results);
         }
     }
 }

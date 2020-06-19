@@ -41,11 +41,7 @@ namespace Lore.Application.Products.Queries.GetProducts
                 .ApplyQuery(query, out var count)
                 .ToListAsync(cancellationToken);
 
-            return new QueryResult<ProductModel>
-            {
-                Results = results,
-                Count = count
-            };
+            return new QueryResult<ProductModel>(count, results);
         }
     }
 }

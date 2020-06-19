@@ -12,6 +12,8 @@ import { AttributesInputModule } from './attributes-input/attributes-input.modul
 import { OpenOrderFormDirective } from './open-order-form.directive';
 import { OrderFormComponent } from './order-form.component';
 import { OrderItemsInputModule } from './order-items-input/order-items-input.module';
+import { SimpleSelectionModule } from '../../master-data/simple-selection/simple-selection.module';
+import { AutocompleteSelectionModule } from '../../master-data/autocomplete-selection/autocomplete-selection.module';
 
 @NgModule({
   declarations: [OrderFormComponent, OpenOrderFormDirective],
@@ -19,6 +21,7 @@ import { OrderItemsInputModule } from './order-items-input/order-items-input.mod
   imports: [
     AttributesInputModule,
     CommonModule,
+    AutocompleteSelectionModule,
     MatButtonModule,
     MatDatepickerModule,
     MatDialogModule,
@@ -27,6 +30,7 @@ import { OrderItemsInputModule } from './order-items-input/order-items-input.mod
     MatTabsModule,
     OrderItemsInputModule,
     ReactiveFormsModule,
+    SimpleSelectionModule,
   ],
 })
 export class OrderFormModule {}

@@ -70,11 +70,7 @@ namespace Lore.Application.Orders.Queries.GetOrders
                 .ApplyQuery(request, out var count)
                 .ToListAsync(cancellationToken);
 
-            return new QueryResult<OrderReadModel>
-            {
-                Results = results,
-                Count = count
-            };
+            return new QueryResult<OrderReadModel>(count, results);
         }
     }
 }

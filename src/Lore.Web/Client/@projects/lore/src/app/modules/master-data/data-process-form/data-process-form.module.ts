@@ -11,8 +11,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { DataProcessFormComponent } from './data-process-form.component';
 import { DataProcessFormDialogComponent } from './data-process-form-dialog/data-process-form-dialog.component';
 import { OpenDataProcessDialogDirective } from './open-data-process-dialog.directive';
-import { DataChipsSelectionModule } from '../data-chips-selection/data-chips-selection.module';
 import { SimpleSelectionModule } from '../simple-selection/simple-selection.module';
+import { AutocompleteSelectionModule } from '../autocomplete-selection/autocomplete-selection.module';
 
 @NgModule({
   declarations: [
@@ -27,7 +27,7 @@ import { SimpleSelectionModule } from '../simple-selection/simple-selection.modu
     MatCheckboxModule,
     MatDatepickerModule,
     SimpleSelectionModule,
-    DataChipsSelectionModule,
+    AutocompleteSelectionModule,
     MatDialogModule,
     MatFormFieldModule,
     MatInputModule,

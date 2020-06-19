@@ -10,7 +10,7 @@
     placeholderLabel="Search..."
     indexAndLengthScreenReaderText="from"
     noEntriesFoundLabel="Empty results"
-    *ngIf="retrievedValues.length > 10"
+    *ngIf="retrievedValues.length > 2"
   >
     <i class="mdi mdi-close" ngxMatSelectSearchClear></i>
   </ngx-mat-select-search>
@@ -40,7 +40,9 @@
       [hidden]="requestProgress.state.progress"
       [value]="value"
       *ngIf="value"
-      >{{ value[viewValue] }}</mat-option
+      >{{
+        viewValueFormat ? viewValueFormat(value) : value[viewValue]
+      }}</mat-option
     >
     <mat-option
       *cdkVirtualFor="
@@ -49,7 +51,14 @@
       "
       [value]="value"
     >
-      <div highlightTarget>{{ value[viewValue] }}</div>
+      <div>
+        <span
+          appHighlight
+          [query]="query"
+          [text]="viewValueFormat ? viewValueFormat(value) : value[viewValue]"
+        >
+        </span>
+      </div>
     </mat-option>
   </cdk-virtual-scroll-viewport>
 
@@ -63,7 +72,12 @@
       *ngFor="let value of values$ | async | searchFilter: 'name':query"
       [value]="value"
     >
-      <span highlightTarget>{{ value[viewValue] }}</span>
+      <span
+        appHighlight
+        [query]="query"
+        [text]="viewValueFormat ? viewValueFormat(value) : value[viewValue]"
+      >
+      </span>
     </mat-option>
   </ng-container>
 </mat-select>

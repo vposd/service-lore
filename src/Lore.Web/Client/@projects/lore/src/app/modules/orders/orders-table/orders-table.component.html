@@ -78,7 +78,7 @@
     <mat-cell *matCellDef="let row">
       <div
         class="table-chip"
-        *ngFor="let attr of row.attributes[deviceAttribute.name]"
+        *ngFor="let attr of row.attributesView[deviceAttribute.name]"
       >
         {{ attr.value }}
       </div>

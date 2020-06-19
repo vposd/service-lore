@@ -4,3 +4,11 @@
   display: block;
   margin-bottom: $offset-sm;
 }
+
+.input-color {
+  width: 0;
+  height: 0;
+  position: absolute;
+  margin-top: 2px;
+  margin-left: 4px;
+}

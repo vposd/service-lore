@@ -12,6 +12,9 @@ export const endpoints: Endpoints = {
     values: '/api/attributes/values',
     value: '/api/attributes/values/${id}',
   },
+  customers: {
+    root: '/api/customers',
+  },
   users: {
     currentUser: '/api/users/current',
   },

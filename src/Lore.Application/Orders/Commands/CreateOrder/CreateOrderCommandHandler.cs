@@ -34,7 +34,7 @@ namespace Lore.Application.Orders.Commands.CreateOrder
             var order = new Order();
 
             order.Description = order.Description;
-            order.DateIn = DateTime.Now;
+            order.DateIn = order.DateIn;
             order.CustomerId = await GetCustomerIdAsync(request.Customer, context, cancellationToken);
             order.DeviceId = await GetDeviceIdAsync(request.Device, context, cancellationToken);
             order.DeviceFailures = request.Failures?
@@ -81,17 +81,17 @@ namespace Lore.Application.Orders.Commands.CreateOrder
             return defaultState;
         }
 
-        private async Task<long> GetDeviceIdAsync(DeviceWriteModel model, ILoreDbContext context, CancellationToken cancellationToken)
+        private async Task<long> GetDeviceIdAsync(DeviceCommandModel model, ILoreDbContext context, CancellationToken cancellationToken)
         {
             var orderDeviceId = model.Id;
 
-            if (orderDeviceId == 0L)
+            if (orderDeviceId == null)
             {
                 var orderDevice = await CreateDeviceAsync(model, context, cancellationToken);
                 orderDeviceId = orderDevice.Id;
             }
 
-            return orderDeviceId;
+            return orderDeviceId ?? 0L;
         }
 
         private async Task<Customer> CreateCustomerAsync(CustomerModel model, ILoreDbContext context, CancellationToken cancellationToken)
@@ -111,12 +111,9 @@ namespace Lore.Application.Orders.Commands.CreateOrder
             return customer;
         }
 
-        private async Task<Device> CreateDeviceAsync(DeviceWriteModel model, ILoreDbContext context, CancellationToken cancellationToken)
+        private async Task<Device> CreateDeviceAsync(DeviceCommandModel model, ILoreDbContext context, CancellationToken cancellationToken)
         {
-            var orderDevice = new Device
-            {
-
-            };
+            var orderDevice = new Device();
 
             if (model.Id != 0L)
             {

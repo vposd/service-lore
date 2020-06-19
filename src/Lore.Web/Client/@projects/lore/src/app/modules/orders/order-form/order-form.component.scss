@@ -1,3 +1,5 @@
+@import '~@styles/material';
+
 .form-field-group {
   display: flex;
 
@@ -8,6 +10,10 @@
 
 .mat-dialog-content {
   overflow: hidden;
+}
+
+.mat-title {
+  margin-top: $offset-sm;
 }
 
 .mat-tab-group {

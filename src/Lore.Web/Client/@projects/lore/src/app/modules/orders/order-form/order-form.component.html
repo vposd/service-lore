@@ -15,39 +15,53 @@
       <ng-container [formGroup]="form">
         <h2 class="mat-title">Customer</h2>
 
-        <mat-form-field appearance="fill">
-          <mat-label>Name</mat-label>
-          <input matInput />
-        </mat-form-field>
+        <div class="form-field-group" formGroupName="customer">
+          <app-autocomplete-selection
+            [label]="'Name'"
+            source="Customer"
+            formControlName="model"
+            [viewValue]="'name'"
+          ></app-autocomplete-selection>
 
-        <mat-form-field appearance="fill">
-          <mat-label>Phone</mat-label>
-          <input matInput />
-        </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Phone</mat-label>
+            <input matInput formControlName="phone" />
+          </mat-form-field>
+        </div>
 
         <h2 class="mat-title">Device</h2>
 
-        <mat-form-field appearance="fill">
-          <mat-label>Name</mat-label>
-          <input matInput />
-        </mat-form-field>
+        <ng-container formGroupName="device">
+          <mat-form-field appearance="fill">
+            <mat-label>Name</mat-label>
+            <input matInput formControlName="name" />
+          </mat-form-field>
 
-        <mat-form-field appearance="fill">
-          <mat-label>SerialNumber</mat-label>
-          <input matInput />
-        </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>SerialNumber</mat-label>
+            <input matInput formControlName="serialNumber" />
+          </mat-form-field>
 
-        <app-attributes-input></app-attributes-input>
+          <app-attributes-input
+            formControlName="attributes"
+          ></app-attributes-input>
+        </ng-container>
 
-        <mat-form-field appearance="fill">
-          <mat-label>Failures</mat-label>
-          <input matInput />
-        </mat-form-field>
+        <app-autocomplete-selection
+          [label]="'Failures'"
+          source="Failure"
+          formControlName="failures"
+          [viewValue]="'name'"
+        ></app-autocomplete-selection>
 
         <div class="form-field-group">
           <mat-form-field appearance="fill">
             <mat-label>Date in</mat-label>
-            <input matInput [matDatepicker]="pickerDateIn" />
+            <input
+              matInput
+              [matDatepicker]="pickerDateIn"
+              formControlName="dateIn"
+            />
             <mat-datepicker-toggle
               matSuffix
               [for]="pickerDateIn"
@@ -60,7 +74,11 @@
             [hidden]="params.processAction !== processActionEnum.Edit"
           >
             <mat-label>Date out</mat-label>
-            <input matInput [matDatepicker]="pickerDateOut" />
+            <input
+              matInput
+              [matDatepicker]="pickerDateOut"
+              formControlName="dateOut"
+            />
             <mat-datepicker-toggle
               matSuffix
               [for]="pickerDateOut"

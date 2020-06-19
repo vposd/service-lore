@@ -41,11 +41,7 @@ namespace Lore.Application.Orders.Queries.GetOrderStatuses
                 .ApplyQuery(query, out var count)
                 .ToListAsync(cancellationToken);
 
-            return new QueryResult<OrderStatusModel>
-            {
-                Results = results,
-                Count = count
-            };
+            return new QueryResult<OrderStatusModel>(count, results);
         }
     }
 }

@@ -46,5 +46,12 @@ namespace Lore.Web.Controllers
             var result = await Mediator.Send(command, cancellationToken);
             return Ok(result);
         }
+
+        //[HttpPatch]
+        //public async Task<IActionResult> Create([FromBody] CreateOrderCommand command, CancellationToken cancellationToken)
+        //{
+        //    var result = await Mediator.Send(command, cancellationToken);
+        //    return Ok(result);
+        //}
     }
 }

@@ -24,7 +24,7 @@ import { SimpleSelectionComponent } from './simple-selection.component';
     MatProgressSpinnerModule,
     NgxMatSelectSearchModule,
     SelectModule,
-    MatSelectModule
-  ]
+    MatSelectModule,
+  ],
 })
-export class SimpleSelectionModule { }
+export class SimpleSelectionModule {}

@@ -8,7 +8,7 @@ export class MasterDataSource<T extends Entity> {
   href: string;
   label: {
     plural: string;
-    single: string;
+    noun: string;
   };
   endpoint: string;
   entityName: string;

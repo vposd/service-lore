@@ -71,3 +71,8 @@ html {
     padding: 0;
   }
 }
+
+.bg--hightlight {
+  background: mat-color($mat-amber, 800);
+  color: #fff;
+}

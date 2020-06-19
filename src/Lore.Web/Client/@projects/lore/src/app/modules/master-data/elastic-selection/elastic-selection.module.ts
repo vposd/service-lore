@@ -11,7 +11,6 @@ import { RequestProgressModule } from '@common/utils/request-progress/request-pr
 
 import { ElasticSelectionDirective } from './elastic-selection.directive';
 import { ElasticSelectionFilterComponent } from './elastic-selection-filter/elastic-selection-filter.component';
-import { DataSelectionModule } from '../data-selection/data-selection.module';
 
 @NgModule({
   declarations: [ElasticSelectionDirective, ElasticSelectionFilterComponent],
@@ -24,8 +23,7 @@ import { DataSelectionModule } from '../data-selection/data-selection.module';
     RequestProgressModule,
     SelectModule,
     MatDividerModule,
-    DataSelectionModule,
-    MatButtonModule
-  ]
+    MatButtonModule,
+  ],
 })
 export class ElasticSelectionModule {}

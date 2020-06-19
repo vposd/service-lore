@@ -9,12 +9,13 @@ import {
   Input,
   EventEmitter,
   Output,
+  OnDestroy,
 } from '@angular/core';
 import { FocusMonitor } from '@angular/cdk/a11y';
 import { NgControl, ControlValueAccessor } from '@angular/forms';
 import { MatFormFieldControl } from '@angular/material/form-field';
-import { Observable, of } from 'rxjs';
-import { pluck, tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 import {
   SelectComponent,
@@ -22,59 +23,20 @@ import {
 } from '@common/form-controls/select/select.component';
 import { RequestProgress } from '@common/utils/request-progress/request-progress.class';
 import { Entity } from '@contracts/common';
+import { HttpCacheService } from '@common/utils/http-cache/http-cache-service/http-cache.service';
 
 import {
   MasterDataConfig,
   MasterDataSource,
 } from '../config/master-data-config.service';
 import { MasterDataService } from '../master-data-service/master-data.service';
-import { QueryRequestBuilder } from '../master-data-service/query-request-builder.class';
 import {
   dataFilter,
   PropertyExpression,
 } from '../master-data-service/filter-expression';
-
-interface RetrieveDataStrategy<T> {
-  getData(): Observable<T[]>;
-}
-
-class QueryRequestDataStrategy<T extends Entity>
-  implements RetrieveDataStrategy<T> {
-  constructor(
-    private readonly masterData: MasterDataService,
-    private filterExpression = dataFilter(),
-    private ignorePagination: boolean,
-    private sourceParams: MasterDataSource<T>,
-    private requestProgress: RequestProgress
-  ) {}
-
-  getData() {
-    if (!this.sourceParams) {
-      this.requestProgress.stop(true);
-      return of([]);
-    }
-
-    const query = new QueryRequestBuilder().setFilter(
-      this.filterExpression.toString()
-    );
-
-    if (this.ignorePagination) {
-      query.setPageSize(Infinity);
-    }
-    return this.masterData
-      .query<T>(this.sourceParams.endpoint, query.request, true)
-      .pipe(pluck('results'));
-  }
-}
-
-class DefinedValuesDataStrategy<T extends Entity>
-  implements RetrieveDataStrategy<T> {
-  constructor(private readonly values: T[]) {}
-
-  getData() {
-    return of(this.values);
-  }
-}
+import { QueryRequestDataStrategy } from './query-request-data-strategy';
+import { DefinedValuesDataStrategy } from './defined-values-data-strategy';
+import { RetrieveDataStrategy } from './retrieve-data-strategy';
 
 @Component({
   selector: 'app-simple-selection',
@@ -91,15 +53,20 @@ class DefinedValuesDataStrategy<T extends Entity>
 })
 export class SimpleSelectionComponent<T extends Entity>
   extends SelectComponent<SelectValue<T>>
-  implements OnInit, ControlValueAccessor, MatFormFieldControl<SelectValue<T>> {
+  implements
+    OnInit,
+    OnDestroy,
+    ControlValueAccessor,
+    MatFormFieldControl<SelectValue<T>> {
   @Input()
   set source(source: string) {
     if (!source) {
-      throw new Error('[DataSelection]: Missing source');
+      throw new Error('[Data Selection]: Missing source');
     }
     this.sourceParams = this.masterDataConfig.getSource(source);
     this.retrieveDataStrategy = new QueryRequestDataStrategy(
       this.masterData,
+      this.httpCache,
       this.filterExpression,
       this.ignorePagination,
       this.sourceParams,
@@ -114,6 +81,7 @@ export class SimpleSelectionComponent<T extends Entity>
   @Input() required = false;
   @Input() ignorePagination = false;
   @Input() viewValue = 'name';
+  @Input() viewValueFormat: (e: T) => string;
 
   /** External additional params for query data request */
   @Input() filterExpression = dataFilter();
@@ -131,7 +99,8 @@ export class SimpleSelectionComponent<T extends Entity>
     _focusMonitor: FocusMonitor,
     _elementRef: ElementRef<HTMLElement>,
     private readonly masterDataConfig: MasterDataConfig,
-    private readonly masterData: MasterDataService
+    private readonly masterData: MasterDataService,
+    private readonly httpCache: HttpCacheService
   ) {
     super(_focusMonitor, _elementRef, ngControl);
     if (this.ngControl != null) {
@@ -143,6 +112,10 @@ export class SimpleSelectionComponent<T extends Entity>
     this.requestProgress.start();
     super.ngOnInit();
     this.openChange(false);
+  }
+
+  ngOnDestroy() {
+    this.retrieveDataStrategy.onDestroy();
   }
 
   openChange(event: boolean) {

@@ -33,7 +33,10 @@ import {
   Operator,
   property,
 } from '../modules/master-data/master-data-service/filter-expression';
-import { SimpleEntity } from '@contracts/common';
+import {
+  customerMetadata,
+  Customer,
+} from '@contracts/master-data/customer.class';
 
 const config = new MasterDataConfig();
 
@@ -43,7 +46,7 @@ config.sources = [
     endpoint: environment.endpoints.orderStatuses.root,
     label: {
       plural: 'Order statuses',
-      single: 'Order status',
+      noun: 'Order status',
     },
     entityName: 'OrderStatus',
     metadata: orderStatusMetadata,
@@ -54,7 +57,7 @@ config.sources = [
     endpoint: environment.endpoints.failures.root,
     label: {
       plural: 'Failures',
-      single: 'Failure',
+      noun: 'Failure',
     },
     entityName: 'Failure',
     metadata: failureMetadata,
@@ -65,21 +68,32 @@ config.sources = [
     endpoint: environment.endpoints.products.root,
     label: {
       plural: 'Products',
-      single: 'Product',
+      noun: 'Product',
     },
     entityName: 'Product',
     metadata: productMetadata,
     filters: [displayDeletedFilter],
   }),
   new MasterDataSource<ProductGroup>({
-    href: 'products',
+    href: 'productGroups',
     endpoint: environment.endpoints.productGroups.root,
     label: {
       plural: 'Product groups',
-      single: 'Product group',
+      noun: 'Product group',
     },
     entityName: 'ProductGroup',
     metadata: productGroupMetadata,
+    filters: [displayDeletedFilter],
+  }),
+  new MasterDataSource<Customer>({
+    href: 'customers',
+    endpoint: environment.endpoints.customers.root,
+    label: {
+      plural: 'Customers',
+      noun: 'Customer',
+    },
+    entityName: 'Customer',
+    metadata: customerMetadata,
     filters: [displayDeletedFilter],
   }),
   new MasterDataSource<Attribute>({
@@ -87,7 +101,7 @@ config.sources = [
     endpoint: environment.endpoints.attributes.root,
     label: {
       plural: 'Attributes',
-      single: 'Attribute',
+      noun: 'Attribute',
     },
     entityName: 'Attribute',
     metadata: attributeMetadata,
@@ -98,7 +112,7 @@ config.sources = [
     endpoint: environment.endpoints.attributes.values,
     label: {
       plural: 'Attributes values',
-      single: 'Attributes value',
+      noun: 'Attributes value',
     },
     entityName: 'AttributeValue',
     metadata: attributeValueMetadata,

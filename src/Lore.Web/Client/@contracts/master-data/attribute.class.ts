@@ -12,6 +12,7 @@ export class Attribute extends DeletableEntity {
   name: string;
   type: AttributeValueType;
   objectType: AttributeObject;
+  values: AttributeValue[];
 }
 
 export const attributeMetadata: ObjectPropertyMetadata<Attribute>[] = [

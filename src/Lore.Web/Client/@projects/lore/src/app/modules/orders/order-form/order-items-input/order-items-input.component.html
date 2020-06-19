@@ -4,9 +4,9 @@
       <mat-form-field appearance="fill">
         <mat-label>Product / Service</mat-label>
         <app-simple-selection
-          source="products"
+          source="Product"
           formControlName="skuId"
-          [viewValue]="'name'"
+          [viewValueFormat]="productViewValueFormat"
         ></app-simple-selection>
       </mat-form-field>
 
