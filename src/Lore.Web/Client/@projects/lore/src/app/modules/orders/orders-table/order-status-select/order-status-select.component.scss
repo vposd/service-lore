@@ -1,0 +1,23 @@
+@import '~@styles/material';
+
+.menu-trigger {
+  cursor: pointer;
+  background: rgba(0, 0, 0, 0.12);
+  padding: 0.5rem 1rem;
+  font-weight: 700;
+  border-radius: 0.25rem;
+  transition: 180ms;
+
+  &:hover {
+    background: rgba(100, 100, 100, 0.12);
+  }
+}
+
+.option-item {
+  display: flex;
+  align-items: center;
+
+  .mdi {
+    margin-right: $offset-sm;
+  }
+}

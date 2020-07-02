@@ -1,5 +1,4 @@
 ﻿using System.Reflection;
-using Lore.Web.Config;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -10,6 +9,7 @@ namespace Lore
     public class Program
     {
         public static void Main(string[] args) =>
+
             CreateWebHostBuilder(args)
             .Build()
             .Run();
@@ -36,7 +36,6 @@ namespace Lore
                     config.AddCommandLine(args);
                 }
             })
-            .UseSentryOnProduction()
             .UseStartup<Startup>();
     }
 }

@@ -1,15 +1,15 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
 using Lore.Application.Common.Interfaces;
 using Lore.Domain.Entities;
+using MediatR;
 
 namespace Lore.Application.Employees.Commands.UpsertEmployee
 {
     public class UpsertEmployeeCommandHandler : IRequestHandler<UpsertEmployeeCommand, long>
     {
 
-        private ILoreDbContextFactory contextFactory;
+        private readonly ILoreDbContextFactory contextFactory;
 
         public UpsertEmployeeCommandHandler(
             ILoreDbContextFactory contextFactory)
@@ -34,7 +34,6 @@ namespace Lore.Application.Employees.Commands.UpsertEmployee
             entity.UserId = request.UserId;
             entity.FirstName = request.FirstName;
             entity.LastName = request.LastName;
-            entity.Phone = request.Phone;
 
             await context.SaveChangesAsync(cancellationToken);
 

@@ -1,0 +1,19 @@
+<span
+  [matMenuTriggerFor]="menu"
+  class="menu-trigger"
+  *ngIf="state$ | async as state"
+>
+  {{ state?.name || 'None' }}
+</span>
+
+<mat-menu #menu="matMenu">
+  <button
+    mat-menu-item
+    *ngFor="let state of orderStatuses$ | async"
+    (click)="setState(state.id); $event.stopPropagation()"
+  >
+    <div class="option-item">
+      <i class="mdi mdi-circle" [style.color]="state.color"></i>{{ state.name }}
+    </div>
+  </button>
+</mat-menu>

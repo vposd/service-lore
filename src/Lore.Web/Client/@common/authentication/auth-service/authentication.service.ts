@@ -10,7 +10,7 @@ import { HttpCacheService } from '@common/utils/http-cache/http-cache-service/ht
 import { InformationService } from '@common/information/information.service';
 import {
   RequestProgressState,
-  RequestProgress
+  RequestProgress,
 } from '@common/utils/request-progress/request-progress.class';
 import { StorageService } from '@common/utils/storage/storage.service';
 import { Store } from '@common/utils/store/store.class';
@@ -24,12 +24,12 @@ const ERROR_MAP = {
   401: 'Неправильное имя пользователя или пароль',
   400: 'Имя пользователя или пароль не введены',
   500: 'Не удается войти',
-  503: 'Сервис временно не доступен'
+  503: 'Сервис временно не доступен',
 };
 
 const formatError = (error: string) =>
   ({
-    'Invalid username or password': 'Неправильное имя пользователя или пароль'
+    'Invalid username or password': 'Неправильное имя пользователя или пароль',
   }[error]);
 
 export class AuthState {
@@ -39,7 +39,7 @@ export class AuthState {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthenticationService extends Store<AuthState> {
   get user$(): Observable<User | null> {
@@ -88,8 +88,8 @@ export class AuthenticationService extends Store<AuthState> {
       user: null,
       isAuthenticated: false,
       authProgress: {
-        progress: true
-      }
+        progress: true,
+      },
     };
     return this.http
       .post<AuthResult>(
@@ -97,7 +97,7 @@ export class AuthenticationService extends Store<AuthState> {
         credentials
       )
       .pipe(
-        tap(result => {
+        tap((result) => {
           this.storage.set(StorageKey.AccessToken, result.accessToken);
           this.storage.set(StorageKey.RefreshToken, result.refreshToken);
           this.httpCacheService.clean();
@@ -106,7 +106,7 @@ export class AuthenticationService extends Store<AuthState> {
       .toPromise()
       .then(() => this.getCurrentUser())
       .then(() => this.router.navigate([this.referenceUrl]))
-      .catch(errorResponse => {
+      .catch((errorResponse) => {
         this.errorHandler.handleError(errorResponse);
 
         const error =
@@ -114,7 +114,7 @@ export class AuthenticationService extends Store<AuthState> {
           RequestProgress.formatError(errorResponse, ERROR_MAP);
         this.state = {
           ...this.state,
-          authProgress: { error }
+          authProgress: { error },
         };
 
         this.impormation.error(error);
@@ -125,33 +125,33 @@ export class AuthenticationService extends Store<AuthState> {
     this.state = {
       ...this.state,
       authProgress: {
-        progress: true
-      }
+        progress: true,
+      },
     };
 
     return this.http
       .get<User>(this.environment.endpoints.users.currentUser)
       .toPromise()
       .then(
-        user =>
+        (user) =>
           (this.state = {
             ...this.state,
             user: new User(user),
             isAuthenticated: true,
             authProgress: {
-              done: true
-            }
+              done: true,
+            },
           })
       )
-      .catch(error => {
+      .catch((error) => {
         this.errorHandler.handleError(error);
         this.state = {
           ...this.state,
           user: null,
           isAuthenticated: false,
           authProgress: {
-            error: ''
-          }
+            error: '',
+          },
         };
       });
   }
@@ -178,7 +178,7 @@ export class AuthenticationService extends Store<AuthState> {
     this.state = {
       ...this.state,
       user: null,
-      isAuthenticated: false
+      isAuthenticated: false,
     };
     this.redirectToLogin();
   }

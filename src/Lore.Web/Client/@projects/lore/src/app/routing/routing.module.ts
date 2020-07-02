@@ -7,9 +7,9 @@ import { routes } from './routes';
 
 @NgModule({
   imports: [
-    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })
+    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules }),
   ],
   exports: [RouterModule],
-  providers: [GlobalAuthGuard]
+  providers: [GlobalAuthGuard],
 })
-export class RoutingModule { }
+export class RoutingModule {}

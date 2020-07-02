@@ -1,0 +1,24 @@
+<ng-container [formGroup]="form">
+  <ng-container *ngFor="let filter of filters">
+    <div
+      class="control-section"
+      *ngIf="filter.type === filterType.EntitySelection"
+    >
+      <mat-form-field appearance="outline" class="mat-form-field-no-padding">
+        <mat-label>
+          {{ filter.label }}
+        </mat-label>
+        <app-simple-selection
+          [formControlName]="filter.property"
+          [source]="filter.sourceValuesContract"
+        ></app-simple-selection>
+      </mat-form-field>
+    </div>
+
+    <div class="control-section" *ngIf="filter.type === filterType.Boolean">
+      <mat-slide-toggle [formControlName]="filter.property">{{
+        filter.label
+      }}</mat-slide-toggle>
+    </div>
+  </ng-container>
+</ng-container>

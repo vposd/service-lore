@@ -1,0 +1,10 @@
+@import '~@styles/material';
+
+:host {
+  padding: $offset-md;
+  display: flex;
+}
+
+.table-container {
+  width: 100%;
+}

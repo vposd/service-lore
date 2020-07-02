@@ -1,0 +1,12 @@
+<ng-container [formGroup]="form">
+  <div *ngFor="let attr of attributes$ | async">
+    <app-autocomplete-selection
+      @fadeIn
+      [label]="attr.name"
+      [values]="attr.values"
+      [multipleSelection]="attr.type === valueType.ListMultipleValue"
+      [formControlName]="attr.id"
+      [viewValue]="'value'"
+    ></app-autocomplete-selection>
+  </div>
+</ng-container>

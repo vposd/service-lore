@@ -1,12 +1,6 @@
 ﻿using System;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.IdentityModel.Tokens;
 using Lore.Application.Common.Interfaces.Services;
 using Lore.Application.Interfaces.Services;
 using Lore.Infrastructure.Excel;
@@ -14,6 +8,13 @@ using Lore.Infrastructure.Excel.Export;
 using Lore.Infrastructure.Helpers;
 using Lore.Infrastructure.Identity;
 using Lore.Infrastructure.Identity.Services;
+using Lore.Infrastructure.Notifications;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Lore.Infrastructure
 {
@@ -30,6 +31,7 @@ namespace Lore.Infrastructure
             services.AddTransient<IJwtTokenValidator, JwtTokenValidator>();
             services.AddTransient<ITokenFactory, TokenFactory>();
             services.AddTransient<ITokenFactory, TokenFactory>();
+            services.AddTransient<INotificationService, NotificationsService>();
             services.AddTransient<IExcelExport, GenericExcelExport>();
 
             services.AddDbContext<ApplicationIdentityDbContext>(options =>

@@ -11,7 +11,7 @@ import {
   ViewChild,
   ViewEncapsulation,
   ViewChildren,
-  QueryList
+  QueryList,
 } from '@angular/core';
 import { FocusMonitor } from '@angular/cdk/a11y';
 import { MatFormFieldControl } from '@angular/material/form-field';
@@ -32,9 +32,9 @@ export type SelectValue<T> = T | T[];
   providers: [
     {
       provide: MatFormFieldControl,
-      useExisting: SelectComponent
-    }
-  ]
+      useExisting: SelectComponent,
+    },
+  ],
 })
 export class SelectComponent<T>
   implements
@@ -110,7 +110,7 @@ export class SelectComponent<T>
     private readonly _elementRef: ElementRef<HTMLElement>,
     @Optional() @Self() readonly ngControl: NgControl
   ) {
-    _focusMonitor.monitor(_elementRef, true).subscribe(origin => {
+    _focusMonitor.monitor(_elementRef, true).subscribe((origin) => {
       if (this.disabled) {
         return;
       }
@@ -133,7 +133,7 @@ export class SelectComponent<T>
 
   ngOnInit() {
     this.select.stateChanges.subscribe(() => this.stateChanges.next());
-    this.select.valueChange.subscribe(value => {
+    this.select.valueChange.subscribe((value) => {
       this.onChange(value);
       this.writeValue(value);
     });

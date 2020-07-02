@@ -1,11 +1,11 @@
-@import 'material';
-@import './packages/text';
-@import './packages/row';
 @import './packages/icons';
-@import './utils/display';
+@import './packages/row';
+@import './packages/text';
 @import './utils/cursor';
+@import './utils/display';
 @import './utils/flex';
 @import './utils/offset';
+@import 'material';
 
 body {
   @include mat-typography-level-to-styles($application-typography, body-1);
@@ -20,4 +20,59 @@ html {
   -ms-text-size-adjust: 100%;
   -ms-overflow-style: scrollbar;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+// Buttons
+.mat-flat-button,
+.mat-button {
+  letter-spacing: 0.1rem;
+}
+
+// Dialogs
+.mat-dialog-title {
+  text-transform: uppercase;
+}
+
+.mat-dialog-actions {
+  justify-content: flex-end;
+}
+
+.mat-dialog-content {
+  height: 100%;
+}
+
+// Form field
+.mat-form-field {
+  width: 100%;
+}
+
+.mat-tab-group {
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.mat-tab-body-wrapper {
+  flex: 1 1 auto;
+}
+
+.gkz-viewport {
+  height: 100%;
+  width: 100%;
+  overflow-x: auto;
+
+  .cdk-virtual-scroll-content-wrapper {
+    transform: translateY(0) !important;
+  }
+}
+
+.mat-form-field-no-padding {
+  .mat-form-field-wrapper {
+    padding: 0;
+  }
+}
+
+.bg--hightlight {
+  background: mat-color($mat-amber, 800);
+  color: #fff;
 }

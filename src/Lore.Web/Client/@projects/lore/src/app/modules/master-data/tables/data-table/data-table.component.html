@@ -1,0 +1,174 @@
+<div class="table-container-header row">
+  <div class="row__section mat-headline">{{ sourceParams.label.plural }}</div>
+  <div class="row__spacer"></div>
+  <ng-container>
+    <div class="row__section">
+      <app-data-filters
+        [filters]="sourceParams.filters"
+        (expressionsChange)="onExpressionsChanged($event)"
+      ></app-data-filters>
+    </div>
+  </ng-container>
+  <div class="row__section">
+    <button
+      mat-flat-button
+      color="accent"
+      appOpenDataProcessDialog
+      [source]="sourceParams.entityName"
+      [process]="processType.Create"
+      (operationResult)="onOperationSuccess($event)"
+    >
+      + Create
+    </button>
+  </div>
+</div>
+
+<div class="table-content">
+  <div
+    class="progress-container offset--md"
+    *ngIf="!initialized && !tableHidden"
+  >
+    <p class="progress-container__header">Loading...</p>
+    <div class="progress-container__progress progress progress--info">
+      <div class="progress-indeterminate"></div>
+    </div>
+  </div>
+
+  <request-progress-spinner
+    [requestProgress]="requestProgress"
+    *ngIf="tableHidden && requestProgress.state.progress"
+  ></request-progress-spinner>
+
+  <mat-table
+    [hidden]="tableHidden"
+    class="data-table table--hover"
+    [class.table--hover]="selectable"
+    [dataSource]="dataSource"
+    multiTemplateDataRows
+    matSort
+    [style.opacity]="requestProgress.state.progress ? 0.5 : 1"
+  >
+    <ng-container matColumnDef="actions">
+      <mat-header-cell *matHeaderCellDef>
+        <mat-checkbox
+          *ngIf="multipleSelection"
+          (change)="$event ? masterToggle() : null"
+          [checked]="selectionModel.hasValue() && isAllSelected"
+          [indeterminate]="selectionModel.hasValue() && !isAllSelected"
+        ></mat-checkbox>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        <mat-checkbox
+          [checked]="selectionModel.isSelected(row.id)"
+          (click)="$event.stopPropagation()"
+          (change)="$event ? selectRow(row) : null"
+        ></mat-checkbox>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container *ngFor="let column of columns">
+      <ng-container
+        [matColumnDef]="column.key"
+        *ngIf="column.name !== 'actions'"
+      >
+        <mat-header-cell *matHeaderCellDef mat-sort-header>
+          {{ column.name }}
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row">
+          <app-data-cell
+            [sourceParams]="sourceParams"
+            [value]="row[column.key]"
+            [property]="column.key"
+          ></app-data-cell
+        ></mat-cell>
+      </ng-container>
+    </ng-container>
+
+    <ng-container matColumnDef="row-actions">
+      <mat-header-cell *matHeaderCellDef> </mat-header-cell>
+      <mat-cell *matCellDef="let row" (click)="$event.stopPropagation()">
+        <button mat-icon-button [matMenuTriggerFor]="menu">
+          <i class="mdi mdi-dots-vertical"></i>
+        </button>
+        <mat-menu #menu="matMenu">
+          <button
+            mat-menu-item
+            appOpenDataProcessDialog
+            [source]="sourceParams.entityName"
+            [process]="processType.Clone"
+            [item]="row"
+            (operationResult)="onOperationSuccess($event)"
+          >
+            Clone
+          </button>
+          <button mat-menu-item *ngIf="!row.deleted" (click)="delete(row.id)">
+            Mark as delete
+          </button>
+          <button mat-menu-item *ngIf="row.deleted" (click)="restore(row.id)">
+            Restore
+          </button>
+        </mat-menu>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="expandedDetail">
+      <mat-cell *matCellDef="let row">
+        <div
+          class="expanded-detail"
+          [@detailExpand]="row.id == expandedRowId ? 'expanded' : 'collapsed'"
+        >
+          <ng-container
+            *appExpandableRowHost="
+              let row;
+              expanded: row.id == expandedRowId;
+              template: expandableRow;
+              context: row
+            "
+          ></ng-container>
+        </div>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true">
+      <div class="mat-header-row header-group-row">
+        <div class="mat-header-cell" role="columnheader"></div>
+      </div>
+    </mat-header-row>
+
+    <mat-row
+      class="table__row"
+      [class.table__row--selected]="selectionModel.isSelected(row.id)"
+      [class.table__row--muted]="row.deleted"
+      [class.table__row--expanded]="expandedRowId == row.id"
+      appOpenDataProcessDialog
+      [source]="sourceParams.entityName"
+      [process]="processType.Edit"
+      [item]="row"
+      (operationResult)="onOperationSuccess($event)"
+      @rowsAnimation
+      *matRowDef="let row; columns: displayedColumns"
+    ></mat-row>
+    <mat-row
+      *matRowDef="let element; columns: ['expandedDetail']"
+      class="detail-row"
+    >
+    </mat-row>
+  </mat-table>
+
+  <div class="row flex-full row--sticky" [hidden]="tableHidden">
+    <section
+      class="row__section row__section--align-start text--secondary offset--left-sm mat-caption text--truncate hidden-xs-down"
+    >
+      <ng-container *ngIf="selectable && multipleSelection">
+        Выбрано: {{ selectionModel.selected.length }}
+      </ng-container>
+    </section>
+    <span class="row__spacer"></span>
+    <section class="row__section row__section--align-end">
+      <mat-paginator
+        showFirstLastButtons
+        class="mat-paginator--bg"
+      ></mat-paginator>
+    </section>
+  </div>
+</div>

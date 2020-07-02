@@ -1,15 +1,38 @@
 export interface Endpoints {
+  customers: {
+    root: string;
+  };
   authentication: {
     signIn: string;
     signOut: string;
     refreshAccess: string;
   };
-  data: {
-    clients: string;
-    employees: string;
+  attributes: {
+    root: string;
+    values: string;
+    value: string;
   };
   users: {
     currentUser: string;
+  };
+  data: {};
+  orders: {
+    root: string;
+    single: string;
+    updateState: string;
+  };
+  orderStatuses: {
+    root: string;
+    single: string;
+  };
+  products: {
+    root: string;
+  };
+  productGroups: {
+    root: string;
+  };
+  failures: {
+    root: string;
   };
 }
 

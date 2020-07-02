@@ -37,6 +37,40 @@ $mat-grey: (
   ),
 );
 
+// Custom mat-green palette
+$mat-green: (
+  50: #e8f5e9,
+  100: #c8e6c9,
+  200: #a5d6a7,
+  300: #81c784,
+  400: #66bb6a,
+  500: #4caf50,
+  600: #43a047,
+  700: #388e3c,
+  800: #2e7d32,
+  900: #1b5e20,
+  A100: #b9f6ca,
+  A200: #69f0ae,
+  A400: #00e676,
+  A700: #00c853,
+  contrast: (
+    50: $dark-primary-text,
+    100: $dark-primary-text,
+    200: $dark-primary-text,
+    300: $light-primary-text,
+    400: $light-primary-text,
+    500: $light-primary-text,
+    600: $light-primary-text,
+    700: $light-primary-text,
+    800: $light-primary-text,
+    900: $light-primary-text,
+    A100: $dark-primary-text,
+    A200: $light-primary-text,
+    A400: $light-primary-text,
+    A700: $light-primary-text,
+  ),
+);
+
 // Foreground palette for light themes.
 $mat-light-theme-foreground: (
   base: black,
@@ -68,18 +102,18 @@ $mat-light-theme-foreground: (
 }
 
 $application-typography: mat-typography-config(
-  $font-family: 'Roboto, Arial, sans-serif',
+  $font-family: 'Roboto, "Helvetica Neue", sans-serif',
   $display-4: mat-typography-level(2rem, 2rem, 400),
   $display-3: mat-typography-level(1.75rem, 1.75rem, 400),
   $display-2: mat-typography-level(1.25rem, 1.25rem, 400),
   $display-1: mat-typography-level(1.2rem, 1.125rem, 400),
   $headline: mat-typography-level(1.125rem, normal, 400),
-  $title: mat-typography-level(1rem, normal, 400),
+  $title: mat-typography-level(1rem, normal, 700, $letter-spacing: 0.07rem),
   $subheading-1: mat-typography-level(0.8rem, normal, 400),
   $subheading-2: mat-typography-level(0.875rem, normal, 700),
   $body-1: mat-typography-level(0.75rem, normal, 400),
   $body-2: mat-typography-level(0.75rem, normal, 700),
-  $button: mat-typography-level(0.75rem, 1rem, 400),
+  $button: mat-typography-level(0.75rem, 1rem, 400, $letter-spacing: 0.07rem),
   $caption: mat-typography-level(0.75rem, 1rem, 400),
 );
 
@@ -94,7 +128,7 @@ $grey-palette: mat-palette($mat-grey, 800, A100, A400);
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
 $application-primary: mat-palette($mat-light-blue, 800, A100, A400);
-$application-accent: mat-palette($mat-grey, A200, A100, A400);
+$application-accent: mat-palette($mat-green, 400, A100, A400);
 
 // The warn palette is optional (defaults to red).
 $application-warn: mat-palette($mat-red);

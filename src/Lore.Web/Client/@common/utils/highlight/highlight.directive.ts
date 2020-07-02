@@ -1,52 +1,41 @@
-import { Directive, Input, ElementRef } from '@angular/core';
-import { isNil } from 'lodash';
+import {
+  Directive,
+  Input,
+  ElementRef,
+  OnChanges,
+  Renderer2,
+} from '@angular/core';
 
 @Directive({
-  selector: '[appHighlight]'
+  selector: '[appHighlight]',
 })
-export class HighlightDirective {
-  @Input()
-  set highlightQuery(value: string) {
-    if (isNil(value) || value === this._value) {
+export class HighlightDirective implements OnChanges {
+  textContent: string;
+
+  @Input() query: string;
+  @Input() text: string;
+
+  constructor(private el: ElementRef, private renderer: Renderer2) {}
+
+  ngOnChanges(): void {
+    if (!this.query) {
+      this.renderer.setProperty(this.el.nativeElement, 'innerHTML', this.text);
       return;
     }
 
-    this._value = value;
-
-    requestAnimationFrame(() =>
-      Array.from(
-        this.el.nativeElement.querySelectorAll('[highlightTarget]')
-      ).forEach(target => this.highlightString(value, target as HTMLElement))
+    this.renderer.setProperty(
+      this.el.nativeElement,
+      'innerHTML',
+      this.getFormattedText()
     );
   }
 
-  private _value: string;
-
-  constructor(private el: ElementRef) {}
-
-  private highlightString(query: string, target: HTMLElement) {
-    const sanitized = (query || '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  getFormattedText() {
+    const sanitized = (this.query || '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     const regExp = new RegExp(sanitized, 'ig');
-    this.parse(target, query, regExp);
-  }
-
-  private parse(node: HTMLElement, query: string, regexp: RegExp) {
-    const result = node.textContent;
-    const childNodes = Array.from(node.children)
-      .filter(child => child.nodeType !== Node.TEXT_NODE)
-      .filter(child => !child.classList.contains('highlight'));
-
-    if (!childNodes.length) {
-      node.innerHTML =
-        query === ''
-          ? result
-          : result.replace(
-              regexp,
-              substr => `<span class="highlight">${substr}</span>`
-            );
-      return;
-    }
-
-    return childNodes.map(n => this.parse(n as HTMLElement, query, regexp));
+    return this.text.replace(
+      regExp,
+      (s) => `<span class="bg--hightlight">${s}</span>`
+    );
   }
 }

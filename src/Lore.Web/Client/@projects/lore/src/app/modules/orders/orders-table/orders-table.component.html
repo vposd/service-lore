@@ -1,0 +1,149 @@
+<div class="table-container-header row">
+  <div class="row__spacer"></div>
+  <div class="row__section">
+    <button
+      mat-flat-button
+      color="accent"
+      appOpenOrderForm
+      [processAction]="processActionEnum.Create"
+    >
+      Add entry
+    </button>
+  </div>
+</div>
+
+<mat-table
+  [hidden]="tableHidden"
+  class="data-table table--hover"
+  [dataSource]="dataSource"
+  multiTemplateDataRows
+  matSort
+  [style.opacity]="requestProgress.state.progress ? 0.5 : 1"
+>
+  <ng-container matColumnDef="id">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>
+      Order No
+    </mat-header-cell>
+    <mat-cell *matCellDef="let row">{{ row.id }}</mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="statusId">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>
+      Status
+    </mat-header-cell>
+    <mat-cell *matCellDef="let row"
+      ><app-order-status-select
+        [orderId]="row.id"
+        [statusId]="row.statusId"
+        (click)="$event.stopPropagation()"
+      ></app-order-status-select
+    ></mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="customerName">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>
+      Customer
+    </mat-header-cell>
+    <mat-cell *matCellDef="let row">
+      <div class="mat-cell-text">
+        <a href="#" class="table-link mat-cell-text__primary">{{
+          row.customer.name
+        }}</a>
+        <span class="mat-cell-text__secondary">{{ row.customer.phone }}</span>
+      </div>
+    </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="deviceName">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>
+      Device
+    </mat-header-cell>
+    <mat-cell *matCellDef="let row">
+      <div class="mat-cell-text">
+        <span class="mat-cell-text__primary">{{ row.device.name }}</span>
+        <span class="mat-cell-text__secondary"
+          >S/N: {{ row.device.serialNumber }}</span
+        >
+      </div>
+    </mat-cell>
+  </ng-container>
+
+  <ng-container
+    [matColumnDef]="deviceAttribute.name"
+    *ngFor="let deviceAttribute of deviceAttrs"
+  >
+    <mat-header-cell *matHeaderCellDef mat-sort-header>
+      <span class="text--capitalize">{{ deviceAttribute.name }}</span>
+    </mat-header-cell>
+    <mat-cell *matCellDef="let row">
+      <div
+        class="table-chip"
+        *ngFor="let attr of row.attributesView[deviceAttribute.name]"
+      >
+        {{ attr.value }}
+      </div>
+    </mat-cell>
+  </ng-container>
+
+  <ng-container
+    [matColumnDef]="orderDeviceAttribute.name"
+    *ngFor="let orderDeviceAttribute of orderDeviceAttrs"
+  >
+    <mat-header-cell *matHeaderCellDef mat-sort-header>
+      <span class="text--capitalize">{{ orderDeviceAttribute.name }}</span>
+    </mat-header-cell>
+    <mat-cell *matCellDef="let row">
+      <div
+        class="table-chip"
+        *ngFor="let attr of row.attributesView[orderDeviceAttribute.name]"
+      >
+        {{ attr.value }}
+      </div>
+    </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="failures">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>
+      <span class="text--capitalize">Failures</span>
+    </mat-header-cell>
+    <mat-cell *matCellDef="let row">
+      <div class="table-chip" *ngFor="let item of row.failures">
+        {{ item.name }}
+      </div>
+    </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="actions">
+    <mat-header-cell *matHeaderCellDef> </mat-header-cell>
+    <mat-cell *matCellDef="let row">
+      <button
+        mat-icon-button
+        [matMenuTriggerFor]="menu"
+        (click)="$event.stopPropagation()"
+      >
+        <i class="mdi mdi-dots-vertical"></i>
+      </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item>Clone</button>
+        <button mat-menu-item>Mark as delete</button>
+      </mat-menu>
+    </mat-cell>
+  </ng-container>
+
+  <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true">
+    <div class="mat-header-row header-group-row">
+      <div class="mat-header-cell" role="columnheader"></div>
+    </div>
+  </mat-header-row>
+
+  <mat-row
+    class="table__row"
+    [class.table__row--selected]="selectionModel.isSelected(row.id)"
+    [style.background]="row.status.color"
+    appOpenOrderForm
+    [order]="row"
+    [processAction]="processActionEnum.Edit"
+    @rowsAnimation
+    *matRowDef="let row; columns: displayedColumns"
+  ></mat-row>
+</mat-table>

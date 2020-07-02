@@ -8,31 +8,35 @@ import {
   ChangeDetectionStrategy,
   Input,
   EventEmitter,
-  Output
+  Output,
+  OnDestroy,
 } from '@angular/core';
 import { FocusMonitor } from '@angular/cdk/a11y';
 import { NgControl, ControlValueAccessor } from '@angular/forms';
 import { MatFormFieldControl } from '@angular/material/form-field';
 import { Observable } from 'rxjs';
-import { pluck, tap } from 'rxjs/operators';
+import { tap } from 'rxjs/operators';
 
 import {
   SelectComponent,
-  SelectValue
+  SelectValue,
 } from '@common/form-controls/select/select.component';
-import { Entity } from '@contracts/master-data/entity.class';
 import { RequestProgress } from '@common/utils/request-progress/request-progress.class';
+import { Entity } from '@contracts/common';
+import { HttpCacheService } from '@common/utils/http-cache/http-cache-service/http-cache.service';
 
 import {
   MasterDataConfig,
-  MasterDataSource
+  MasterDataSource,
 } from '../config/master-data-config.service';
 import { MasterDataService } from '../master-data-service/master-data.service';
-import { QueryRequestBuilder } from '../master-data-service/query-request-builder.class';
 import {
-  FilterExpression,
-  PropertyExpression
+  dataFilter,
+  PropertyExpression,
 } from '../master-data-service/filter-expression';
+import { QueryRequestDataStrategy } from './query-request-data-strategy';
+import { DefinedValuesDataStrategy } from './defined-values-data-strategy';
+import { RetrieveDataStrategy } from './retrieve-data-strategy';
 
 @Component({
   selector: 'app-simple-selection',
@@ -43,32 +47,51 @@ import {
   providers: [
     {
       provide: MatFormFieldControl,
-      useExisting: SimpleSelectionComponent
-    }
-  ]
+      useExisting: SimpleSelectionComponent,
+    },
+  ],
 })
 export class SimpleSelectionComponent<T extends Entity>
   extends SelectComponent<SelectValue<T>>
-  implements OnInit, ControlValueAccessor, MatFormFieldControl<SelectValue<T>> {
+  implements
+    OnInit,
+    OnDestroy,
+    ControlValueAccessor,
+    MatFormFieldControl<SelectValue<T>> {
   @Input()
   set source(source: string) {
     if (!source) {
-      throw new Error('[DataSelection]: Missing source');
+      throw new Error('[Data Selection]: Missing source');
     }
     this.sourceParams = this.masterDataConfig.getSource(source);
+    this.retrieveDataStrategy = new QueryRequestDataStrategy(
+      this.masterData,
+      this.httpCache,
+      this.filterExpression,
+      this.ignorePagination,
+      this.sourceParams,
+      this.requestProgress
+    );
+  }
+
+  @Input() set values(values: T[]) {
+    this.retrieveDataStrategy = new DefinedValuesDataStrategy<T>(values);
   }
 
   @Input() required = false;
   @Input() ignorePagination = false;
+  @Input() viewValue = 'name';
+  @Input() viewValueFormat: (e: T) => string;
 
   /** External additional params for query data request */
-  @Input() filterExpression = new FilterExpression();
+  @Input() filterExpression = dataFilter();
   @Output() propertyExpressionChange = new EventEmitter<PropertyExpression>();
 
   values$: Observable<T[]>;
-  values = [];
+  retrievedValues = [];
   requestProgress = new RequestProgress();
 
+  private retrieveDataStrategy: RetrieveDataStrategy<T>;
   private sourceParams: MasterDataSource<T>;
 
   constructor(
@@ -76,7 +99,8 @@ export class SimpleSelectionComponent<T extends Entity>
     _focusMonitor: FocusMonitor,
     _elementRef: ElementRef<HTMLElement>,
     private readonly masterDataConfig: MasterDataConfig,
-    private readonly masterData: MasterDataService
+    private readonly masterData: MasterDataService,
+    private readonly httpCache: HttpCacheService
   ) {
     super(_focusMonitor, _elementRef, ngControl);
     if (this.ngControl != null) {
@@ -87,33 +111,24 @@ export class SimpleSelectionComponent<T extends Entity>
   ngOnInit() {
     this.requestProgress.start();
     super.ngOnInit();
+    this.openChange(false);
+  }
+
+  ngOnDestroy() {
+    this.retrieveDataStrategy.onDestroy();
   }
 
   openChange(event: boolean) {
-    const query = new QueryRequestBuilder().setFilter(
-      this.filterExpression.toString()
+    this.values$ = this.retrieveDataStrategy.getData().pipe(
+      tap(
+        (values) => {
+          this.requestProgress.stop(!!values.length);
+          this.retrievedValues = values;
+          this.virtualScrollEnabled = values.length > 50;
+        },
+        (error) => this.requestProgress.error(error)
+      )
     );
-
-    if (this.ignorePagination) {
-      query.setPageSize(Infinity);
-    }
-    if (!this.sourceParams) {
-      this.requestProgress.stop(true);
-      return;
-    }
-    this.values$ = this.masterData
-      .query<T>(this.sourceParams.endpoint, query.request, true)
-      .pipe(
-        pluck('results'),
-        tap(
-          values => {
-            this.requestProgress.stop(!!values.length);
-            this.values = values;
-            this.virtualScrollEnabled = values.length > 50;
-          },
-          error => this.requestProgress.error(error)
-        )
-      );
     super.openChange(event);
   }
 

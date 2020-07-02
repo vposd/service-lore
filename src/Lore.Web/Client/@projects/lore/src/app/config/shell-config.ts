@@ -13,14 +13,35 @@ config.product = {
 config.menu = {
   items: [
     new MenuItem({
-      title: 'Main',
+      title: 'Orders',
       iconClass: 'mdi mdi-book-open-page-variant',
-      href: '/',
+      href: '/orders',
     }),
     new MenuItem({
-      title: 'Settings',
-      iconClass: 'mdi mdi-settings',
-      href: '/settings',
+      title: 'Master data',
+      iconClass: 'mdi mdi-database',
+      menu: [
+        new MenuItem({
+          title: 'Order states',
+          href: 'master-data/order-states',
+        }),
+        new MenuItem({
+          title: 'Device failures',
+          href: 'master-data/failures',
+        }),
+        new MenuItem({
+          title: 'Products',
+          href: 'master-data/products',
+        }),
+        new MenuItem({
+          title: 'Attributes',
+          href: 'master-data/attributes',
+        }),
+        new MenuItem({
+          title: 'Attributes values',
+          href: 'master-data/attributesValues',
+        }),
+      ],
     }),
   ],
 };

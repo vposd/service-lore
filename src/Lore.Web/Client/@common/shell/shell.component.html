@@ -1,15 +1,13 @@
-<div class="shell-content" *ngIf="isAuthenticated$ | async" @fadeIn>
+<div class="shell-content" @fadeIn>
   <mat-drawer-container class="shell-drawer-container" autosize>
     <!-- Shell drawer -->
     <mat-drawer
-      *ngIf="isHandset$ | async as isHandset"
+      *ngIf="isAuthenticated$ | async"
       class="shell-drawer"
       mode="side"
       opened
       [class.shell-drawer--collapsed]="menuCollapsed"
       [@drawerChange]="menuCollapsed ? 'collapsed' : 'expanded'"
-      [fixedInViewport]="isHandset.matches"
-      [fixedTopGap]="isHandset.matches ? 0 : 56"
     >
       <div class="shell-drawer__header">
         <div class="shell-drawer__header__logo" *ngIf="!menuCollapsed" @fadeIn>
@@ -20,14 +18,34 @@
         </button>
       </div>
       <mat-nav-list class="shell-menu">
-        <a
-          mat-list-item
-          [routerLink]="item.href"
-          *ngFor="let item of shellConfig.menu.items"
-        >
-          <i [ngClass]="item.iconClass" mat-list-icon></i>
-          <p class="shell-menu__text" mat-line>{{ item.title }}</p>
-        </a>
+        <ng-container *ngFor="let item of shellConfig.menu.items">
+          <!-- Menu item with router link -->
+          <a
+            mat-list-item
+            [routerLink]="item.href"
+            [routerLinkActive]="'active'"
+            *ngIf="item.href"
+          >
+            <i [ngClass]="item.iconClass" mat-list-icon></i>
+            <p class="shell-menu__text" mat-line>{{ item.title }}</p>
+          </a>
+          <!-- Menu item with child menu items -->
+          <a mat-list-item [matMenuTriggerFor]="menu" *ngIf="item.menu">
+            <i [ngClass]="item.iconClass" mat-list-icon></i>
+            <p class="shell-menu__text" mat-line>{{ item.title }}</p>
+
+            <mat-menu #menu="matMenu" xPosition="after">
+              <button
+                mat-menu-item
+                *ngFor="let menuItem of item.menu"
+                [routerLink]="menuItem.href"
+                [routerLinkActive]="'active'"
+              >
+                {{ menuItem.title }}
+              </button>
+            </mat-menu>
+          </a>
+        </ng-container>
       </mat-nav-list>
     </mat-drawer>
 
@@ -39,7 +57,7 @@
       "
     >
       <!-- Shell toolbar -->
-      <mat-toolbar class="shell-toolbar">
+      <mat-toolbar class="shell-toolbar" *ngIf="isAuthenticated$ | async">
         <mat-toolbar-row>
           <ng-template
             [ngTemplateOutlet]="toolbarStartItem.template"
@@ -51,7 +69,9 @@
       </mat-toolbar>
 
       <!-- Shell router outlet -->
-      <router-outlet></router-outlet>
+      <div class="shell-content-body">
+        <router-outlet></router-outlet>
+      </div>
     </mat-drawer-content>
   </mat-drawer-container>
 </div>
@@ -64,6 +84,3 @@
     ></request-progress-spinner>
   </div>
 </ng-container>
-
-<!-- Display router outlet for authentication module routes -->
-<router-outlet *ngIf="!(isAuthenticated$ | async)"></router-outlet>

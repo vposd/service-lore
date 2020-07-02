@@ -14,12 +14,6 @@ namespace Lore.Persistence
                 .CreateScope();
             using var context = serviceScope.ServiceProvider.GetService<LoreDbContextFactory>().Create();
             context.Database.Migrate();
-
-            SeedDefaultEntities(context);
-        }
-
-        private static void SeedDefaultEntities(LoreDbContext context)
-        {
         }
     }
 }

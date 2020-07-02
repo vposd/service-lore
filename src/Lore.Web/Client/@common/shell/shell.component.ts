@@ -20,7 +20,7 @@ import {
 } from '@angular/cdk/layout';
 import { Observable, Subject, combineLatest } from 'rxjs';
 import { Router, ResolveEnd } from '@angular/router';
-import { tap, takeUntil, pluck } from 'rxjs/operators';
+import { tap, takeUntil, pluck, filter } from 'rxjs/operators';
 import { isUndefined } from 'lodash';
 
 import { AuthenticationService } from '@common/authentication/auth-service/authentication.service';
@@ -29,6 +29,7 @@ import {
   RequestProgressState,
 } from '@common/utils/request-progress/request-progress.class';
 import { FadeIn } from '@common/animations/fade-in-out.animation';
+import { Title } from '@angular/platform-browser';
 
 import { DrawerChange, DrawerContentChange } from './drawer-state-animations';
 import { ShellConfig } from './config/shell-config.service';
@@ -53,6 +54,7 @@ export class ShellComponent implements OnInit {
   @Output() userLogin = new EventEmitter();
   @Output() userLogout = new EventEmitter();
   @Output() settingsSync = new EventEmitter();
+
   @ViewChild(MatDrawer) drawer: MatDrawer;
   @ContentChildren(ShellToolbarStartDirective)
   toolbarStartItems: QueryList<ShellToolbarStartDirective>;
@@ -63,7 +65,8 @@ export class ShellComponent implements OnInit {
     readonly shellConfig: ShellConfig,
     private readonly breakpointObserver: BreakpointObserver,
     private readonly authService: AuthenticationService,
-    private readonly router: Router
+    private readonly router: Router,
+    private readonly documentTitle: Title
   ) {}
 
   ngOnInit() {
@@ -102,7 +105,9 @@ export class ShellComponent implements OnInit {
         tap(([event, user]) => {
           const userName = user ? `(${user.displayName})` : '';
           if (event instanceof ResolveEnd) {
-            const routeData = event.state.root.firstChild.data;
+            const { title } = event.state.root.firstChild.data;
+            const documentTitle = `${this.shellConfig.product.title} - ${title} ${userName}`;
+            this.documentTitle.setTitle(documentTitle);
           }
         }),
         takeUntil(this.destroy$)
@@ -113,8 +118,8 @@ export class ShellComponent implements OnInit {
   private listenAuth() {
     this.authService.state$
       .pipe(
-        tap(async ({ isAuthenticated }) => {
-          if (!isAuthenticated) {
+        tap(({ isAuthenticated }) => {
+          if (isAuthenticated === false) {
             return this.userLogout.emit();
           }
           this.userLogin.emit();

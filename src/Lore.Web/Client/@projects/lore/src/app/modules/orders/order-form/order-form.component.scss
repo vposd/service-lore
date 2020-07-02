@@ -1,0 +1,32 @@
+@import '~@styles/material';
+
+.form-field-group {
+  display: flex;
+
+  .form-field {
+    flex: 1 1 auto;
+    width: 100%;
+  }
+
+  .form-field + .form-field {
+    padding-left: 1rem;
+  }
+}
+
+.mat-dialog-content {
+  overflow: hidden;
+}
+
+.mat-title {
+  margin-top: $offset-sm;
+}
+
+.mat-tab-group {
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.mat-tab-body-wrapper {
+  flex: 1 1 auto;
+}

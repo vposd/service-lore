@@ -7,10 +7,10 @@
 >
   <ngx-mat-select-search
     [(ngModel)]="query"
-    placeholderLabel="Поиск..."
-    indexAndLengthScreenReaderText="из"
-    noEntriesFoundLabel="Ничего не найдено"
-    *ngIf="values.length > 10"
+    placeholderLabel="Search..."
+    indexAndLengthScreenReaderText="from"
+    noEntriesFoundLabel="Empty results"
+    *ngIf="retrievedValues.length > 2"
   >
     <i class="mdi mdi-close" ngxMatSelectSearchClear></i>
   </ngx-mat-select-search>
@@ -26,7 +26,7 @@
   <cdk-virtual-scroll-viewport
     *ngIf="virtualScrollEnabled"
     appHighlight
-    [highlightQuery]="query"
+    [query]="query"
     class="viewport-select"
     itemSize="5"
     maxBufferPx="400"
@@ -34,13 +34,15 @@
   >
     <mat-option
       [hidden]="requestProgress.state.progress || multiple || required"
-      >[Пусто]</mat-option
+      >[Empty]</mat-option
     >
     <mat-option
       [hidden]="requestProgress.state.progress"
       [value]="value"
       *ngIf="value"
-      >{{ value.name }}</mat-option
+      >{{
+        viewValueFormat ? viewValueFormat(value) : value[viewValue]
+      }}</mat-option
     >
     <mat-option
       *cdkVirtualFor="
@@ -49,7 +51,14 @@
       "
       [value]="value"
     >
-      <div highlightTarget>{{ value['name'] }}</div>
+      <div>
+        <span
+          appHighlight
+          [query]="query"
+          [text]="viewValueFormat ? viewValueFormat(value) : value[viewValue]"
+        >
+        </span>
+      </div>
     </mat-option>
   </cdk-virtual-scroll-viewport>
 
@@ -57,13 +66,18 @@
   <ng-container *ngIf="!virtualScrollEnabled">
     <mat-option
       [hidden]="requestProgress.state.progress || multiple || required"
-      >[Пусто]</mat-option
+      >[Empty]</mat-option
     >
     <mat-option
       *ngFor="let value of values$ | async | searchFilter: 'name':query"
       [value]="value"
     >
-      <span highlightTarget>{{ value['name'] }}</span>
+      <span
+        appHighlight
+        [query]="query"
+        [text]="viewValueFormat ? viewValueFormat(value) : value[viewValue]"
+      >
+      </span>
     </mat-option>
   </ng-container>
 </mat-select>

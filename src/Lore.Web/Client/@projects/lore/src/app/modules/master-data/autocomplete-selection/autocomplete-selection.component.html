@@ -1,0 +1,52 @@
+<mat-form-field [style.opacity]="disabled ? '0.6' : ''" appearance="outline">
+  <mat-label class="text--capitalize">{{ label }}</mat-label>
+  <mat-chip-list #chipList [multiple]="multipleSelection">
+    <mat-chip
+      (removed)="remove(selected)"
+      *ngFor="let selected of chips"
+      [class.highlight]="selected?.adding"
+      [disabled]="disabled"
+      [removable]="true"
+      [selectable]="false"
+      class="text--truncate"
+    >
+      {{ selected && selected[viewValue] }}
+      <i class="mdi mdi-close-circle mdi--sm" matChipRemove></i>
+    </mat-chip>
+    <input
+      #lookupInput
+      autofocus
+      matChipInput
+      [placeholder]="placeholder"
+      [formControl]="groupLookupControl"
+      [matAutocomplete]="autoGroup"
+      [matChipInputFor]="chipList"
+      [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+      (matChipInputTokenEnd)="addItemToAdd($event)"
+    />
+  </mat-chip-list>
+  <mat-autocomplete
+    #autoGroup="matAutocomplete"
+    (optionSelected)="select($event)"
+  >
+    <cdk-virtual-scroll-viewport
+      class="viewport-select"
+      itemSize="5"
+      maxBufferPx="400"
+      minBufferPx="200"
+    >
+      <ng-container
+        *cdkVirtualFor="
+          let result of lookupValues$ | async;
+          templateCacheSize: 0
+        "
+      >
+        <mat-option [value]="result">
+          <span appHighlight [query]="query" [text]="result[viewValue]">{{
+            result[viewValue]
+          }}</span>
+        </mat-option>
+      </ng-container>
+    </cdk-virtual-scroll-viewport>
+  </mat-autocomplete>
+</mat-form-field>

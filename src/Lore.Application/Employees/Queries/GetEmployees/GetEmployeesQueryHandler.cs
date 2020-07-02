@@ -21,7 +21,7 @@ namespace Lore.Application.Employees.Queries.GetEmployees
         {
             using var context = contextFactory.Create();
 
-            var vm = new QueryResult<EmployeeReadModel>();
+            var vm = new QueryResult<EmployeeReadModel>(0, null);
 
             return vm;
         }

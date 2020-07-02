@@ -36,10 +36,27 @@ $toolbar-height: 4rem;
   left: 0;
   display: flex;
   flex-direction: column;
+  overflow: hidden !important;
+
+  .shell-content-body {
+    position: relative;
+    overflow: auto;
+    height: 100%;
+  }
 }
 
 .shell-brand-name {
   margin-left: $offset-sm !important;
+}
+
+.shell-menu {
+  .active {
+    background: mat-color($mat-gray, 100);
+
+    &:hover {
+      background: mat-color($mat-gray, 100);
+    }
+  }
 }
 
 .shell-drawer {

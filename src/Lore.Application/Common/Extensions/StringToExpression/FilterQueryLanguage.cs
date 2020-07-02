@@ -100,7 +100,7 @@ namespace Lore.Application.Common.Extensions.StringToExpression
         /// <returns></returns>
         public Expression<Func<T, bool>> Parse<T>(string text)
         {
-            var parameters = new [] { Expression.Parameter(typeof(T)) };
+            var parameters = new[] { Expression.Parameter(typeof(T)) };
             var body = language.Parse(text, parameters);
 
             ExpressionConversions.TryBoolean(ref body);
@@ -132,7 +132,7 @@ namespace Lore.Application.Common.Extensions.StringToExpression
         /// <returns></returns>
         protected virtual IEnumerable<GrammerDefinition> TypeDefinitions()
         {
-            return new []
+            return new[]
             {
                 new OperandDefinition(
                         name: "GUID",
@@ -270,7 +270,7 @@ namespace Lore.Application.Common.Extensions.StringToExpression
         /// <returns></returns>
         protected virtual IEnumerable<GrammerDefinition> ArithmeticOperatorDefinitions()
         {
-            return new []
+            return new[]
             {
                 new BinaryOperatorDefinition(
                         name: "ADD",
@@ -331,7 +331,7 @@ namespace Lore.Application.Common.Extensions.StringToExpression
         /// <returns></returns>
         protected virtual IEnumerable<FunctionCallDefinition> FunctionDefinitions()
         {
-            return new []
+            return new[]
             {
                 new FunctionCallDefinition(
                         name: "FN_STARTSWITH",
@@ -456,7 +456,7 @@ namespace Lore.Application.Common.Extensions.StringToExpression
         /// <returns></returns>
         protected virtual IEnumerable<GrammerDefinition> PropertyDefinitions()
         {
-            return new []
+            return new[]
             {
                 //Properties
                 new OperandDefinition(
@@ -490,7 +490,7 @@ namespace Lore.Application.Common.Extensions.StringToExpression
             return type.GetTypeInfo().GetProperty(property, BindingFlags.Instance | BindingFlags.IgnoreCase | BindingFlags.Public);
         }
 
-        private static bool IsMultipleValuesType(Type type) => type.IsArray || type.IsGenericType && typeof(IEnumerable<>).MakeGenericType(new [] { type.GetGenericArguments()[0] }).IsAssignableFrom(type);
+        private static bool IsMultipleValuesType(Type type) => type.IsArray || type.IsGenericType && typeof(IEnumerable<>).MakeGenericType(new[] { type.GetGenericArguments()[0] }).IsAssignableFrom(type);
 
         public static Type GetElementsType(Type type)
         {
@@ -513,7 +513,7 @@ namespace Lore.Application.Common.Extensions.StringToExpression
         /// <returns></returns>
         protected virtual IEnumerable<GrammerDefinition> WhitespaceDefinitions()
         {
-            return new []
+            return new[]
             {
                 new GrammerDefinition(name: "WHITESPACE", regex: @"\s+", ignore : true)
             };
@@ -548,7 +548,7 @@ namespace Lore.Application.Common.Extensions.StringToExpression
             return (left, right) =>
             {
                 var didConvertEnum = ExpressionConversions.TryEnumNumberConvert(ref left, ref right) ||
-                    ExpressionConversions.TryEnumStringConvert(ref left, ref right, ignoreCase : true);
+                    ExpressionConversions.TryEnumStringConvert(ref left, ref right, ignoreCase: true);
 
                 return expFn(left, right);
             };

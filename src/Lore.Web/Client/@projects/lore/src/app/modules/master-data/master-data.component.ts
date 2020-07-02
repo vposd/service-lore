@@ -5,25 +5,25 @@ import { Observable } from 'rxjs';
 
 import {
   MasterDataConfig,
-  MasterDataSource
+  MasterDataSource,
 } from './config/master-data-config.service';
 
 @Component({
   selector: 'app-master-data',
   templateUrl: './master-data.component.html',
-  styleUrls: ['./master-data.component.scss']
+  styleUrls: ['./master-data.component.scss'],
 })
 export class MasterDataComponent implements OnInit {
   dataSource$: Observable<MasterDataSource<any>>;
 
   constructor(
     private masterDataConfig: MasterDataConfig,
-    private route: ActivatedRoute
+    readonly route: ActivatedRoute
   ) {}
 
   ngOnInit() {
     this.dataSource$ = this.route.params.pipe(
-      map(({ source }) => this.masterDataConfig.getSource(source))
+      map(({ source }) => this.masterDataConfig.getSourceByHref(source))
     );
   }
 }

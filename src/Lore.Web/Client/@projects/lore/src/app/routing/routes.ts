@@ -7,43 +7,50 @@ import { UserRole } from '@contracts/authentication/user';
 export const routes: Routes = [
   {
     path: 'login',
-    component: AuthenticationComponent
+    component: AuthenticationComponent,
+    data: {
+      title: 'Authentication',
+    },
   },
   {
-    path: 'data',
+    path: 'orders',
     loadChildren: () =>
-      import('../modules/master-data/master-data.module').then(
-        x => x.MasterDataModule
-      ),
+      import('../modules/orders/orders.module').then((x) => x.OrdersModule),
     canActivate: [GlobalAuthGuard],
     data: {
-      title: ''
-    }
-  },
-  {
-    path: 'reports',
-    loadChildren: () =>
-      import('../modules/reports/reports.module').then(x => x.ReportsModule),
-    canActivate: [GlobalAuthGuard],
-    data: {
-      title: 'Отчеты'
-    }
+      title: 'Orders',
+    },
   },
   {
     path: 'settings',
     loadChildren: () =>
-      import('../modules/settings/settings.module').then(x => x.SettingsModule),
+      import('../modules/settings/settings.module').then(
+        (x) => x.SettingsModule
+      ),
+    canActivate: [GlobalAuthGuard],
     data: {
       forRoles: [UserRole.Admin],
-      title: 'Настройки'
-    }
+      title: 'Settings',
+    },
+  },
+  {
+    path: 'master-data',
+    loadChildren: () =>
+      import('../modules/master-data/master-data.module').then(
+        (x) => x.MasterDataModule
+      ),
+    canActivate: [GlobalAuthGuard],
+    data: {
+      forRoles: [UserRole.Admin],
+      title: 'Order states',
+    },
   },
   {
     path: '**',
-    redirectTo: '',
+    redirectTo: '/orders',
     canActivate: [GlobalAuthGuard],
     data: {
-      title: ''
-    }
-  }
+      title: '',
+    },
+  },
 ];
