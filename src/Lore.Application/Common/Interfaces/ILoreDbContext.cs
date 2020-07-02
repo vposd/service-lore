@@ -20,8 +20,10 @@ namespace Lore.Application.Common.Interfaces
         DbSet<Employee> Employees { get; set; }
         DbSet<Attribute> Attributes { get; set; }
         DbSet<AttributeValue> AttributesValues { get; set; }
+        DbSet<ObjectAttributeValue> ObjectAttributeValues { get; set; }
         DbSet<ProductGroup> ProductGroups { get; set; }
         DbSet<Product> Products { get; set; }
+        DbSet<DeviceFailure> DeviceFailures { get; set; }
         DbSet<TEntity> Set<TEntity>() where TEntity : class;
 
         DatabaseFacade Database { get; }

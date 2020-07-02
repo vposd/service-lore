@@ -18,6 +18,7 @@ export interface Endpoints {
   data: {};
   orders: {
     root: string;
+    single: string;
     updateState: string;
   };
   orderStatuses: {

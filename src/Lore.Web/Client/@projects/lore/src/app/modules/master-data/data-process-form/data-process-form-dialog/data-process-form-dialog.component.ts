@@ -36,9 +36,7 @@ export class DataProcessFormDialogComponent<T extends Entity>
   readonly requestProgress = new RequestProgress();
   formState: FormState<T>;
 
-  ngOnInit(): void {
-    console.log(this.params);
-  }
+  ngOnInit(): void {}
 
   onFormChange(formState: FormState<T>) {
     this.formState = formState;

@@ -20,6 +20,7 @@ export const endpoints: Endpoints = {
   },
   orders: {
     root: '/api/orders',
+    single: '/api/orders/{orderId}',
     updateState: '/api/orders/{orderId}/state/{stateId}',
   },
   orderStatuses: {

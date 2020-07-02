@@ -2,10 +2,10 @@
 using System.Threading.Tasks;
 using Lore.Api.Controllers;
 using Lore.Application.Common.Models;
-using Lore.Application.Orders.Commands.CreateOrder;
 using Lore.Application.Orders.Commands.UpdateOrderState;
-using Lore.Application.Orders.Events.OrderCreated;
+using Lore.Application.Orders.Queries.GetOrder;
 using Lore.Application.Orders.Queries.GetOrders;
+using Lore.Web.Contracts.Orders;
 using Lore.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -28,8 +28,8 @@ namespace Lore.Web.Controllers
         [Route("{id}")]
         public async Task<IActionResult> Get(long id, CancellationToken cancellationToken)
         {
-            await Mediator.Publish(new OrderCreatedEvent { OrderId = id }, cancellationToken);
-            return Ok();
+            var vm = await Mediator.Send(new GetOrderQuery { Id = id }, cancellationToken);
+            return Ok(vm);
         }
 
         [HttpPost]
@@ -41,17 +41,18 @@ namespace Lore.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateOrderCommand command, CancellationToken cancellationToken)
+        public async Task<IActionResult> CreateOrder([FromBody] ProcessOrderRequest request, CancellationToken cancellationToken)
         {
-            var result = await Mediator.Send(command, cancellationToken);
+            var result = await Mediator.Send(ProcessOrderRequest.ToCommand(request), cancellationToken);
             return Ok(result);
         }
 
-        //[HttpPatch]
-        //public async Task<IActionResult> Create([FromBody] CreateOrderCommand command, CancellationToken cancellationToken)
-        //{
-        //    var result = await Mediator.Send(command, cancellationToken);
-        //    return Ok(result);
-        //}
+        [HttpPatch]
+        [Route("{id}")]
+        public async Task<IActionResult> UpdateOrder([FromBody] ProcessOrderRequest request, CancellationToken cancellationToken)
+        {
+            var result = await Mediator.Send(ProcessOrderRequest.ToCommand(request), cancellationToken);
+            return Ok(result);
+        }
     }
 }

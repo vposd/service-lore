@@ -23,20 +23,14 @@ namespace Lore.Application.Attributes.Commands.UpsertAttributeValue
             using var context = contextFactory.Create();
 
             if (request.IsDefault)
-            {
                 ResetDefaultAttributeValue(context);
-            }
 
             var entity = new AttributeValue();
 
             if (request.Id.HasValue)
-            {
                 entity = await context.AttributesValues.FindAsync(request.Id);
-            }
             else
-            {
                 context.AttributesValues.Add(entity);
-            }
 
             entity.AttributeId = request.AttributeId;
             entity.IsDefault = request.IsDefault;

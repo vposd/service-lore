@@ -31,6 +31,12 @@ import { OrdersService } from '../orders.service';
 import { OrderTableRow, AttributeModel } from '../models/order-table-row';
 import { ProcessAction } from '../../master-data/models/process-action.enum';
 import { RowsAnimation } from '../../master-data/tables/data-table/data-table-animations';
+import { OrderProcessEvent } from '@contracts/events/order-process-event.class';
+import {
+  dataFilter,
+  Operator,
+  property,
+} from '../../master-data/master-data-service/filter-expression';
 
 const groupAttributes = (attrs: Attribute[][]): AttributeModel[] =>
   chain(attrs)
@@ -91,6 +97,24 @@ export class OrdersTableComponent implements OnInit, OnDestroy {
     this.dataSource = new MatTableDataSource([]);
     this.selectionModel = new SelectionModel<string>(true, []);
     this.listenTableInteraction();
+
+    this.notifications.events$
+      .pipe(
+        listenEvent<OrderProcessEvent>('OrderProcessEvent'),
+        switchMap((x) => this.orders.getOrder(x.payload.orderId).pipe()),
+        tap((order) => {
+          console.log(order);
+          const found = this.dataSource.data.find((x) => x.id === order.id);
+          if (found) {
+            return (this.dataSource.data = this.dataSource.data.map((x) =>
+              x.id === order.id ? OrderTableRow.fromDto(order) : x
+            ));
+          }
+
+          this.dataSource.data = [order, ...this.dataSource.data];
+        })
+      )
+      .subscribe(console.log);
 
     this.notifications.events$
       .pipe(
@@ -164,22 +188,23 @@ export class OrdersTableComponent implements OnInit, OnDestroy {
           this.deviceAttrs = groupAttributes(
             results.map((x) => x.device.attributes)
           );
+          this.orderDeviceAttrs = groupAttributes(
+            results.map((x) => x.deviceAttributes)
+          );
           const deviceAttrsColumns = this.deviceAttrs.map((x) => x.name);
+          const orderDeviceAttrsColumns = this.orderDeviceAttrs.map(
+            (x) => x.name
+          );
+
           this.displayedColumns = uniq([
             ...this.displayedColumns.filter((x) => x !== 'actions'),
             ...deviceAttrsColumns,
+            ...orderDeviceAttrsColumns,
+            'failures',
             'actions',
           ]);
 
-          this.dataSource.data = results.map((x) => ({
-            ...x,
-            attributesView: x.device.attributes.reduce(
-              (acc, i) => (
-                (acc[i.name] = [...(acc[i.name] || []), i.value]), acc
-              ),
-              {}
-            ),
-          }));
+          this.dataSource.data = results.map(OrderTableRow.fromDto);
 
           console.log(this.dataSource.data);
           this.requestProgress.stop(!count);

@@ -8,14 +8,14 @@ import { map, take, filter, switchMap } from 'rxjs/operators';
 import {
   ReportsConfig,
   ReportMetadata,
-  ParamData
+  ParamData,
 } from './config/reports-config';
 import { ReportsService } from './reports.service';
 
 @Component({
   selector: 'app-reports',
   templateUrl: './reports.component.html',
-  styleUrls: ['./reports.component.scss']
+  styleUrls: ['./reports.component.scss'],
 })
 export class ReportsComponent implements OnInit {
   reportMetadata$: Observable<ReportMetadata>;

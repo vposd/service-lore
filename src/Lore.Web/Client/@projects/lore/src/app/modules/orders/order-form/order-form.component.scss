@@ -3,7 +3,12 @@
 .form-field-group {
   display: flex;
 
-  mat-form-field + mat-form-field {
+  .form-field {
+    flex: 1 1 auto;
+    width: 100%;
+  }
+
+  .form-field + .form-field {
     padding-left: 1rem;
   }
 }

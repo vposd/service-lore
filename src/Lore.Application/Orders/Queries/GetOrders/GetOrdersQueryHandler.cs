@@ -60,10 +60,22 @@ namespace Lore.Application.Orders.Queries.GetOrders
                                 }
                             })
                     },
+                    DeviceAttributes = x.DeviceAttributes
+                            .Select(v => new AttributeReadModel
+                            {
+                                Id = v.AttributeId,
+                                Type = v.Attribute.Type,
+                                Name = v.Attribute.Name,
+                                Value = new AttributeValueReadModel
+                                {
+                                    Id = v.AttributeValue.Id,
+                                    Value = v.AttributeValue.Value
+                                }
+                            }),
                     Failures = x.DeviceFailures
                         .Select(v => new SimpleEntityModel
                         {
-                            Id = v.Id,
+                            Id = v.FailureId,
                             Name = v.Failure.Name
                         })
                 })

@@ -11,6 +11,7 @@ namespace Lore.Application.Orders.Models
         public long StatusId { get; set; }
         public CustomerModel Customer { get; set; }
         public DeviceReadModel Device { get; set; }
+        public IEnumerable<AttributeReadModel> DeviceAttributes { get; set; }
         public IEnumerable<SimpleEntityModel> Failures { get; set; }
         public IEnumerable<OrderItemReadModel> Items { get; set; }
         public DateTime DateIn { get; set; }

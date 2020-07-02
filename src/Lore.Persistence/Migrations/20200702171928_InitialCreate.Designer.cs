@@ -10,8 +10,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Lore.Persistence.Migrations
 {
     [DbContext(typeof(LoreDbContext))]
-    [Migration("20200505084505_UpdateFailuresFK")]
-    partial class UpdateFailuresFK
+    [Migration("20200702171928_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -127,7 +127,7 @@ namespace Lore.Persistence.Migrations
                     b.Property<long>("FailureId")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("OrderId")
+                    b.Property<long>("OrderId")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
@@ -136,7 +136,7 @@ namespace Lore.Persistence.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("DeviceFailure");
+                    b.ToTable("DeviceFailures");
                 });
 
             modelBuilder.Entity("Lore.Domain.Entities.Employee", b =>
@@ -211,6 +211,9 @@ namespace Lore.Persistence.Migrations
                     b.Property<long?>("DeviceId")
                         .HasColumnType("bigint");
 
+                    b.Property<long>("OrderId")
+                        .HasColumnType("bigint");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AttributeId");
@@ -219,7 +222,9 @@ namespace Lore.Persistence.Migrations
 
                     b.HasIndex("DeviceId");
 
-                    b.ToTable("ObjectAttributeValue");
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("ObjectAttributeValues");
                 });
 
             modelBuilder.Entity("Lore.Domain.Entities.Order", b =>
@@ -327,7 +332,7 @@ namespace Lore.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("OrderStates");
+                    b.ToTable("OrderStatuses");
 
                     b.HasData(
                         new
@@ -421,7 +426,6 @@ namespace Lore.Persistence.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("character varying(255)")
                         .HasMaxLength(255);
 
@@ -464,6 +468,15 @@ namespace Lore.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ProductGroups");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = -1L,
+                            Deleted = false,
+                            Name = "Root",
+                            ParentId = -1L
+                        });
                 });
 
             modelBuilder.Entity("Lore.Domain.Entities.AttributeValue", b =>
@@ -485,7 +498,9 @@ namespace Lore.Persistence.Migrations
 
                     b.HasOne("Lore.Domain.Entities.Order", "Order")
                         .WithMany("DeviceFailures")
-                        .HasForeignKey("OrderId");
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Lore.Domain.Entities.Employee", b =>
@@ -514,6 +529,12 @@ namespace Lore.Persistence.Migrations
                     b.HasOne("Lore.Domain.Entities.Device", "Device")
                         .WithMany("Attributes")
                         .HasForeignKey("DeviceId");
+
+                    b.HasOne("Lore.Domain.Entities.Order", "Order")
+                        .WithMany("DeviceAttributes")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Lore.Domain.Entities.Order", b =>
@@ -564,7 +585,7 @@ namespace Lore.Persistence.Migrations
             modelBuilder.Entity("Lore.Domain.Entities.Product", b =>
                 {
                     b.HasOne("Lore.Domain.Entities.ProductGroup", "ProductGroup")
-                        .WithMany()
+                        .WithMany("Products")
                         .HasForeignKey("ProductGroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

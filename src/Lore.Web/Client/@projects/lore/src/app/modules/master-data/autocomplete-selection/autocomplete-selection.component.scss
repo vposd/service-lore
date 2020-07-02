@@ -17,3 +17,15 @@
   width: 100%;
   height: 15rem;
 }
+
+.mat-chip {
+  margin: 1px 4px 0 4px !important;
+  min-height: 20px;
+}
+
+.mat-standard-chip.mat-chip-with-trailing-icon {
+  padding-top: 3px;
+  padding-bottom: 3px;
+  padding-right: 0px;
+  padding-left: 6px;
+}

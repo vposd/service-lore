@@ -21,6 +21,12 @@ export class MasterDataService {
     });
   }
 
+  get<T extends Entity>(endpoint: string, id: string, cache = false) {
+    return this.http.get<T>(endpoint + `/${id}`, {
+      ...(cache ? ENABLED_CACHE_OPTIONS : {}),
+    });
+  }
+
   update<T extends Entity>(endpoint: string, item: T) {
     return this.http.patch<OperationResult>(endpoint, item);
   }

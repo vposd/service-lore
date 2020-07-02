@@ -10,13 +10,9 @@ import {
 import { FormControl, ControlValueAccessor, NgControl } from '@angular/forms';
 import { map, switchMap, startWith, debounceTime } from 'rxjs/operators';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { reject, uniqueId, isString } from 'lodash';
-import { Observable, fromEvent, merge, Subject, BehaviorSubject } from 'rxjs';
-import {
-  MatChipInput,
-  MatChipEvent,
-  MatChipInputEvent,
-} from '@angular/material/chips';
+import { reject, uniqueId, isArray, isEmpty } from 'lodash';
+import { Observable, fromEvent, merge, Subject } from 'rxjs';
+import { MatChipInput, MatChipInputEvent } from '@angular/material/chips';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 
 import { FadeIn } from '@common/animations/fade-in-out.animation';
@@ -31,7 +27,8 @@ import { QueryRequestDataStrategy } from './query-request-data-strategy';
 import { DefinedValuesDataStrategy } from './defined-values-data-strategy';
 import { RetrieveDataStrategy } from './retrieve-data-strategy';
 
-type SelectionItem<T extends Entity> = T & { adding?: boolean };
+export type Value<T> = T & { adding: true };
+export type SelectionItem<T extends Entity> = Value<T> | Value<T>[];
 
 @Component({
   selector: 'app-autocomplete-selection',
@@ -48,7 +45,7 @@ export class AutocompleteSelectionComponent<T extends Entity>
     }
     this._source = source;
     this.sourceParams = this.masterDataConfig.getSource(source);
-    this.retrieveDataStrategy = new QueryRequestDataStrategy(
+    this.retrieveDataStrategy = new QueryRequestDataStrategy<Value<T>>(
       this.masterData,
       this.sourceParams,
       this.viewValue
@@ -59,12 +56,22 @@ export class AutocompleteSelectionComponent<T extends Entity>
   }
 
   @Input()
-  set values(values: T[]) {
+  set values(values: SelectionItem<T>) {
     this._values = values;
-    this.retrieveDataStrategy = new DefinedValuesDataStrategy<T>(values);
+    this.retrieveDataStrategy = new DefinedValuesDataStrategy<Value<T>>(
+      values as Value<T>[]
+    );
   }
   get values() {
     return this._values;
+  }
+
+  get chips() {
+    return this.multipleSelection
+      ? this.value || []
+      : isEmpty(this.value)
+      ? []
+      : [this.value];
   }
 
   @Input() viewValue: string;
@@ -76,9 +83,9 @@ export class AutocompleteSelectionComponent<T extends Entity>
   disabled: boolean;
   separatorKeysCodes = [ENTER, COMMA];
   groupLookupControl = new FormControl();
-  lookupValues$: Observable<SelectionItem<T>[]>;
+  lookupValues$: Observable<SelectionItem<T>>;
   query = '';
-  value: SelectionItem<T> | SelectionItem<T>[];
+  value: SelectionItem<T>;
 
   @ViewChild('lookupInput', { static: true }) lookupInput: ElementRef<
     HTMLInputElement
@@ -88,8 +95,8 @@ export class AutocompleteSelectionComponent<T extends Entity>
 
   private sourceParams: MasterDataSource<T>;
   private _source: string;
-  private _values: SelectionItem<T>[];
-  private retrieveDataStrategy: RetrieveDataStrategy<T>;
+  private _values: SelectionItem<T>;
+  private retrieveDataStrategy: RetrieveDataStrategy<Value<T>>;
   private readonly clearInputValueBroadcast = new Subject<string>();
 
   constructor(
@@ -103,7 +110,9 @@ export class AutocompleteSelectionComponent<T extends Entity>
   }
 
   ngOnInit() {
-    this.writeValue(this.multipleSelection ? [] : null);
+    if (this.multipleSelection && !isArray(this.value)) {
+      this.value = this.value ? [this.value] : [];
+    }
     this.lookupValues$ = merge(
       fromEvent(this.lookupInput.nativeElement, 'input').pipe(
         map((event) => (event.target as HTMLInputElement).value)
@@ -119,11 +128,12 @@ export class AutocompleteSelectionComponent<T extends Entity>
     );
   }
 
-  remove(value: SelectionItem<T>) {
+  remove(item: Value<T>) {
     if (!this.multipleSelection) {
       this.writeValue(null);
     }
-    this.writeValue(reject(this.value as T[], (x) => x.id === value.id));
+    const value = this.value as Value<T>[];
+    this.writeValue(reject(value, (x) => x.id === item.id));
     this.clearValue();
   }
 
@@ -132,16 +142,28 @@ export class AutocompleteSelectionComponent<T extends Entity>
       return;
     }
     const value = ({
-      id: uniqueId('-'),
+      id: event.value,
       [this.viewValue]: event.value,
       adding: true,
-    } as unknown) as SelectionItem<T>;
+    } as unknown) as Value<T>;
     this.add(value);
   }
 
   select(event: MatAutocompleteSelectedEvent) {
-    this.add(event.option.value as T);
+    this.add(event.option.value as Value<T>);
   }
+
+  registerOnChange(fn: (value: SelectionItem<T>) => void): void {
+    this.onChange = fn;
+  }
+
+  registerOnTouched(fn: () => void): void {
+    this.onTouched = fn;
+  }
+
+  onChange = (value: SelectionItem<T>) => {};
+
+  onTouched = () => {};
 
   setDisabledState(disabled: boolean) {
     this.chipInput.disabled = disabled;
@@ -152,26 +174,23 @@ export class AutocompleteSelectionComponent<T extends Entity>
     return this.groupLookupControl.enable();
   }
 
-  writeValue(value: SelectionItem<T> | SelectionItem<T>[]) {
+  writeValue(value: SelectionItem<T>) {
     this.value = value;
+    this.onChange(this.value);
   }
 
-  registerOnChange(fn) {}
-
-  registerOnTouched(fn) {}
-
-  private add(item: SelectionItem<T>) {
+  private add(item: Value<T>) {
     if (!this.multipleSelection) {
-      this.writeValue([item]);
+      this.writeValue(item);
       this.clearValue();
       return;
     }
-    this.value = this.value as SelectionItem<T>[];
-    const index = this.value.findIndex((x) => x.id === item.id);
+    const value = (this.value as Value<T>[]) || [];
+    const index = value?.findIndex((x) => x.id === item.id);
     this.writeValue(
       index < 0
-        ? this.value.concat(item)
-        : this.value.map((x, i) => (i === index ? item : x))
+        ? value.concat(item)
+        : value.map((x, i) => (i === index ? item : x))
     );
     this.clearValue();
   }

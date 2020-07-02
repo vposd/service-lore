@@ -1,12 +1,12 @@
 <h1 mat-dialog-title>
   <span *ngIf="params.processAction === processActionEnum.Clone"
-    >Clone {{ params.sourceParams.label.single }}</span
+    >Clone {{ params.sourceParams.label.noun }}</span
   >
   <span *ngIf="params.processAction === processActionEnum.Create"
-    >Create {{ params.sourceParams.label.single }}</span
+    >Create {{ params.sourceParams.label.noun }}</span
   >
   <span *ngIf="params.processAction === processActionEnum.Edit"
-    >Edit {{ params.sourceParams.label.single }}</span
+    >Edit {{ params.sourceParams.label.noun }}</span
   >
 </h1>
 <div mat-dialog-content>

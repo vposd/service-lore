@@ -253,7 +253,6 @@ export class ProductsDataTableComponent implements OnInit, OnDestroy {
         const meta = this.productSource.metadata.find(
           (x) => x.property === active
         );
-        console.log(meta);
       }),
       map(
         ({ active, direction }) =>
@@ -308,14 +307,12 @@ export class ProductsDataTableComponent implements OnInit, OnDestroy {
             productsResults.results
           );
           const tree = makeTree(flattenNodes);
-          console.log(tree);
           this.initialized = true;
           this.dataSource.data = tree as any;
           this.requestProgress.stop(!productsResults.count);
           this.treeControl.expandAll();
         },
         (error) => {
-          console.log(error);
           this.initialized = true;
           this.requestProgress.stop(true);
           this.information.error(RequestProgress.formatError(error));

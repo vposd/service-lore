@@ -34,9 +34,11 @@ namespace Lore.Persistence
         public DbSet<Failure> Failures { get; set; }
         public DbSet<Device> Devices { get; set; }
         public DbSet<OrderStatus> OrderStatuses { get; set; }
+        public DbSet<DeviceFailure> DeviceFailures { get; set; }
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Attribute> Attributes { get; set; }
         public DbSet<AttributeValue> AttributesValues { get; set; }
+        public DbSet<ObjectAttributeValue> ObjectAttributeValues { get; set; }
         public DbSet<ProductGroup> ProductGroups { get; set; }
         public DbSet<Product> Products { get; set; }
 

@@ -62,5 +62,9 @@
 .table-chip {
   border-radius: 16px;
   padding: 0.4rem;
-  background: mat-color($mat-grey, 200);
+  background: rgba(70, 70, 70, 0.12);
+
+  & + .table-chip {
+    margin-left: $offset-xs;
+  }
 }

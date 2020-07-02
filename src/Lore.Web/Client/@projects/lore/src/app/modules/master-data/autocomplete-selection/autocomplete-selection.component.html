@@ -1,16 +1,16 @@
-<mat-form-field [style.opacity]="disabled ? '0.6' : ''" appearance="fill">
+<mat-form-field [style.opacity]="disabled ? '0.6' : ''" appearance="outline">
   <mat-label class="text--capitalize">{{ label }}</mat-label>
   <mat-chip-list #chipList [multiple]="multipleSelection">
     <mat-chip
-      class="text--truncate"
-      [class.highlight]="selected.adding"
-      *ngFor="let selected of value"
-      [disabled]="disabled"
-      [selectable]="false"
-      [removable]="true"
       (removed)="remove(selected)"
+      *ngFor="let selected of chips"
+      [class.highlight]="selected?.adding"
+      [disabled]="disabled"
+      [removable]="true"
+      [selectable]="false"
+      class="text--truncate"
     >
-      {{ selected[viewValue] }}
+      {{ selected && selected[viewValue] }}
       <i class="mdi mdi-close-circle mdi--sm" matChipRemove></i>
     </mat-chip>
     <input

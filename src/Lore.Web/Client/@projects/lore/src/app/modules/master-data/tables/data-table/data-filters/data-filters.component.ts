@@ -31,7 +31,6 @@ export class DataFiltersComponent implements OnInit {
     );
 
     this.form.valueChanges.pipe(startWith(this.form.value)).subscribe((x) => {
-      console.log('change');
       const expressions = this.filters
         .filter((f) => !isNil(x[f.property]))
         .map((f) => f.expressionFactory(x[f.property]));

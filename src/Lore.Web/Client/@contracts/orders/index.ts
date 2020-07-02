@@ -42,7 +42,39 @@ export class Order extends Entity {
   dateIn: string;
   dateOut: string;
   description: string;
-  attributes: Attribute[];
+  deviceAttributes: Attribute[];
+  failures: SimpleEntity[];
+  items: OrderItem[];
+}
+
+export class DeviceSaveRequest {
+  id: string;
+  attributes: ExistingAttributeValue[];
+  attributesToCreate: CreatingAttributeValue[];
+  name: string;
+  serialNumber: string;
+}
+
+export class ExistingAttributeValue {
+  attributeId: string;
+  valueId: string;
+}
+
+export class CreatingAttributeValue {
+  attributeId: string;
+  valueId: string;
+}
+
+export class OrderSaveRequest extends Entity {
+  id: string;
+  customer: Customer;
+  statusId: string;
+  device: DeviceSaveRequest;
+  dateIn: string;
+  dateOut: string;
+  description: string;
+  deviceAttributes: ExistingAttributeValue[];
+  deviceAttributesToCreate: CreatingAttributeValue[];
   failures: SimpleEntity[];
   items: OrderItem[];
 }

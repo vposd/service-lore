@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Lore.Application\Lore.Application.csproj" />
     <ProjectReference Include="..\Lore.Domain\Lore.Domain.csproj" />
   </ItemGroup>
 

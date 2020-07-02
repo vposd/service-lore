@@ -49,7 +49,6 @@ export class OpenDataProcessDialogDirective<T extends Entity> {
 
     dialogRef.afterClosed().subscribe((result) => {
       this.operationResult.emit(result);
-      console.log(result);
     });
   }
 }

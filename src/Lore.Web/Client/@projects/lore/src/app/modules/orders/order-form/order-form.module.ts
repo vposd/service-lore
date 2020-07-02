@@ -7,6 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatTabsModule } from '@angular/material/tabs';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MatDividerModule } from '@angular/material/divider';
 
 import { AttributesInputModule } from './attributes-input/attributes-input.module';
 import { OpenOrderFormDirective } from './open-order-form.directive';
@@ -23,6 +24,7 @@ import { AutocompleteSelectionModule } from '../../master-data/autocomplete-sele
     CommonModule,
     AutocompleteSelectionModule,
     MatButtonModule,
+    MatDividerModule,
     MatDatepickerModule,
     MatDialogModule,
     MatFormFieldModule,

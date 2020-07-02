@@ -5,14 +5,22 @@ import { map, pluck } from 'rxjs/operators';
 
 import { ENABLED_CACHE_OPTIONS } from '@common/utils/http-cache/http-cache-constant';
 import { QueryResult } from '@contracts/common';
-import { Order } from '@contracts/orders';
+import { Order, OrderSaveRequest } from '@contracts/orders';
 import { OrderStatus } from '@contracts/master-data/order-state.class';
 import { Attribute } from '@contracts/master-data/attribute.class';
+import { environment } from '@projects/lore/src/environments/environment';
+import { AttributeObject } from '@contracts/enums';
 
 import { endpoints, makeHref } from '../../../environments/endpoints';
 import { MasterDataService } from '../master-data/master-data-service/master-data.service';
 import { OrderTableRow } from './models/order-table-row';
-import { environment } from '@projects/lore/src/environments/environment';
+import { QueryRequestBuilder } from '../master-data/master-data-service/query-request-builder.class';
+import {
+  dataFilter,
+  Operator,
+  property,
+} from '../master-data/master-data-service/filter-expression';
+import { MasterDataConfig } from '../master-data/config/master-data-config.service';
 
 @Injectable({
   providedIn: 'root',
@@ -20,6 +28,7 @@ import { environment } from '@projects/lore/src/environments/environment';
 export class OrdersService {
   constructor(
     private readonly http: HttpClient,
+    private readonly masterDataConfig: MasterDataConfig,
     private readonly masterData: MasterDataService
   ) {}
 
@@ -42,6 +51,22 @@ export class OrdersService {
     );
   }
 
+  getOrder(orderId: string): Observable<OrderTableRow> {
+    return forkJoin([
+      this.masterData.get<Order>(endpoints.orders.root, orderId),
+      this.masterData.query<OrderStatus>(
+        endpoints.orderStatuses.root,
+        new HttpParams(),
+        true
+      ),
+    ]).pipe(
+      map(([order, orderStatuses]) => ({
+        ...order,
+        status: orderStatuses.results.find((s) => s.id === order.statusId),
+      }))
+    );
+  }
+
   getOrderStatus(id: string) {
     return this.http.get<OrderStatus>(
       makeHref(endpoints.orderStatuses.single, { id }),
@@ -56,20 +81,31 @@ export class OrdersService {
     );
   }
 
-  getAttributes() {
+  getAttributes(objectType: AttributeObject) {
+    const query = new QueryRequestBuilder();
+    if (objectType) {
+      query.setFilter(
+        dataFilter(Operator.And, [
+          property('deleted').equals(false),
+          property('objectType').equals(objectType),
+        ]).toString()
+      );
+    }
     return this.http
-      .get<QueryResult<Attribute>>(
-        endpoints.attributes.root,
-        ENABLED_CACHE_OPTIONS
-      )
+      .get<QueryResult<Attribute>>(endpoints.attributes.root, {
+        params: query.request,
+      })
       .pipe(pluck('results'));
   }
 
-  createOrder(order: Order) {
+  createOrder(order: OrderSaveRequest) {
     return this.http.post(environment.endpoints.orders.root, order);
   }
 
-  updateOrder(order: Order) {
-    return this.http.patch(environment.endpoints.orders.root, order);
+  updateOrder(order: OrderSaveRequest) {
+    return this.http.patch(
+      makeHref(environment.endpoints.orders.single, { orderId: order.id }),
+      order
+    );
   }
 }
