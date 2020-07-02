@@ -7,17 +7,17 @@
 $auth-backgrounds-map: () !default;
 $auth-backgrounds-map: map-merge(
   (
-    1280px: '../assets/auth-bg/bg-auth.jpg',
-    1366px: '../assets/auth-bg/bg-auth.jpg',
-    1920px: '../assets/auth-bg/bg-auth.jpg',
-    2560px: '../assets/auth-bg/bg-auth.jpg',
-    3840px: '../assets/auth-bg/bg-auth.jpg'
+    1280px: '/assets/auth-bg/bg-auth.jpg',
+    1366px: '/assets/auth-bg/bg-auth.jpg',
+    1920px: '/assets/auth-bg/bg-auth.jpg',
+    2560px: '/assets/auth-bg/bg-auth.jpg',
+    3840px: '/assets/auth-bg/bg-auth.jpg',
   ),
   $auth-backgrounds-map
 );
 
 .page--auth-bg {
-  background: url(../assets/auth-bg/bg-auth.jpg);
+  background: url(/assets/auth-bg/bg-auth.jpg);
 
   @include page-full-bg($auth-backgrounds-map);
   @include page-full-background-color-hover;
